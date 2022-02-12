@@ -1,21 +1,21 @@
 # open the supplies bag under trapped pouches
-dclick 0x434D80CB
+dclick 'logBagPouch'
 wait 1000
 
 # pickup key from bank
-lift 0x4CC29A40 1
+lift 'logBoxKey' 1
 drop 0x470FA367 88 101 0
 
 # use on lockbox
 clearsysmsg 
-dclick 0x4CC29A40
+dclick 'logBoxKey'
 waitfortarget
-target 0x4CC29A3F
+target 'logBox'
 wait 500
 
 # try to open it
 clearsysmsg 
-dclick 0x4CC29A3F
+dclick 'logBox'
 wait 500
 
 # if its locked, repeat
@@ -25,5 +25,5 @@ if insysmsg 'It appears to be locked'
 endif
 
 # move key back into bank
-lift 0x4CC29A40 1
+lift 'logBoxKey' 1
 drop 0x470FA36D 86 103 0
