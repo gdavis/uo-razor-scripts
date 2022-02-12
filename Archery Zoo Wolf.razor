@@ -1,0 +1,22 @@
+if skill 'Archery' >= 100 and skill 'Tactics' >= 100
+    overhead  'Now GM Archer!'
+    unsetvar 'dummy'
+
+    if warmode
+        overhead 'Time to relax.'
+        warmode 'off'
+    endif
+    
+    wait 5000
+    replay
+endif
+
+if not warmode 
+    overhead 'Warmode!'
+    warmode 'on'
+    setlasttarget
+    attack lasttarget
+endif
+
+wait 10000
+replay

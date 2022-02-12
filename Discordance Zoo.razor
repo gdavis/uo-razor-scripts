@@ -1,0 +1,27 @@
+if skill 'Discordance' >= 100
+    overhead 'You are now GM at Discordance!'
+    wait 3000
+    loop
+endif
+
+overhead 'Sowing Discord' 348
+skill 'Discordance'
+waitfortarget 5000
+
+if insysmsg 'What instrument shall'
+  sysmsg 'Selecting lute as next instrument'
+  targettype 'lute' backpack
+  clearsysmsg 
+  waitfortarget 5000
+endif
+
+if not varexist 'mob1'
+    overhead 'Discord who?' 348
+    setvar 'mob1'
+endif
+
+target 'mob1'
+
+wait 5500
+
+loop

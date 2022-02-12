@@ -1,0 +1,14 @@
+if findtype 'log%s' backpack
+    overhead 'Cutting logs' 53
+    dclicktype 'scissors' backpack
+    waitfortarget
+    targettype 'log%s' backpack
+    wait 750
+    
+    overhead 'Moving to bank' 903
+    organizer 11
+    wait 2000
+    loop
+else 
+    overhead 'Logs cut and banked.'
+endif

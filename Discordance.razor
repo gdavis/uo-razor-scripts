@@ -1,0 +1,46 @@
+clearsysmsg
+
+if not timerexists 'discocooldown' 
+    createtimer 'discocooldown'
+    settimer 'discocooldown' 5000
+endif
+
+if timer 'discocooldown' < 5000
+    overhead 'Not Ready' 48
+    stop
+endif
+
+skill 'Discordance'
+wait 250
+
+if insysmsg 'What instrument shall'
+  sysmsg 'Selecting lute as next instrument'
+  targettype 'lute' backpack
+  clearsysmsg 
+  waitfortarget 5000
+endif
+
+if insysmsg 'You must wait a few moments to use another skill'
+    overhead 'Not Ready' 48
+    stop
+endif
+
+overhead 'Relax who?' 255
+waitfortarget 
+
+# wait for result of targetting
+while not insysmsg 'You fail to discord' and not insysmsg 'You play successfully'
+    # exit script if the ground was targetted
+    if insysmsg 'Song of Discordance'
+        stop
+    endif
+    wait 100
+endwhile
+
+if insysmsg 'You fail to discord'
+    overhead 'Disco Failed' 33
+else
+    overhead 'Dude, chill.'
+endif
+
+settimer 'discocooldown' 0

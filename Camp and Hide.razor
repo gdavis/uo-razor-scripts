@@ -1,0 +1,57 @@
+if insysmsg 'The world will save'
+   overhead 'Waiting for world save...' 
+
+    if insysmsg 'World save complete'
+        overhead 'Save complete, continuing...'
+        clearsysmsg 
+        loop
+    endif
+    
+    wait 1000
+    loop
+endif
+
+if not hidden
+    skill 'Hiding'
+    wait 500
+    if insysmsg 'You have hidden'
+        wait 11000
+    else 
+        wait 8500
+    endif
+endif
+
+walk north
+walk north
+wait 250
+walk south
+walk south
+
+
+if not timerexists 'guards'
+    createtimer 'guards'
+endif
+
+if timer 'guards' > 10000
+    say 'guards'
+    settimer 'guards' 0
+endif
+
+if skill 'Camping' >= 80 
+    overhead 'At 80 Camping'
+    wait 3000
+    replay
+endif
+
+if not findtype "kindling" backpack
+    overhead "Need more kindling" 34
+    wait 5000
+    replay
+endif
+    
+if not findtype "campfire" ground 0 1 1
+    dclicktype "kindling" backpack
+    wait 3500
+endif
+
+loop

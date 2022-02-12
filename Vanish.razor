@@ -1,0 +1,18 @@
+if skill 'Hiding' <= 50
+    overhead 'Need to train Hiding!' 38
+    script 'EscapeScript'
+endif
+
+if not hidden
+    skill 'Hiding'
+    wait 500
+    
+    if hidden
+        overhead 'Hidden!' 53
+        sysmsg 'Hidden!' 53
+    else 
+        overhead 'Trying to hide...' 903
+        wait 1000
+        replay
+    endif
+endif

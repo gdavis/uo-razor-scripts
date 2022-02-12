@@ -1,0 +1,24 @@
+clearsysmsg 
+if lhandempty
+    dress 'Hatchet'
+    wait 1000
+endif
+
+hotkey 'Use item in hand'
+waitfortarget 
+hotkey 'Target Self'
+wait 500
+if insysmsg 'You do not see any'
+    script 'EscapeScript'
+else
+    wait 5000
+endif
+
+# for moving into a pack with certain weight
+if weight > 300
+    overhead "Almost full"
+#    organizer 20
+#    wait 500
+endif
+
+loop

@@ -1,0 +1,12 @@
+if not hidden
+    skill 'Hiding'
+    wait 500
+    
+    if insysmsg 'You have hidden'
+        overhead 'Hidden!'
+        sysmsg 'Hidden!'
+    else 
+        wait 1000
+        replay
+    endif
+endif

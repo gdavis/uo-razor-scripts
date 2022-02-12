@@ -1,0 +1,174 @@
+# PK check
+if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
+    clearsysmsg 
+    if skill 'magery' >= 60
+        overhead 'Get out of here!' 34
+        hotkey 'Recall'
+        waitfortarget         
+        target 'recall_runebook'
+    elseif skill 'Hiding' >= 50
+        overhead 'Hiding from PK!' 34
+        sysmsg 'Hiding from nearby PK!' 34
+        script 'Vanish'
+    endif
+endif
+
+
+# check if bags are full
+if weight >= 540
+    overhead 'Carrying too much!' 38
+    sysmsg 'Carrying too much!' 38
+    
+    if skill 'hiding' >= 50 and not hidden
+        skill 'hiding'
+    endif
+    
+    wait 5000
+    replay
+endif
+
+# wait for world save
+if insysmsg 'The world will save'
+    if insysmsg 'World save complete'
+        overhead 'Save complete, continuing...' 53
+        clearsysmsg 
+        loop
+    endif
+    
+    # wait 20 seconds before continuing. 15s for warning + 3-5 seconds for actual save
+    for 3
+        overhead 'Waiting for world save...' 53
+        wait 6667
+    endfor
+    loop
+endif
+
+# equip an axe
+if lhandempty
+    if not findtype 'hatchet' backpack
+    overhead 'Out of hatchets' 38
+        wait 5000
+        replay
+    else
+        overhead 'Equipping Hatchet' 53
+        dclicktype 'hatchet' backpack
+        wait 1000    
+    endif
+endif
+
+if not hidden
+    clearsysmsg 
+    overhead 'Chop chop...' 53
+    hotkey 'Use item in hand'
+    waitfortarget 2000
+    hotkey 'Target Self'
+    wait 1000
+else
+    overhead 'Hidden, waiting to move or for PK to leave' 903
+    wait 5000
+    replay
+endif
+
+
+# check for no more resources
+if insysmsg 'You do not see any'
+    overhead 'Move!' 43
+
+    if not hidden
+        skill 'Hiding'
+    endif
+
+    wait 2000
+    replay
+endif
+
+# if we dont immediately see a no more resources, wait some more to finish chopping
+wait 4000
+
+# determine what was chopped
+if insysmsg 'dullwood'
+    overhead 'Got some dullwood!' 805
+    setvar! 'success' 1
+elseif insysmsg 'shadowwood'
+    overhead 'Got some shadowwood!' 902
+    setvar! 'success' 1
+elseif insysmsg 'copperwood'
+    overhead 'Got some copperwood!' 144
+    setvar! 'success' 1
+elseif insysmsg 'bronzewood'
+    overhead 'Got some bronzewood!' 242
+    setvar! 'success' 1
+elseif insysmsg 'goldenwood'
+    overhead 'Got some goldenwood!' 50
+    setvar! 'success' 1
+elseif insysmsg 'rosewood'
+    overhead 'Got some rosewood!' 35
+    setvar! 'success' 1
+elseif insysmsg 'verewood'
+    overhead 'Got some verewood!' 270
+    setvar! 'success' 1
+elseif insysmsg 'valewood'
+    overhead 'Got some valewood!' 94
+    setvar! 'success' 1
+elseif insysmsg 'avarwood'
+    overhead 'Got some avarwood!' 209
+    setvar! 'success' 1
+elseif insysmsg 'You chop'
+    overhead 'Got some logs!' 640
+    setvar! 'success' 1
+else 
+    setvar! 'success' 0
+endif
+
+# check for success
+if 'success' == 1
+    # move logs into secure bag
+    organizer 10
+    wait 250
+    replay
+endif
+
+# check for failure
+if insysmsg 'You hack'
+    overhead 'Trying again...' 903
+    replay
+endif
+
+# check for invalid area
+if insysmsg 'Harvesting is not allowed'
+    overhead 'Cannot chop here!' 38
+    wait 5000
+    replay
+endif
+
+# check for action delay
+if insysmsg 'You must wait'
+    wait 2500
+    replay
+endif
+
+# if the above system messages are not present, there may be a captcha check
+overhead 'Captcha Check!' 38
+sysmsg 'Captcha Check!' 38
+
+# wait 5 minutes to see if we pass the captcha
+for 300
+    overhead 'Waiting for Captcha...' 38
+
+    if not hidden
+        skill 'Hiding'
+    endif
+    
+    if insysmsg 'Captcha successful'
+        clearsysmsg 
+        walk 'up'
+        walk 'up'
+        walk 'down'
+        walk 'down'
+        replay
+    endif
+    
+    wait 1000
+endfor
+
+script 'Vanish'

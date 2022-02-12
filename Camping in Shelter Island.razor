@@ -1,0 +1,29 @@
+if insysmsg 'The world will save'
+   overhead 'Waiting for world save...' 
+
+    if insysmsg 'World save complete'
+        overhead 'Save complete, continuing...'
+        clearsysmsg 
+        loop
+    endif
+    
+    wait 1000
+    loop
+endif
+
+if skill 'Camping' >= 70
+    overhead 'Maxed for Shelter Island'
+    wait 3000
+    loop
+endif
+
+dclicktype 'kindling' backpack
+wait 500
+
+if insysmsg 'You fail to ignite'
+    wait 3500
+else
+    wait 5000
+endif
+
+loop

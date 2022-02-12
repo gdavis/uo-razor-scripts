@@ -1,0 +1,56 @@
+if mana < 50
+    skill 'Meditation'
+    wait 500
+    
+    if findbuff 'actively meditating'
+        while mana < maxmana
+            overhead 'Meditating...'
+            wait 3500
+        endwhile
+        replay
+        
+    else
+        overhead 'Retrying meditation...'
+        wait 5500
+        replay
+    endif
+endif
+
+if skill 'Magery' < 60
+    cast 'Summ. Creature'
+    wait 6000
+    
+elseif skill 'Magery' < 80
+    if count 'Blood moss' < 10 or count 'Nightshade' < 10
+        restock 1
+        wft 5000
+        target self
+        wait 500
+    endif
+        
+    cast 'Invisibility'
+    wft 1000
+    target self
+    wait 2000
+    
+elseif skill 'Magery' < 100
+    if count 'Blood moss' < 10 or count 'Mandrake Root' < 10 or count "Spider's Silk" < 10
+        restock 2
+        wft 5000
+        target self
+        wait 750
+    endif
+    
+    cast 'Water Elemental'
+    wait 6000
+    
+    if findtype "a water elemental" true
+        say 'a water elemental release'
+        wait 200
+    endif
+else
+    overhead 'Now GM Mage!'
+    wait 6667
+endif
+
+loop

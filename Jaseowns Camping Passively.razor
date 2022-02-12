@@ -1,0 +1,19 @@
+# Training Camping Passively Alone by Jaseowns
+# UO Outlands
+# Requirements:  Kindling + Not beinnear other people's campfires
+if skill 'Camping' >= 80 
+    overhead 'At 80 Camping'
+    wait 3000
+    replay
+endif
+
+if not findtype "kindling" backpack
+    overhead "Need more kindling" 34
+    wait 5000
+    replay
+endif
+    
+if not findtype "campfire" ground 0 1 1
+    dclicktype "kindling" backpack
+endif
+loop

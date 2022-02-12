@@ -1,0 +1,55 @@
+# Variant of the Provocation script, used to train provo at the Prevalia Zoo.
+# This will also train up Discordance after using the provocation skill.
+clearsysmsg 
+#unsetvar 'mob1'
+#unsetvar 'mob2'
+skill 'Provocation'
+waitfortarget 5000
+
+if insysmsg 'What instrument shall'
+  sysmsg 'Selecting lute as next instrument'
+  targettype 'lute' backpack
+  clearsysmsg 
+  waitfortarget 5000
+endif
+
+if not varexist 'mob1'
+    overhead 'Provoke who?' 348
+    setvar 'mob1'
+endif
+
+target 'mob1'
+waitfortarget
+
+if not varexist 'mob2'
+    overhead 'Attack who?' 348
+    setvar 'mob2'
+endif
+
+target 'mob2'
+wait 100
+
+if insysmsg 'fail to incite anger'
+    overhead 'Failed!' 33
+    wait 5500
+else
+    overhead 'Fight!'
+    wait 10500
+endif
+
+overhead 'Sowing Discord' 348
+skill 'Discordance'
+waitfortarget 5000
+
+if insysmsg 'What instrument shall'
+  sysmsg 'Selecting lute as next instrument'
+  targettype 'lute' backpack
+  clearsysmsg 
+  waitfortarget 5000
+endif
+
+target 'mob1'
+
+wait 5500
+
+loop

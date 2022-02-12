@@ -1,0 +1,62 @@
+clearsysmsg 
+
+if not timerexists 'provocooldown' 
+    createtimer 'provocooldown'
+    settimer 'provocooldown' 10000
+endif
+
+if timer 'provocooldown' < 10000
+    overhead 'Provo Not Ready' 48
+    stop
+endif
+
+skill 'Provocation'
+wait 250
+
+if insysmsg 'What instrument shall'
+  sysmsg 'Selecting lute as next instrument'
+  targettype 'lute' backpack
+  clearsysmsg 
+  waitfortarget 5000
+endif
+
+if insysmsg 'You must wait' or insysmsg 'before you may provoke or pacify'
+    overhead 'Provo Not Ready' 48
+    stop
+endif
+
+overhead 'Provoke who?' 255
+waitfortarget 4000
+
+while not insysmsg 'Whom do you wish them to attack'
+    # if the ground was targetted, exit the script
+    if insysmsg 'Song of Provocation' or insysmsg "You can't incite that"
+        stop
+    endif
+    
+    wait 100
+endwhile
+
+overhead 'Attack whom?' 255
+waitfortarget 4000
+
+while not insysmsg 'You play successfully' and not insysmsg 'You fail to incite' and not insysmsg 'to attack themselves!'
+    wait 100
+endwhile
+
+# Determine the outcome, then wait to notify when it can be used again
+if insysmsg 'fail to incite anger'
+    overhead 'Failed' 33
+    settimer 'provocooldown' 5000
+    wait 5000
+    overhead "Ready"
+    
+elseif insysmsg 'to attack themselves!'
+    overhead 'Try again, fool!' 33
+    
+else
+    overhead 'Fight!'
+    settimer 'provocooldown' 0
+    wait 10000
+    overhead "Provo Ready"
+endif
