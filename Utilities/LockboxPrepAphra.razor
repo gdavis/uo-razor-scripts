@@ -1,0 +1,72 @@
+# Moves the key for the lockbox from the bank, opens bags inside the lockbox,
+# then locks the lockbox and places the key back in the bank.
+#
+# Used to prepare secure storage for loot and regs for Aphra
+# 
+# NOTE: key for lockbox should be in the top level of the bank
+
+if not varexist 'aphraBagPouch'
+    overhead 'Set pouch in backpack that contains the lockbox'
+    setvar  'aphraBagPouch'
+endif
+    
+if not varexist 'aphraLockBox'
+    overhead 'Set lockbox for secure storage'
+    setvar 'aphraLockBox'
+endif
+
+if not varexist 'aphraLockboxKey'
+    overhead 'Set key for log box'
+    setvar 'aphraLockboxKey'
+endif
+
+if not varexist 'aphraLootBag'
+    overhead 'Set the container inside the lockbox for loot'
+    setvar 'aphraLootBag'
+endif
+
+# open the supplies bag under trapped pouches
+dclick 'aphraBagPouch'
+wait 500
+
+# move key from bank to backpack
+lift 'aphraLockboxKey' 1
+drop 0x48752DFC 100 96 0
+wait 1000
+
+# open lockbox
+clearsysmsg 
+dclick 'aphraLockBox'
+wait 1000
+
+if insysmsg 'It appears to be locked'
+    gumpclose
+    overhead 'Unlocking box'
+    
+    # use the key
+    dclick 'aphraLockboxKey'
+    waitfortarget 5000
+    
+    # unlock the lockbox
+    target 'aphraLockBox'
+    wait 500
+    
+    # open lockbox
+    dclick 'aphraLockBox'
+    wait 1000
+endif
+
+## open pouch inside lockbox
+dclick 'aphraLootBag'
+wait 1000
+
+# use the key
+dclick 'aphraLockboxKey'
+waitfortarget 5000
+# lock the lockbox
+target 'aphraLockBox'
+wait 1000
+
+# move key from backpack to bank
+lift 'aphraLockboxKey' 1
+drop 0x4119D4BD 46 134 0
