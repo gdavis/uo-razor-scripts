@@ -1,0 +1,35 @@
+if lhandempty
+    overhead 'Equipping Fishing Pole'
+    dress 'Fishing Pole'
+    wait 500
+endif
+
+clearsysmsg 
+overhead 'Here fishy, fishy'
+hotkey 'Use item in left hand'
+
+for 10
+    if insysmsg 'You fish a while'
+        overhead 'No bites.' 38
+        wait 2500
+        break
+    elseif insysmsg 'You catch a fish'
+        overhead 'Caught one!'
+        wait 1000
+        break
+    else
+        wait 1000
+    endif
+endfor
+
+if findtype 'cooked fish' backpack
+    overhead 'Cleaning fish...'
+    dclicktype 'dagger'
+    wft
+    targettype 'cooked fish'
+    wait 500
+    organizer 15
+    wait 1000
+endif
+
+loop

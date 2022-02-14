@@ -1,0 +1,25 @@
+if skill 'tasteidentification' >= 60
+    overhead 'At 60 Taste ID'
+    setskill 'tasteidentification' locked
+    wait 6667
+    loop
+endif
+
+
+skill 'tasteidentification'
+waitfortarget
+targetrelloc 0 0
+wait 500
+
+if insysmsg 'you are unable'
+    wait 5500
+else
+    wait 10500
+endif
+
+
+if skill 'wrestling' <= 60
+    setskill 'wrestling' locked
+endif
+
+loop
