@@ -1,0 +1,30 @@
+if skill 'hiding' < 80
+    overhead 'Must train hidding to 80 first'
+    wait 5000
+    loop
+else
+    if not hidden
+        skill 'hiding'
+        wait 500
+        
+        if hidden
+            wait 11000
+        else 
+            wait 7500
+        endif
+        
+        loop
+    endif
+    
+
+    skill 'stealth' 
+    wait 11000
+    
+#    if insysmsg 'You begin to move'
+#        wait 11000
+#    else 
+#        wait 7500
+#    endif
+        
+    loop
+endif
