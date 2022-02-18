@@ -28,13 +28,13 @@ walk south
 walk south
 
 
-if not timerexists 'guards'
-    createtimer 'guards'
-endif
-
-if timer 'guards' > 20000
-    say 'guards'
-    settimer 'guards' 0
-endif
-
+#if not timerexists 'guards'
+#    createtimer 'guards'
+#endif
+#
+#if timer 'guards' > 20000
+#    say 'guards'
+#    settimer 'guards' 0
+#endif
+#
 loop

@@ -1,4 +1,4 @@
-if mana < 50
+if mana < 30
     skill 'Meditation'
     wait 500
     
@@ -18,7 +18,14 @@ endif
 
 if skill 'Magery' < 60
     cast 'Summ. Creature'
+    say 'all guard me'
     wait 6000
+    
+    if insysmsg 'too many followers'
+        say 'all release'
+        waitforgump 931181454
+        gumpresponse 1
+    endif
     
 elseif skill 'Magery' < 80
     if count 'Blood moss' < 10 or count 'Nightshade' < 10
@@ -52,5 +59,6 @@ else
     overhead 'Now GM Mage!'
     wait 6667
 endif
+
 
 loop

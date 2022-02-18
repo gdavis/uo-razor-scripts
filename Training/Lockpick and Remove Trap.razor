@@ -1,0 +1,36 @@
+if findtype 'strong box' backpack as box
+
+if skill 'lockpicking' < 70 
+    if findtype 'lockpicks' backpack as picks
+            dclick 'picks'
+            waitfortarget
+            target box
+            wait 3500
+        else
+            overhead 'Missing lockpicks!' 38
+            wait 2000
+        endif
+    else 
+        overhead 'Done with lockpicking'
+    endif
+
+    
+    if skill 'remove trap' < 70
+        if findtype 'drill' backpack as drill
+            dclick drill
+            waitfortarget 
+            target box
+            wait 3500
+        else
+            overhead 'Missing drill!' 38
+            wait 2500
+        endif
+    else
+       overhead 'Done with remove trap' 
+    endif
+
+    loop
+else
+    overhead 'Missing strong box!' 38
+    stop
+endif
