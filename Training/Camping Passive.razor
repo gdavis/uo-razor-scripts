@@ -1,0 +1,31 @@
+if insysmsg 'The world will save'
+   overhead 'Waiting for world save...' 
+
+    if insysmsg 'World save complete'
+        overhead 'Save complete, continuing...'
+        clearsysmsg 
+        loop
+    endif
+    
+    wait 1000
+    loop
+endif
+
+if skill 'Camping' >= 100
+    overhead 'GM Camper!'
+    wait 6667
+    loop
+endif
+
+if not findtype "kindling" backpack
+    overhead "Need more kindling" 34
+    wait 5000
+    replay
+endif
+    
+if not findtype "campfire" ground 0 1 1
+    dclicktype "kindling" backpack
+    wait 3500
+endif
+
+loop
