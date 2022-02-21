@@ -1,11 +1,17 @@
+# create recall escape target
+if not varexist 'loggingEscapeRune'
+    overhead 'Select escape rune or runebook'
+    setvar 'loggingEscapeRune'
+endif
+
 # PK check
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     clearsysmsg 
     if skill 'magery' >= 60
-        overhead 'Get out of here!' 34
+        overhead 'Escaping PK!' 34
         hotkey 'Recall'
         waitfortarget         
-        target 'recall_runebook'
+        target 'loggingEscapeRune'
     elseif skill 'Hiding' >= 50
         overhead 'Hiding from PK!' 34
         sysmsg 'Hiding from nearby PK!' 34
@@ -13,11 +19,18 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     endif
 endif
 
-
 # check if bags are full
 if weight >= 540
     overhead 'Carrying too much!' 38
     sysmsg 'Carrying too much!' 38
+    
+    if skill 'magery' >= 60
+        overhead 'Bags are full, heading home...' 34
+        hotkey 'Recall'
+        waitfortarget
+        target 'loggingEscapeRune'
+        wait 2000
+    endif 
     
     if skill 'hiding' >= 50 and not hidden
         skill 'hiding'
@@ -32,14 +45,18 @@ if insysmsg 'The world will save'
     if insysmsg 'World save complete'
         overhead 'Save complete, continuing...' 53
         clearsysmsg 
+        settimer 'worldSaveTimer' 20000
+        loop
+    elseif timer 'worldSaveTimer' < 20000
+        overhead 'Waiting for world save...'
         loop
     endif
     
-    # wait 20 seconds before continuing. 15s for warning + 3-5 seconds for actual save
-    for 3
-        overhead 'Waiting for world save...' 53
-        wait 6667
-    endfor
+    if not timerexists 'worldSaveTimer'
+        createtimer 'worldSaveTimer'
+    endif
+    
+    settimer 'worldSaveTimer' 0
     loop
 endif
 
