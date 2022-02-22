@@ -1,3 +1,17 @@
+# check for recent travel
+if insysmsg 'you have recently traveled'
+    clearsysmsg
+    overhead 'Recently travelled, waiting to continue...'
+    sysmsg 'Recently travelled, waiting to continue...'
+    
+    if not hidden and skill 'hiding' > 50
+        skill 'hiding'
+    endif
+    
+    wait 30000
+    loop
+endif
+
 # create recall escape target
 if not varexist 'loggingEscapeRune'
     overhead 'Select escape rune or runebook'
@@ -12,6 +26,16 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
         hotkey 'Recall'
         waitfortarget         
         target 'loggingEscapeRune'
+        wait 3000
+        clearsysmsg 
+        
+        if skill 'Hiding' >= 50 
+            skill 'Hiding'
+            overhead 'Recall escaped from PK'
+            sysmsg 'Recall escaped from PK'
+            stop
+        endif        
+        
     elseif skill 'Hiding' >= 50
         overhead 'Hiding from PK!' 34
         sysmsg 'Hiding from nearby PK!' 34
@@ -29,7 +53,8 @@ if weight >= 540
         hotkey 'Recall'
         waitfortarget
         target 'loggingEscapeRune'
-        wait 2000
+        wait 3000
+        clearsysmsg 
     endif 
     
     if skill 'hiding' >= 50 and not hidden
@@ -41,6 +66,13 @@ if weight >= 540
 endif
 
 # wait for world save
+
+# init world timer with a value that wont catch below
+if not timerexists 'worldSaveTimer'
+    createtimer 'worldSaveTimer'
+    settimer 'worldSaveTimer' 25000
+endif
+    
 if insysmsg 'The world will save'
     if insysmsg 'World save complete'
         overhead 'Save complete, continuing...' 53
@@ -50,10 +82,6 @@ if insysmsg 'The world will save'
     elseif timer 'worldSaveTimer' < 20000
         overhead 'Waiting for world save...'
         loop
-    endif
-    
-    if not timerexists 'worldSaveTimer'
-        createtimer 'worldSaveTimer'
     endif
     
     settimer 'worldSaveTimer' 0
