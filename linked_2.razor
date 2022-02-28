@@ -1,0 +1,8 @@
+overhead 'Running script 2'
+wait 2500
+
+if find 'script_rune' backpack as rune
+    getlabel rune next_script
+    overhead 'Returning to: {{next_script}}'
+    script next_script
+endif

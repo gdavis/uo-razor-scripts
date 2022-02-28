@@ -19,9 +19,17 @@ if not varexist 'loggingEscapeRune'
 endif
 
 # PK check
+setvar! 'use_recall' 1
+
+if 'use_recall' == 1 
+    overhead 'Recall Escape Enabled'
+else
+    overhead 'Recall Escape Disabled'
+endif
+
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     clearsysmsg 
-    if skill 'magery' >= 60
+    if skill 'magery' >= 60 and 'use_recall' == 1
         overhead 'Escaping PK!' 34
         hotkey 'Recall'
         waitfortarget         

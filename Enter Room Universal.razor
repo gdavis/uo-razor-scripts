@@ -1,0 +1,21 @@
+gumpclose 
+say 'room'
+waitforgump 
+
+if ingump 'enter your room'
+    overhead 'owner!'
+    gumpresponse 4
+elseif ingump 'rent this room'
+    gumpresponse 5
+    waitforgump 
+    
+    if ingump 'co-owner'
+        overhead 'Entering co-owned room'
+        gumpresponse 100
+    else
+        overhead 'No access to rooms'
+    endif
+else 
+    overhead 'No room access!' 38
+endif
+    

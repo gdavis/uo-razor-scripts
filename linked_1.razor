@@ -1,0 +1,26 @@
+# This is a demo script showing how
+# a recall rune can be used to store
+# a string of the script we want
+# to return to after executing
+# another script.
+#
+# Ideally scripts can be executed
+# dynamically between other scripts,
+# allowing cross-script execution.
+
+
+overhead 'Running script 1'
+
+if not varexist 'script_rune'
+    overhead 'Select the rune to use as a script identifier'
+    setvar 'script_rune'
+endif
+
+
+dclick 'script_rune'
+waitforprompt 'any'
+promptresponse 'linked_1'
+wait 1000
+
+script 'linked_2'
+
