@@ -26,9 +26,9 @@ elseif ingump 'Rent This Room'
     
     if ingump 'co-owner'
         while not insysmsg 'You enter the rental room'
+            wait 250
             overhead 'Entering co-owned room...' 903
             gumpresponse 100
-            wait 500
         endwhile
         
         overhead 'Welcome home'
