@@ -1,21 +1,41 @@
-gumpclose 
-say 'room'
-waitforgump 
+hotkey 'Cancel Current Target'
+clearsysmsg 
 
-if ingump 'enter your room'
-    overhead 'owner!'
-    gumpresponse 4
-elseif ingump 'rent this room'
+@setvar rentalGumpID 2393832411
+
+if gumpexists rentalGumpID
+    gumpclose
+    wait 100
+endif
+
+say 'room'
+waitforgump rentalGumpID 3000
+
+if ingump 'Enter Your Room'
+    while not insysmsg 'You enter the rental room'
+        overhead 'Entering my room...' 903
+        gumpresponse 4
+        wait 100
+    endwhile
+    
+    overhead 'Welcome home'
+    
+elseif ingump 'Rent This Room'
     gumpresponse 5
-    waitforgump 
+    waitforgump rentalGumpID 3000
     
     if ingump 'co-owner'
-        overhead 'Entering co-owned room'
-        gumpresponse 100
+        while not insysmsg 'You enter the rental room'
+            overhead 'Entering co-owned room...' 903
+            gumpresponse 100
+            wait 500
+        endwhile
+        
+        overhead 'Welcome home'
     else
-        overhead 'No access to rooms'
+        overhead 'No access to any rooms!' 38
     endif
 else 
+    sysmsg 'Character does not have a room or access to one!' 38
     overhead 'No room access!' 38
 endif
-    
