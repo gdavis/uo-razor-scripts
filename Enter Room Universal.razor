@@ -12,10 +12,12 @@ say 'room'
 waitforgump rentalGumpID 3000
 
 if ingump 'Enter Your Room'
+    wait 250
+
     while not insysmsg 'You enter the rental room'
         overhead 'Entering my room...' 903
         gumpresponse 4
-        wait 100
+        wait 250
     endwhile
     
     overhead 'Welcome home'
