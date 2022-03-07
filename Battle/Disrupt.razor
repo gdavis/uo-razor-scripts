@@ -1,0 +1,95 @@
+# Script that interrupts spell casting by cycling through a series of offensive spells.
+# 
+# Offensive spells from the 1st, 2nd, 3rd, and 4th circle cannot disrupt twice in a row.
+# To make interrupting easy, we keep track of an index of the last spell cast so that we
+# may move to the next interrupt for casting the next interrupt spell.
+#
+# - last_interrupt:         tracks the sequence for the outer spell cast sequence. 
+#                           the sequence is as follows:
+#                               1) non-hostile spell
+#                               2) magic arrow
+#                               3) fireball
+#                               4) lightning
+#
+# - last_non_hostile_spell: tracks the last non-hostile spell cast. this is to ensure
+#                           the same spell from the same circle is never cast 
+#                           twice in a row. this prevents a failed interrupt.
+#
+
+clearsysmsg 
+#hotkey 'cancel current target'
+
+if not timerexists 'disrupt_wait'
+    createtimer 'disrupt_wait' 
+    settimer 'disrupt_wait' 10000
+endif
+
+if timer 'disrupt_wait' < 10000
+    overhead 'TOO FAST' 38
+    wait 100
+    loop
+endif
+
+if not varexist last_interrupt
+    @setvar! last_interrupt 0
+endif
+
+if not varexist last_non_hostile_spell 
+    @setvar! last_non_hostile_spell 0
+endif
+
+if last_interrupt == 0
+    @setvar! last_interrupt 1
+
+    if last_non_hostile_spell == 0
+        @setvar! last_non_hostile_spell 1
+        overhead 'harm'
+        cast 'harm'
+        settimer 'disrupt_wait' 9250
+        
+    elseif last_non_hostile_spell == 1
+        @setvar! last_non_hostile_spell 2
+        overhead 'weaken'
+        cast 'weaken'
+        settimer 'disrupt_wait' 9500
+        
+    elseif last_non_hostile_spell == 2
+        @setvar! last_non_hostile_spell 3
+        overhead 'feeblemind'
+        cast 'feeblemind'    
+        settimer 'disrupt_wait' 9500
+        
+    elseif last_non_hostile_spell == 3
+        @setvar! last_non_hostile_spell 0
+        overhead 'clumsy'
+        cast 'clumsy'
+        settimer 'disrupt_wait' 9500
+    endif
+    
+elseif last_interrupt == 1 
+    @setvar! last_interrupt 2
+    overhead 'magic arrow'
+    cast 'magic arrow'
+    settimer 'disrupt_wait' 9500
+    
+elseif last_interrupt == 2
+    @setvar! last_interrupt 3
+    overhead 'fireball'
+    cast 'fireball'
+    settimer 'disrupt_wait' 9000
+    
+elseif last_interrupt == 3 
+    @setvar! last_interrupt 0  
+    overhead 'lightning'
+    cast 'lightning'
+    settimer 'disrupt_wait' 8750
+   
+endif
+
+if insysmsg 'You have not yet recovered from casting'
+    overhead 'TOO FAST' 28
+endif
+
+wft 3000
+target lasttarget 
+overhead '[DISRUPT]'
