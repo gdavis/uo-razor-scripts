@@ -1,10 +1,8 @@
-# check for shelter island
-if skill 'magery' >= 70 
-    overhead 'Get me off this island!'
-    wait 5000
-    loop
+if not varexist regs_restock
+    overhead 'Select Restock Bag for Reagents'
+    sysmsg 'Select Restock Bag for Reagents'
+    @setvar! regs_restock
 endif
-    
 
 if mana < 20
     skill 'Meditation'
@@ -37,9 +35,9 @@ if skill 'Magery' < 60
     
 elseif skill 'Magery' < 80
     if count 'Blood moss' < 10 or count 'Nightshade' < 10
-        restock 1
+        restock 9
         wft 5000
-        target self
+        target regs_restock
         wait 500
     endif
         
@@ -50,9 +48,9 @@ elseif skill 'Magery' < 80
     
 elseif skill 'Magery' < 100
     if count 'Blood moss' < 10 or count 'Mandrake Root' < 10 or count "Spider's Silk" < 10
-        restock 2
+        restock 10
         wft 5000
-        target self
+        target regs_restock
         wait 750
     endif
     

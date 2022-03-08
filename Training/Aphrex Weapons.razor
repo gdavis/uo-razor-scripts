@@ -1,0 +1,19 @@
+# Trains swords and wrestling to 70
+if skill 'swordsmanship' >= 100 and not lhandempty
+    clearhands 'both'
+endif
+
+if skill 'wrestling' >= 100
+    stop
+endif
+
+if skill 'anatomy' >= 80
+    setskill 'anatomy' lock
+endif
+
+if skill 'tactics' == 80
+    setskill 'tactics' lock
+endif
+
+wait 2500
+loop
