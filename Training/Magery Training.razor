@@ -4,25 +4,25 @@ if not varexist regs_restock
     @setvar! regs_restock
 endif
 
-if mana < 20
-    skill 'Meditation'
-    wait 500
-    
-    if findbuff 'actively meditating'
-        while mana < maxmana
-            overhead 'Meditating...'
-            wait 3500
-        endwhile
-        replay
-        
-    else
-        overhead 'Retrying meditation...'
-        wait 5500
-        replay
-    endif
-endif
-
+# Summon Creature from 50-60
 if skill 'Magery' < 60
+    if mana < 20
+        skill 'Meditation'
+        wait 500
+    
+        if findbuff 'actively meditating'
+            while mana < maxmana
+                overhead 'Meditating...'
+                wait 3500
+            endwhile
+            replay
+        else
+            overhead 'Retrying meditation...'
+            wait 5500
+            replay
+        endif
+    endif    
+
     cast 'Summ. Creature'
     say 'all guard me'
     wait 6000
@@ -32,8 +32,26 @@ if skill 'Magery' < 60
         waitforgump 931181454
         gumpresponse 1
     endif
-    
+
+# Invisibility from 60-80
 elseif skill 'Magery' < 80
+    if mana < 30
+        skill 'Meditation'
+        wait 500
+    
+        if findbuff 'actively meditating'
+            while mana < maxmana
+                overhead 'Meditating...'
+                wait 3500
+            endwhile
+            replay
+        else
+            overhead 'Retrying meditation...'
+            wait 5500
+            replay
+        endif
+    endif        
+
     if count 'Blood moss' < 10 or count 'Nightshade' < 10
         restock 9
         wft 5000
@@ -46,7 +64,25 @@ elseif skill 'Magery' < 80
     target self
     wait 2000
     
+# Summon Water Elemental From 80-100
 elseif skill 'Magery' < 100
+    if mana < 50
+        skill 'Meditation'
+        wait 500
+    
+        if findbuff 'actively meditating'
+            while mana < maxmana
+                overhead 'Meditating...'
+                wait 3500
+            endwhile
+            replay
+        else
+            overhead 'Retrying meditation...'
+            wait 5500
+            replay
+        endif
+    endif        
+
     if count 'Blood moss' < 10 or count 'Mandrake Root' < 10 or count "Spider's Silk" < 10
         restock 10
         wft 5000
