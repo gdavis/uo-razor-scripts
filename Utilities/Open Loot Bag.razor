@@ -1,0 +1,6 @@
+if not varexist loot_bag
+    overhead 'Select your loot bag'
+    @setvar! loot_bag
+endif
+
+dclick loot_bag backpack
