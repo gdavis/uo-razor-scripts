@@ -2,8 +2,8 @@ hotkey 'Cancel Current Target'
 
 while true == true
     clearsysmsg 
-    cast 'Greater Heal'
-    overhead '[G-Heal Self]' 24
+    cast 'Heal'
+    overhead '[Heal Self]' 24
     wait 250
     
     if insysmsg 'You are already casting a spell'
@@ -15,6 +15,7 @@ while true == true
 
     if insysmsg 'You have not yet recovered'
         overhead '[Not Recovered]' 38
+        settimer gheal 1000
         wait 100
         loop
     endif

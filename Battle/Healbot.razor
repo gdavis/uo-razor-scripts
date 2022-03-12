@@ -1,0 +1,12 @@
+# Script used to train pvp interrupts.
+# Will attempt to constantly stay at 
+# full health so the attacker can
+# practice interrupting.
+
+if poisoned or hp < maxhp
+    hotkey '> Greater Heal/Cure Self'
+elseif mana < 100
+    skill 'Mediatation'
+endif
+loop
+

@@ -37,6 +37,14 @@ elseif ingump 'Rent This Room'
     else
         overhead 'No access to any rooms!' 38
     endif
+elseif ingump 'Visit Other Rooms'
+    gumpresponse 2
+    waitforgump rentalGumpID 3000
+    while not insysmsg 'You enter the rental room'
+        wait 250
+        overhead 'Entering co-owned room...' 903
+        gumpresponse 100
+    endwhile
 else 
     sysmsg 'Character does not have a room or access to one!' 38
     overhead 'No room access!' 38

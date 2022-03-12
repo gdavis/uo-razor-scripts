@@ -1,0 +1,27 @@
+# Test script to quickly cast Explosion and E-Bolt on a new target
+hotkey 'Cancel Current Target'
+
+@unsetvar! kill_target
+
+overhead '[SET KILL TARGET]' 28
+@setvar! kill_target
+
+cast 'explosion'
+overhead '[EXPLODE]' 38
+wft
+target kill_target
+
+clearsysmsg 
+cast 'energy bolt'
+wait 100
+
+while insysmsg 'not yet recovered from casting'
+    overhead "NOT READY"
+    wait 100
+    clearsysmsg 
+    cast 'energy bolt'
+endwhile
+
+overhead "[E-BOLT!]" 38
+wft 5000
+target kill_target
