@@ -3,7 +3,7 @@ if findtype 'strong box' backpack as box
     if skill 'lockpicking' < 100
         if findtype 'lockpicks' backpack as picks
             dclick 'picks'
-            waitfortarget
+            waitfortarget 5000
             target box
             wait 3500
         else
@@ -19,7 +19,7 @@ if findtype 'strong box' backpack as box
     if skill 'remove trap' < 100
         if findtype 'drill' backpack as drill
             dclick drill
-            waitfortarget 
+            waitfortarget 5000 
             target box
             wait 3500
         else
@@ -28,7 +28,7 @@ if findtype 'strong box' backpack as box
         endif
     else
        overhead 'Done with remove trap' 
-        wait 2500
+       wait 2500
     endif
 
     loop
