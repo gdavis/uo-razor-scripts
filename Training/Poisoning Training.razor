@@ -30,6 +30,12 @@ else
     endif
 endif
 
+# check if we've been poisoned
+if findbuff 'poison'
+    overhead 'Poisoned!'
+    hotkey 'Drink Cure'
+endif
+
 # this will move empty bottles to 
 # the left chest in the rental room
 if counttype 'empty bottle%s%' self >= 25 and findtype 'empty bottle%s%' backpack as bottles

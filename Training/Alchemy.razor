@@ -29,6 +29,11 @@ if skill 'Alchemy' < 55
 
 # Lesser Magic Resist
 elseif skill 'Alchemy' < 75
+    if counttype "Spider's Silk" backpack < 4
+        overhead 'Missing spider silk!' 38
+        wait 5000
+        loop
+    endif
 
 # Greater Poison
 elseif skill 'Alchemy' < 95
@@ -58,6 +63,14 @@ if skill 'Alchemy' < 55
     waitforgump 949095101
     gumpresponse 200
     waitforgump 949095101
+  
+# Poison option for training.  
+#elseif skill 'Alchemy' < 75
+#    overhead '55 - 75: Regular Poison'
+#    gumpresponse 106
+#    waitforgump 949095101
+#    gumpresponse 201
+#    waitforgump 949095101
     
 # Lesser Magic Resist
 elseif skill 'Alchemy' < 75
@@ -66,6 +79,14 @@ elseif skill 'Alchemy' < 75
     waitforgump 949095101
     gumpresponse 200
     waitforgump 949095101
+    
+    # chug, chug, chug! 
+    # use em up for the bottles
+    if counttype 'Black Potion' >= 25
+        while findtype 'Black Potion' backpack as potion
+            dclick potion 
+        endwhile
+    endif
 
 # Greater Poison
 elseif skill 'Alchemy' < 95
@@ -96,22 +117,22 @@ else
     overhead "Legendary Poisoner!"
 endif
 
-wait 3500
+wait 2500
 
 # ----------------------------
 # Move potion to the chest
-if counttype 'Green Potion' self >= 25 and findtype 'Green Potion' backpack as potion 
+while counttype 'Green Potion' self >= 24 and findtype 'Green Potion' backpack as potion 
     overhead 'moving potions...'    
     lift potion 25
 
-    if findtype 'Green Potion' 0x4B6FA8C9 as stack
-        # add emptle bottles to the existing stack
-        drop stack
-    else
+#    if findtype 'Green Potion' 0x4B6FA8C9 as stack
+#        # add emptle bottles to the existing stack
+#        drop stack
+#    else
         # add a new stack in the chest
         drop 0x4B6FA8C9 76 151 0
-    endif
+        #    endif
 
-endif
+endwhile
 
 loop
