@@ -1,0 +1,45 @@
+# Takes the reagents out of a wizards
+# satchel, places it into a reg box,
+# and then runs an organizer 
+# to restock the inventory with the 
+# correct number of reagents.
+# Helpful to quickly dump after a 
+# run where we may have picked up regs
+# in loot bags, and want to restock.
+
+clearsysmsg 
+if findtype 'reagent satchel' as satchel
+    undress 'Wizard Satchel'
+endif
+
+overhead 'Unpacking reagents...'
+organizer 7
+
+wait 500
+if insysmsg 'Organize Agent did not find any'
+    overhead 'Nothing to unpack??' 38
+else
+    while not insysmsg 'queued actions' 
+        wait 1000
+        overhead 'Waiting to unpack...'
+    endwhile
+endif
+
+
+
+# set the desired restock agent
+# run for the amount of regs to restock
+if not varexist 'regs_bag'
+    overhead 'Restock from what?'
+    setvar 'regs_bag'
+endif
+
+overhead 'Restocking reagents...'
+restock 1
+wft
+target 'regs_bag'
+
+if findtype 'reagent satchel' as satchel
+    dress 'Wizard Satchel'
+    dclick satchel
+endif

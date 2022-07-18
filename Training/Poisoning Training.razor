@@ -1,0 +1,48 @@
+# Starting at 50 poisoning to GM
+
+# NOTE:
+# this is just for using potions made
+# by Sully as he levels alchemy
+
+if not varexist 'poison_target'
+    overhead 'Poison what weapon?'
+    setvar 'poison_target'
+endif
+
+if findtype 'Green Potion' backpack as potion
+    skill 'poisoning'
+    waitfortarget
+    target potion
+
+    # use on item
+    waitfortarget
+    target 'poison_target'
+    wait 5500
+else 
+    # check for existing potions in the chest
+    if findtype 'Green Potion' 0x4B6FA8C9 as potion
+        overhead 'Restocking potions...'
+        lift potion 25
+        drop backpack 0 0 0
+    else
+        overhead 'no potions left'
+        wait 10000
+    endif
+endif
+
+# this will move empty bottles to 
+# the left chest in the rental room
+if counttype 'empty bottle%s%' self >= 25 and findtype 'empty bottle%s%' backpack as bottles
+    overhead 'moving bottles...'
+    lift bottles 25
+    
+    if findtype 'empty bottle%s%' 0x4B6FA8C9 as stack
+        # add emptle bottles to the existing stack
+        drop stack
+    else
+        # add a new stack in the chest
+        drop 0x4B6FA8C9 76 151 0
+    endif
+endif
+    
+loop

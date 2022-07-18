@@ -1,0 +1,16 @@
+# Taming Tests
+skill 'taming' 
+wft
+target lasttarget
+
+wait 12500
+overhead 'is it tame?'
+
+
+if insysmsg 'You fail to tame'
+    sysmsg 'failed'
+    overhead 'failed'
+elseif insysmsg 'It seems to accept you'
+    sysmsg 'tame success'
+    overhead 'tame success'
+endif
