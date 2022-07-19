@@ -24,34 +24,33 @@ if not findtype 'mortar and pestle' backpack
     loop
 endif
 
+
+if counttype 'Nightshade' backpack < 10
+    dclick 'regbox'
+    if findtype 'Nightshade' 'regbox' as ns
+        lift ns 200
+        drop backpack 0 0 0 
+    endif
+endif
+
+# 3981 = spider silk
+if counttype 3981 backpack < 4
+    overhead 'Missing spider silk!' 38
+    dclick 'regbox'
+    if findtype 3981 'regbox' as ss
+        lift ss 200
+        drop backpack 0 0 0
+    endif    
+    
+    wait 5000
+    loop
+endif
+
 # Lesser Poison
 if skill 'Alchemy' < 55
-    if not findtype 'Nightshade'
-        overhead 'Missing nightshade!' 38
-        wait 5000
-        loop
-    endif
 
 # Lesser Magic Resist
 elseif skill 'Alchemy' < 75
-    # 3981 = spider silk
-    if counttype 3981 backpack < 4
-        overhead 'Missing spider silk!' 38
-    
-        dclick 'regbox'
-        if findtype 3981 'regbox' as ss
-            lift ss 200
-        
-            if findtype 'wizard satchel' self as satchel
-                drop satchel 0 0 0
-            else
-                drop backpack 0 0 0
-            endif
-        endif    
-    
-        wait 5000
-        loop
-    endif
 
 # Greater Poison
 elseif skill 'Alchemy' < 95
