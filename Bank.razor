@@ -1,0 +1,8 @@
+say 'bank guards'
+
+if skill 'hiding' > 50 and not hidden
+    while not hidden
+        skill 'hiding'
+        wait 1000
+    endwhile
+endif

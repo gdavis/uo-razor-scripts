@@ -1,17 +1,3 @@
-# check for recent travel
-if insysmsg 'you have recently traveled'
-    clearsysmsg
-    overhead 'Recently travelled, waiting to continue...'
-    sysmsg 'Recently travelled, waiting to continue...'
-    
-    if not hidden and skill 'hiding' > 50
-        skill 'hiding'
-    endif
-    
-    wait 30000
-    loop
-endif
-
 # create recall escape target
 if not varexist 'loggingEscapeRune'
     overhead 'Select escape rune or runebook'
@@ -122,6 +108,19 @@ else
     replay
 endif
 
+# check for recent travel
+if insysmsg 'you have recently traveled'
+    clearsysmsg
+    overhead 'Recently travelled, waiting to continue...'
+    sysmsg 'Recently travelled, waiting to continue...'
+    
+    if not hidden and skill 'hiding' > 50
+        skill 'hiding'
+    endif
+    
+    wait 5000
+    loop
+endif
 
 # check for no more resources
 if insysmsg 'You do not see any'
