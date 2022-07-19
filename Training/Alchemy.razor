@@ -3,6 +3,11 @@
 # ----------------------------
 # Prechecks for resources
 
+if not varexist 'regbox'
+    overhead 'Where to refill regs from?'
+    setvar 'regbox'
+endif
+
 if not findtype 'empty bottle%s%' backpack
     if findtype 'empty bottle%s%' 0x4B6FA8C9 as bottles
         overhead 'Restocking bottles...'
@@ -29,8 +34,21 @@ if skill 'Alchemy' < 55
 
 # Lesser Magic Resist
 elseif skill 'Alchemy' < 75
-    if counttype "Spider's Silk" backpack < 4
+    # 3981 = spider silk
+    if counttype 3981 backpack < 4
         overhead 'Missing spider silk!' 38
+    
+        dclick 'regbox'
+        if findtype 3981 'regbox' as ss
+            lift ss 200
+        
+            if findtype 'wizard satchel' self as satchel
+                drop satchel 0 0 0
+            else
+                drop backpack 0 0 0
+            endif
+        endif    
+    
         wait 5000
         loop
     endif
