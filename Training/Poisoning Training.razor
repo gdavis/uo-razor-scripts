@@ -9,6 +9,37 @@ if not varexist 'poison_target'
     setvar 'poison_target'
 endif
 
+if poisoned 
+    say 'cure me'
+endif
+
+if hp < maxhp or poisoned
+    if findtype 'clean bandage%s%' backpack 
+        clearsysmsg
+        dclicktype 'clean bandage%s%' backpack
+        wft 1000
+        target self
+        wait 500
+            
+        if insysmsg 'You begin applying the bandages'
+            settimer 'bandageSelf' 0
+            wait 10250
+            if hp < 100 
+                overhead 'Bandage: still hurt, reapplying...'
+                replay
+            endif
+        elseif insysmsg 'That being is not damaged'
+            overhead 'Full Health'
+        else
+            overhead 'Did it apply?!?'
+        endif
+    else 
+        overhead 'No bandages!'
+        wait 1000
+        loop
+    endif
+endif
+
 if findtype 'Green Potion' backpack as potion
     skill 'poisoning'
     waitfortarget

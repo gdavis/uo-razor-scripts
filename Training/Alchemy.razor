@@ -3,6 +3,14 @@
 # ----------------------------
 # Prechecks for resources
 
+# cure Aphir if he needs it
+if insysmsg 'cure me'
+    cast 'Cure'
+    waitfortarget
+    target 0xD41E
+    clearsysmsg 
+endif
+
 if not varexist 'regbox'
     overhead 'Where to refill regs from?'
     setvar 'regbox'
