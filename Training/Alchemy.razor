@@ -3,14 +3,6 @@
 # ----------------------------
 # Prechecks for resources
 
-# cure Aphir if he needs it
-if insysmsg 'cure me'
-    cast 'Cure'
-    waitfortarget
-    target 0xD41E
-    clearsysmsg 
-endif
-
 if not varexist 'regbox'
     overhead 'Where to refill regs from?'
     setvar 'regbox'
@@ -144,20 +136,40 @@ endif
 
 wait 2500
 
+# ---------------------------
+# Move potion to the keg
+clearsysmsg 
+
+# grab keg from box if we dont have it
+if not findtype 'keg' backpack
+    if findtype 'keg' 0x4B6FA8C9 0 as newkeg
+        lift newkeg 1
+        drop backpack 79 64 0
+    else 
+        overhead 'no more kegs!'
+        wait 5000
+        loop
+    endif
+endif
+
+if findtype 'Green Potion' self as potion and findtype 'keg' self as keg
+    lift potion 25
+    drop keg 0 0 0
+endif
+
+wait 250
+
+if insysmsg 'the keg will not hold' and findtype 'keg' self as keg
+    lift keg 1
+    drop 0x4B6FA8C9 93 126 0
+endif
+
 # ----------------------------
 # Move potion to the chest
-while counttype 'Green Potion' self >= 24 and findtype 'Green Potion' backpack as potion 
-    overhead 'moving potions...'    
-    lift potion 25
-
-#    if findtype 'Green Potion' 0x4B6FA8C9 as stack
-#        # add emptle bottles to the existing stack
-#        drop stack
-#    else
-        # add a new stack in the chest
-        drop 0x4B6FA8C9 76 151 0
-        #    endif
-
-endwhile
+#while counttype 'Green Potion' self >= 24 and findtype 'Green Potion' backpack as potion 
+#    overhead 'moving potions...'    
+#    lift potion 25
+#    drop 0x4B6FA8C9 76 151 0
+#endwhile
 
 loop
