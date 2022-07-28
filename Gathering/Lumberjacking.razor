@@ -51,8 +51,8 @@ if weight >= 540
         clearsysmsg 
     endif 
     
-    if skill 'hiding' >= 50 and not hidden
-        skill 'hiding'
+    if skill 'Hiding' >= 50 and not hidden
+        skill 'Hiding'
     endif
     
     wait 5000
@@ -114,8 +114,8 @@ if insysmsg 'you have recently traveled'
     overhead 'Recently travelled, waiting to continue...'
     sysmsg 'Recently travelled, waiting to continue...'
     
-    if not hidden and skill 'hiding' > 50
-        skill 'hiding'
+    if skill 'Hiding' >= 50 and not hidden
+        skill 'Hiding'
     endif
     
     wait 5000
