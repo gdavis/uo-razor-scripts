@@ -1,0 +1,46 @@
+if hp <= 20 
+    overhead 'Oh shit!'
+    gumpresponse 19
+endif
+
+
+if hp <= 50 
+    overhead 'Getting kinda low...'
+    gumpresponse 16
+    waitfortarget 1000
+    target 'self'
+endif
+
+
+if hp < 90
+    if not timerexists 'bandageSelf'
+        createtimer 'bandageSelf'
+        settimer 'bandageSelf' 10000 
+    endif
+
+    if timer 'bandageSelf' < 10000
+        overhead 'Bandage: Applying...'
+    elseif hp >= 100
+        overhead 'Full Health'
+    elseif findtype 'clean bandage%s%' backpack 
+        clearsysmsg
+        dclicktype 'clean bandage%s%' backpack
+        wft 1000
+        target self
+        wait 500
+            
+        if insysmsg 'You begin applying the bandages'
+            settimer 'bandageSelf' 0
+        elseif insysmsg 'That being is not damaged'
+            overhead 'Full Health'
+        else
+            overhead 'Did it apply?!?'
+        endif
+    else 
+        overhead 'No bandages!'
+    endif
+endif
+   
+
+wait 1000
+loop

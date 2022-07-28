@@ -134,7 +134,14 @@ else
     overhead "Legendary Poisoner!"
 endif
 
-wait 2500
+wait 2000
+
+if ingump 'You fail to create a useful potion' 949095101
+    overhead 'You Failed.' 38
+elseif ingump 'You pour the potion' 949095101
+    overhead 'Success!' 84
+endif
+
 
 # ---------------------------
 # Move potion to the keg
@@ -143,6 +150,7 @@ clearsysmsg
 # grab keg from box if we dont have it
 if not findtype 'keg' backpack
     if findtype 'keg' 0x4B6FA8C9 0 as newkeg
+        overhead 'grabbing new empty keg'
         lift newkeg 1
         drop backpack 79 64 0
     else 
@@ -152,7 +160,12 @@ if not findtype 'keg' backpack
     endif
 endif
 
+if findtype 'Green Potion' self as potion
+    overhead 'created potion'
+endif    
+
 if findtype 'Green Potion' self as potion and findtype 'keg' self as keg
+    overhead 'moving potion to keg'    
     lift potion 25
     drop keg 0 0 0
 endif
@@ -160,6 +173,8 @@ endif
 wait 250
 
 if insysmsg 'the keg will not hold' and findtype 'keg' self as keg
+    overhead 'keg full!'
+    overhead 'moving to chest...'
     lift keg 1
     drop 0x4B6FA8C9 93 126 0
 endif
