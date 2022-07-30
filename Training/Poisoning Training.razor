@@ -9,11 +9,19 @@ if not varexist 'poison_target'
     setvar 'poison_target'
 endif
 
-if poisoned 
-    say 'cure me'
-endif
 
 if hp < maxhp or poisoned
+    if skill 'Chivalry' > 50
+        gumpresponse 16
+        waitfortarget 1000
+        target 'self'
+        
+        if hp < 40
+            gumpresponse 19
+            waitforgump 1387930325
+        endif  
+    endif    
+
     if findtype 'clean bandage%s%' backpack 
         clearsysmsg
         dclicktype 'clean bandage%s%' backpack
@@ -29,12 +37,12 @@ if hp < maxhp or poisoned
                 replay
             endif
         elseif insysmsg 'That being is not damaged'
-            overhead 'Full Health'
+            overhead 'Full Health' 1001
         else
-            overhead 'Did it apply?!?'
+            overhead 'Did it apply?!?' 38
         endif
     else 
-        overhead 'No bandages!'
+        overhead 'No bandages!' 38
         wait 1000
         loop
     endif
@@ -46,31 +54,72 @@ if findtype 'Green Potion' backpack as potion
     target potion
 
     # use on item
-    waitfortarget
+    waitfortarget 1000
     target 'poison_target'
-    wait 5500
+    
+    wait 500
+    # check if weve been poisoned
+    if findbuff 'poison'
+        overhead 'Poisoned!' 44
+        hotkey 'Drink Cure'
+    endif
+    
+    wait 5000
 else 
+    # refill from a poison keg in inventory
+    if findtype 'keg' backpack 363 as keg 
+        getlabel keg kegName
+        @setvar useKeg 0
+
+        if skill 'poisoning' < 55
+            overhead 'need regular poison' 920
+        elseif skill 'poisoning' < 80
+           overhead 'need greater poison' 920
+        elseif skill 'poisoning' < 100 
+            if 'deadly' in kegName
+                overhead 'found deadly keg' 920
+                @setvar useKeg 1
+            else 
+                overhead 'need deadly poison' 920
+            endif  
+        else 
+            overhead 'need leathal poison' 920
+        endif
+    
+        if useKeg == 1 
+            overhead 'Refilling from keg...' 920
+            while counttype 'empty bottle%s%' self > 0
+                dclick keg
+                
+                getlabel keg kegName
+                if 'is empty' in kegName
+                    break
+                endif  
+            endwhile
+            
+            loop
+        endif
+    else 
+        overhead 'No kegs found to refill from' 38
+        wait 2500
+    endif
+
     # check for existing potions in the chest
     if findtype 'Green Potion' 0x4B6FA8C9 as potion
-        overhead 'Restocking potions...'
+        overhead 'Restocking potions...' 920
         lift potion 25
         drop backpack 0 0 0
     else
-        overhead 'no potions left'
-        wait 10000
+        overhead 'No potions left' 38
+        wait 2500
+        loop
     endif
-endif
-
-# check if we've been poisoned
-if findbuff 'poison'
-    overhead 'Poisoned!'
-    hotkey 'Drink Cure'
 endif
 
 # this will move empty bottles to 
 # the left chest in the rental room
 if counttype 'empty bottle%s%' self >= 25 and findtype 'empty bottle%s%' backpack as bottles
-    overhead 'moving bottles...'
+    overhead 'moving bottles...' 920
     lift bottles 25
     
     if findtype 'empty bottle%s%' 0x4B6FA8C9 as stack
@@ -81,5 +130,6 @@ if counttype 'empty bottle%s%' self >= 25 and findtype 'empty bottle%s%' backpac
         drop 0x4B6FA8C9 76 151 0
     endif
 endif
+
     
 loop

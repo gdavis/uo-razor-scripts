@@ -148,43 +148,43 @@ endif
 clearsysmsg 
 
 # grab keg from box if we dont have it
-if not findtype 'keg' backpack
-    if findtype 'keg' 0x4B6FA8C9 0 as newkeg
-        overhead 'grabbing new empty keg'
-        lift newkeg 1
-        drop backpack 79 64 0
-    else 
-        overhead 'no more kegs!'
-        wait 5000
-        loop
-    endif
-endif
+#if not findtype 'keg' backpack
+#    if findtype 'keg' 0x4B6FA8C9 0 as newkeg
+#        overhead 'grabbing new empty keg'
+#        lift newkeg 1
+#        drop backpack 79 64 0
+#    else 
+#        overhead 'no more kegs!'
+#        wait 5000
+#        loop
+#    endif
+#endif
 
 if findtype 'Green Potion' self as potion
     overhead 'created potion'
 endif    
 
-if findtype 'Green Potion' self as potion and findtype 'keg' self as keg
-    overhead 'moving potion to keg'    
-    lift potion 25
-    drop keg 0 0 0
-endif
-
-wait 250
-
-if insysmsg 'the keg will not hold' and findtype 'keg' self as keg
-    overhead 'keg full!'
-    overhead 'moving to chest...'
-    lift keg 1
-    drop 0x4B6FA8C9 93 126 0
-endif
+#if findtype 'Green Potion' self as potion and findtype 'keg' self as keg
+#    overhead 'moving potion to keg'    
+#    lift potion 25
+#    drop keg 0 0 0
+#endif
+#
+#wait 250
+#
+#if insysmsg 'the keg will not hold' and findtype 'keg' self as keg
+#    overhead 'keg full!'
+#    overhead 'moving to chest...'
+#    lift keg 1
+#    drop 0x4B6FA8C9 93 126 0
+#endif
 
 # ----------------------------
 # Move potion to the chest
-#while counttype 'Green Potion' self >= 24 and findtype 'Green Potion' backpack as potion 
-#    overhead 'moving potions...'    
-#    lift potion 25
-#    drop 0x4B6FA8C9 76 151 0
-#endwhile
+while counttype 'Green Potion' self >= 24 and findtype 'Green Potion' backpack as potion 
+    overhead 'moving potions...'    
+    lift potion 25
+    drop 0x4B6FA8C9 76 151 0
+endwhile
 
 loop
