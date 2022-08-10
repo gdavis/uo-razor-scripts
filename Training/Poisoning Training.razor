@@ -4,14 +4,16 @@
 # this is just for using potions made
 # by Sully as he levels alchemy
 
+@setvar chestID 0x46512083
+
 if not varexist 'poison_target'
     overhead 'Poison what weapon?'
     setvar 'poison_target'
 endif
 
 # try to refill empty bottles with cure potions from a keg
-if findtype 'keg' backpack 44
-    while findtype 'keg' backpack 44 as cureKeg and counttype 'Orange Potion' backpack < 25
+if findtype 6464 backpack 44
+    while findtype 6464 backpack 44 as cureKeg and counttype 'Orange Potion' backpack < 25
         if findtype 'empty bottle%s%' backpack
             dclick  cureKeg
         else
@@ -83,16 +85,14 @@ if findtype 'Green Potion' backpack as potion
     
     wait 5000
 else 
-    if not findtype 'keg' backpack 363 and findtype 'keg' 0x46512083 363 as newkeg
-#        lift newkeg 1
-#        drop backpack 0 0 0
-        dclick newkeg
+    if not findtype 'keg' backpack 363 and findtype 'keg' chestID 363 as refillKeg
+        dclick refillKeg
         wait 250
     endif
 
     # refill from a poison keg in inventory
-    if findtype 'keg' backpack 363 as keg 
-        getlabel keg kegName
+    if findtype 'keg' backpack 363 as refillKeg 
+        getlabel refillKeg kegName
         @setvar useKeg 0
         overhead kegName
 
@@ -113,11 +113,12 @@ else
     
         if useKeg == 1 
             overhead 'Refilling from keg...' 920
-            while counttype 'empty bottle%s%' self > 0
-                dclick keg
+            while counttype 'Green Potion' self < 25 and counttype 'empty bottle%s%' self > 0
+                dclick refillKeg
                 
-                getlabel keg kegName
+                getlabel refillKeg kegName
                 if 'is empty' in kegName
+                    overhead 'emptied the keg!' 44
                     break
                 endif  
             endwhile
@@ -130,7 +131,7 @@ else
     endif
 
     # check for existing potions in the chest
-    if findtype 'Green Potion' 0x46512083 as potion
+    if findtype 'Green Potion' chestID as potion
         overhead 'Restocking potions...' 920
         lift potion 25
         drop backpack 0 0 0
@@ -147,12 +148,12 @@ if counttype 'empty bottle%s%' self >= 25 and findtype 'empty bottle%s%' backpac
     overhead 'moving bottles...' 920
     lift bottles 25
     
-    if findtype 'empty bottle%s%' 0x46512083 as stack
+    if findtype 'empty bottle%s%' chestID as stack
         # add emptle bottles to the existing stack
         drop stack
     else
         # add a new stack in the chest
-        drop 0x4B6FA8C9 76 151 0
+        drop chestID 76 151 0
     endif
 endif
 
