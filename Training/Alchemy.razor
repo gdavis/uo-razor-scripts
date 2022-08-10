@@ -9,7 +9,7 @@ if not varexist 'regbox'
 endif
 
 if not findtype 'empty bottle%s%' backpack
-    if findtype 'empty bottle%s%' 0x4B6FA8C9 as bottles
+    if findtype 'empty bottle%s%' 0x46512083 as bottles
         overhead 'Restocking bottles...'
         lift bottles 25
         drop backpack 0 0 0
@@ -149,7 +149,7 @@ clearsysmsg
 
 # grab keg from box if we dont have it
 if not findtype 'keg' backpack
-    if findtype 'keg' 0x4B6FA8C9 0 as newkeg
+    if findtype 'keg' 0x46512083 0 as newkeg
         overhead 'grabbing new empty keg'
         lift newkeg 1
         drop backpack 79 64 0
@@ -176,11 +176,11 @@ if insysmsg 'the keg will not hold' and findtype 'keg' self as keg
     overhead 'keg full!'
     overhead 'moving to chest...'
     lift keg 1
-    drop 0x4B6FA8C9 93 126 0
+    drop 0x46512083 93 126 0
 endif
 
 # ----------------------------
-# Move potion to the chest
+## Move potion to the chest
 #while counttype 'Green Potion' self >= 24 and findtype 'Green Potion' backpack as potion 
 #    overhead 'moving potions...'    
 #    lift potion 25
