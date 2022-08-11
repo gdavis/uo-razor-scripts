@@ -1,0 +1,54 @@
+if not varexist chest
+    overhead 'Unlock what chest?' 44
+    @setvar chest
+endif
+
+getlabel chest chestName
+overhead 'Unlocking chest:' 44
+overhead chestName 1001
+dclick chest
+
+wait 100
+if not insysmsg 'It appears to be locked'
+    overhead 'That chest is not locked'
+endif
+
+clearsysmsg 
+
+if not ingump 'Cleared of Traps'
+    overhead 'Has traps...' 908
+    gumpresponse 7
+    waitforgump 736038070 1000
+    wait 1000
+
+    if insysmsg 'You attempt to remove'
+        overhead 'Removing traps...'
+        wait 1000
+        loop
+    elseif insysmsg 'You must wait a few moments before attempting to remove traps'
+        wait 1000
+        loop
+    endif
+else
+    overhead 'Still locked...' 908
+    gumpresponse 4
+    waitforgump 736038070
+    wait 3500
+    
+    if insysmsg 'You attempt to pick the lock' 
+        if insysmsg 'You fail to make any progress' 
+            overhead 'No progress...' 42
+        elseif insysmsg 'make progress'
+            overhead 'Making progress!' 38
+        else
+            overhead 'Too fast??'
+            wait 1000
+        endif
+        
+        loop
+    else
+        overhead 'Too fast?' 
+        wait 1000
+        loop
+    endif
+endif
