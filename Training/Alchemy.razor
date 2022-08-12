@@ -3,13 +3,17 @@
 # ----------------------------
 # Prechecks for resources
 
+# This needs to be updated using `>info` to get the serial of
+# the container that has bottles and kegs.
+@setvar alchChest 0x46E23BE9
+
 if not varexist 'regbox'
     overhead 'Where to refill regs from?'
     setvar 'regbox'
 endif
 
 if not findtype 'empty bottle%s%' backpack
-    if findtype 'empty bottle%s%' 0x46512083 as bottles
+    if findtype 'empty bottle%s%' alchChest as bottles
         overhead 'Restocking bottles...'
         lift bottles 25
         drop backpack 0 0 0
@@ -149,7 +153,7 @@ clearsysmsg
 
 # grab keg from box if we dont have it
 if not findtype 'keg' backpack
-    if findtype 'keg' 0x46512083 0 as newkeg
+    if findtype 'keg' alchChest 0 as newkeg
         overhead 'grabbing new empty keg'
         lift newkeg 1
         drop backpack 79 64 0
@@ -176,7 +180,7 @@ if insysmsg 'the keg will not hold' and findtype 'keg' self as keg
     overhead 'keg full!'
     overhead 'moving to chest...'
     lift keg 1
-    drop 0x46512083 93 126 0
+    drop alchChest 93 126 0
 endif
 
 # ----------------------------
