@@ -1,8 +1,14 @@
+if dead 
+    overhead 'Trap made a whoopsie! Need res.' 38
+    wait 5000
+    loop
+endif
+
 clearsysmsg
 
 if not varexist chest
     overhead 'Unlock what chest?' 44
-    @setvar chest
+    @setvar! chest
 endif
 
 getlabel chest chestName
