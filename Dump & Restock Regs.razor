@@ -7,6 +7,9 @@
 # run where we may have picked up regs
 # in loot bags, and want to restock.
 
+############
+# Jewels
+############
 clearsysmsg 
 overhead 'Unpacking jewels...'
 organizer 5
@@ -15,55 +18,88 @@ wait 500
 if insysmsg 'Organize Agent did not find any'
     overhead 'No jewels to unpack??' 38
 else
-    while not insysmsg 'queued actions' 
-        wait 1000
-        overhead 'Waiting to unpack...'
+    while queued
+        overhead 'Waiting to unpack...' 920
+        wait 500
     endwhile
+    
+    overhead 'Jewels unpacked.' 
 endif
+
+
+############
+# Reagents
+############
+overhead 'Unpacking reagents...'
 
 if findtype 'reagent satchel' as satchel
     undress 'Wizard Satchel'
+    wait 1000
 endif
 
 clearsysmsg 
-overhead 'Unpacking reagents...'
 organizer 7
 wait 500
 
-if insysmsg 'Organize Agent did not find any'
+if insysmsg 'Organize Agent did not find any' and not queued
     overhead 'Nothing to unpack??' 38
 else
-    while not insysmsg 'queued actions' 
-        wait 1000
-        overhead 'Waiting to unpack...'
+    while queued
+        overhead 'Waiting to unpack...' 920
+        wait 500
     endwhile
 endif
 
-# set the desired restock agent
-# run for the amount of regs to restock
+# NOTE: it is important to be wearing the satchel for the restock
+# and the unload needs to not be worn
+if findtype 'reagent satchel' as satchel
+    dress 'Wizard Satchel'
+    dclick satchel
+    wait 1000
+endif
+
 if not varexist 'regs_bag'
     overhead 'Restock from what?'
     setvar 'regs_bag'
 endif
 
-if not find 'regs_bag' backpack 
+if not find regs_bag
     overhead 'Cannot find regs bag! Retarget:'
     setvar 'regs_bag'
 endif
 
+dclick 'regs_bag'
 clearsysmsg 
 overhead 'Restocking reagents...'
 restock 1
 wft
 target 'regs_bag'
-wait 500
 
-while not insysmsg 'Restock done' 
-    wait 1000
-    overhead 'Waiting for restock...'
+wait 1000
+
+if insysmsg 'Organize Agent did not find any' and not queued
+    overhead 'Nothing to restock??' 38
+else
+    while queued
+    overhead 'Waiting to restock...' 920
+        wait 500
+    endwhile
+endif
+
+overhead 'Reagents restocked.'
+
+############
+# Shrooms
+###########
+while counttype 'mushroom' self < 24 
+    clearsysmsg 
+    cast 'Create Food'
+    wait 1500
+    
+    if not insysmsg 'You create'
+        overhead 'Restock failed!' 38
+        stop
+    endif
 endwhile
 
-if findtype 'reagent satchel' as satchel
-    dress 'Wizard Satchel'
-    dclick satchel
-endif
+overhead 'Shrooms restocked.'
