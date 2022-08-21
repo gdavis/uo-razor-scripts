@@ -21,26 +21,22 @@ else
     endwhile
 endif
 
-
 if findtype 'reagent satchel' as satchel
     undress 'Wizard Satchel'
 endif
 
-clearsysmsg
+clearsysmsg 
 overhead 'Unpacking reagents...'
 organizer 7
 wait 500
 
 if insysmsg 'Organize Agent did not find any'
-    overhead 'No regs to unpack??' 38
 else
     while not insysmsg 'queued actions' 
         wait 1000
         overhead 'Waiting to unpack...'
     endwhile
 endif
-
-
 
 # set the desired restock agent
 # run for the amount of regs to restock
@@ -49,10 +45,22 @@ if not varexist 'regs_bag'
     setvar 'regs_bag'
 endif
 
+if not find 'regs_bag' backpack 
+    overhead 'Cannot find regs bag! Retarget:'
+    setvar 'regs_bag'
+endif
+
+clearsysmsg 
 overhead 'Restocking reagents...'
 restock 1
 wft
 target 'regs_bag'
+wait 500
+
+while not insysmsg 'Restock done' 
+    wait 1000
+    overhead 'Waiting for restock...'
+endwhile
 
 if findtype 'reagent satchel' as satchel
     dress 'Wizard Satchel'
