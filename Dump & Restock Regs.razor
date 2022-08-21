@@ -8,16 +8,31 @@
 # in loot bags, and want to restock.
 
 clearsysmsg 
+overhead 'Unpacking jewels...'
+organizer 5
+wait 500
+
+if insysmsg 'Organize Agent did not find any'
+    overhead 'No jewels to unpack??' 38
+else
+    while not insysmsg 'queued actions' 
+        wait 1000
+        overhead 'Waiting to unpack...'
+    endwhile
+endif
+
+
 if findtype 'reagent satchel' as satchel
     undress 'Wizard Satchel'
 endif
 
+clearsysmsg
 overhead 'Unpacking reagents...'
 organizer 7
-
 wait 500
+
 if insysmsg 'Organize Agent did not find any'
-    overhead 'Nothing to unpack??' 38
+    overhead 'No regs to unpack??' 38
 else
     while not insysmsg 'queued actions' 
         wait 1000
