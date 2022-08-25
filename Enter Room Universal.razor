@@ -22,7 +22,7 @@ waitforgump rentalGumpID 3000
 
 if not gumpexists rentalGumpID
     overhead 'Failed to enter room!' 38
-    overhead 'Are you too far away?' 53
+    overhead 'Are you even near the inn?' 53
 elseif ingump 'Enter Your Room'
     wait 250
 
@@ -30,9 +30,15 @@ elseif ingump 'Enter Your Room'
         overhead 'Entering room...' 903
         gumpresponse 4
         wait 250
+        
+        if insysmsg 'That vendor is too far away'
+            overhead 'Innkeeper is too far away!' 38
+            overhead 'Move closer!' 53
+            stop
+        endif
     endwhile
     
-    overhead 'Welcome home'
+    overhead 'Welcome home.'
     
 elseif ingump 'Rent This Room'
     gumpresponse 5
@@ -43,15 +49,21 @@ elseif ingump 'Rent This Room'
             wait 250
             overhead 'Entering co-owned room...' 903
             gumpresponse 100
+            
+            if insysmsg 'That vendor is too far away'
+                overhead 'Innkeeper is too far away!' 38
+                stop
+            endif
         endwhile
         
-        overhead 'Welcome home'
+        overhead 'Welcome home.'
     else
         overhead 'No access to any rooms!' 38
     endif
 elseif ingump 'Visit Other Rooms'
     gumpresponse 2
     waitforgump rentalGumpID 3000
+    
     while not insysmsg 'You enter the rental room'
         wait 250
         overhead 'Entering co-owned room...' 903
