@@ -58,22 +58,22 @@ if findtype 'reagent satchel' as satchel
     wait 1000
 endif
 
-if not varexist 'regs_bag'
+if not varexist regs_bag
     overhead 'Restock from what?'
-    setvar 'regs_bag'
+    setvar regs_bag
 endif
 
-if not find 'regs_bag'
+if not find regs_bag
     overhead 'Cannot find regs bag! Retarget:'
-    setvar 'regs_bag'
+    setvar regs_bag
 endif
 
-dclick 'regs_bag'
+dclick regs_bag
 clearsysmsg 
 overhead 'Restocking reagents...'
 restock 1
 wft
-target 'regs_bag'
+target regs_bag
 
 wait 1000
 
