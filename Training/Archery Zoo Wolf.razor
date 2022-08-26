@@ -18,5 +18,49 @@ if not warmode
     attack lasttarget
 endif
 
-wait 10000
+# ------ Pickup Ammo
+
+# pickup bolts on the ground. stand close to target.
+if findtype 'crossbow bolt' ground as ammo
+    overhead 'Ah, look at that! One of my missed bolts.'
+    lift ammo
+
+    // quiver - the name does not work
+    if findtype 12215 self as myQuiver
+        drop myQuiver -1 -1 -1
+    else 
+        drop backpack -1 -1 -1
+    endif
+    
+    wait 650
+endif
+
+## ------ Arms Lore
+#
+## optional section for training arms lore
+#if skill 'armslore' < 100
+#    
+#    skill 'armslore'
+#    waitfortarget
+#    targettype 'dagger' backpack
+#    waitforgump 3983935725
+#    gumpclose
+#    wait 650
+#endif
+#    
+## ------ Camping
+#
+#if skill 'Camping' < 100 
+#    if not findtype "kindling" backpack
+#        overhead "Need more kindling!" 34
+#        wait 5000
+#    endif
+#        
+#    if not findtype "campfire" ground 0 1 1
+#        dclicktype "kindling" backpack
+#        wait 3500
+#    endif
+#endif
+
+wait 2250
 replay
