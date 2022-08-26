@@ -21,7 +21,7 @@ endif
 # ------ Pickup Ammo
 
 # pickup bolts on the ground. stand close to target.
-if findtype 'crossbow bolt' ground as ammo
+if findtype 'crossbow bolt' ground -1 -1 2 as ammo
     overhead 'Ah, look at that! One of my missed bolts.'
     lift ammo
 
