@@ -49,6 +49,7 @@ else
         if insysmsg 'You successfully pick the lock'
             overhead 'Lock Picked!' 8
             sysmsg 'Chest unlocked. All done!'
+            unsetvar chest
             stop
         elseif insysmsg 'You make some progress on the lock'
             overhead 'Progress!' 8
