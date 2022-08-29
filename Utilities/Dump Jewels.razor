@@ -1,0 +1,15 @@
+clearsysmsg 
+overhead 'Unpacking jewels...'
+organizer 5
+wait 500
+
+if insysmsg 'Organize Agent did not find any'
+    overhead 'No jewels to unpack??' 38
+else
+    while queued
+        overhead 'Waiting to unpack...' 920
+        wait 500
+    endwhile
+    
+    overhead 'Jewels unpacked.' 
+endif
