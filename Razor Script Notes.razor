@@ -1,0 +1,25 @@
+# What does @ do?
+# If you prefix a command with the
+# @ this will silence any 
+# warning/output from the command. 
+# For example:
+    
+// Generate warning if robe is out of reach
+lifttype 'robe'
+
+// Silence warning if robe is out of reach
+@lifttype 'robe'
+
+
+# What does setvar! do?
+# This will make a variable only
+# be defined in the local scope.
+
+# sets a variable that exists
+# until Razor is terminated
+setvar! runtimeVar 0
+
+# if both @ and ! are used, 
+# the variable only exists
+# until the scrip is finished.
+@setvar! localVar 0
