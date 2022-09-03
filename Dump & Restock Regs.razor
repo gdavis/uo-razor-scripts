@@ -28,6 +28,43 @@ endif
 
 
 ############
+# Leather
+############
+clearsysmsg 
+overhead 'Unpacking leather...'
+organizer 4
+
+if insysmsg 'Organize Agent did not find any'
+    overhead 'No leather to unpack??' 38
+else
+    while queued
+        overhead 'Waiting to unpack...' 920
+        wait 500
+    endwhile
+    
+    overhead 'Leather unpacked.' 
+endif
+
+############
+# Food
+############
+clearsysmsg 
+overhead 'Unpacking raw foods...'
+organizer 6
+
+if insysmsg 'Organize Agent did not find any'
+    overhead 'No food to unpack??' 38
+else
+    while queued
+        overhead 'Waiting to unpack...' 920
+        wait 500
+    endwhile
+    
+    overhead 'Foods unpacked.' 
+endif
+
+
+############
 # Reagents
 ############
 overhead 'Unpacking reagents...'
@@ -60,11 +97,6 @@ endif
 
 if not varexist regs_bag
     overhead 'Restock from what?'
-    setvar regs_bag
-endif
-
-if not find regs_bag
-    overhead 'Cannot find regs bag! Retarget:'
     setvar regs_bag
 endif
 
