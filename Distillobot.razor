@@ -1,7 +1,11 @@
-# Distillobot 1000
+# Distillo-bot 1000
 #
 # Automatically creates new distillations 
 # when extracts are placed into a selected bag.
+#
+# Designed for use by guilds or homeowners who
+# want to run a bot that will create distillations
+# for other players.
 #
 # Requirements:
 # A bag within reach used as a drop box for extracts. Cannot
@@ -31,7 +35,7 @@ if not varexist distDrop
         unsetvar distDrop
         loop
     endif
-    overhead 'Distillobot 1000 Initialized.'
+    overhead 'Distillo-bot 1000 Initialized.'
 endif
 
 overhead 'Waiting for extract drop...' 920
@@ -180,7 +184,7 @@ while findtype 'bottle' distDrop as extract
 
     else 
         overhead 'Unknown extract type! {{extractName}}' 38
-        say 'DISTILLOBOT FATAL ERROR! CANNOT COMPUTE! CANNOT COMPUTE!'
+        say 'DISTILLO-BOT FATAL ERROR! CANNOT COMPUTE! CANNOT COMPUTE!'
     endif
 
     gumpclose alchGumpID
