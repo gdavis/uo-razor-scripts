@@ -29,7 +29,7 @@
 # select the drop bag where people will place extracts
 if not varexist distDrop
     overhead 'Select the bag to watch for extracts in.'
-    @setvar! distDrop
+    setvar distDrop
 
     if find distDrop self
         overhead 'INVALID: The drop bag cannot be in your own pockets!' 38
