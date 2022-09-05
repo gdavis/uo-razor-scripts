@@ -73,6 +73,7 @@ while findtype 'bottle' distDrop as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse
         waitforgump alchGumpID
+        wait 650
     else
         overhead 'Need more mortal and pestles!' 38
         say "Oh no! I'm out of mortar and pestles!"
@@ -84,6 +85,7 @@ while findtype 'bottle' distDrop as extract
     # move the extract once we know we can make a distill
     lift extract 99
     drop backpack -1 -1 -1
+    wait 650
 
     # go to the page for this extract,
     # then create it
