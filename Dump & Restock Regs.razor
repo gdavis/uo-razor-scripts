@@ -7,6 +7,19 @@
 # run where we may have picked up regs
 # in loot bags, and want to restock.
 
+// open the chests in the room
+dclick 0x4E76DC61
+wait 250
+
+dclick 0x56C51632
+wait 250
+
+dclick 0x4934E10E
+wait 250
+
+dclick 0x46E23BE9
+wait 250
+
 ############
 # Jewels
 ############
@@ -123,7 +136,7 @@ overhead 'Reagents restocked.'
 ############
 # Shrooms
 ###########
-while counttype 'mushroom' self < 24 
+while counttype 'mushroom' self < 20 
     clearsysmsg 
     cast 'Create Food'
     wait 1500
