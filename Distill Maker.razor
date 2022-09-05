@@ -1,0 +1,204 @@
+# Distillobot 1000
+#
+# Automatically creates new distillations 
+# when extracts are placed into a selected bag.
+#
+# Requirements:
+# A bag within reach used as a drop box for extracts. Cannot
+# be a bag in the crafter's backpack.
+#
+# Written by:       Aphlux (aka Aphra)
+# Last updated:     September 4, 2022
+
+# select the drop bag where people will place extracts
+if not varexist distDrop
+    overhead 'Select the bag to watch for extracts in.'
+    @setvar! distDrop
+
+    if find distDrop self
+        overhead 'INVALID: The drop bag cannot be in your own pockets!' 38
+        wait 1000
+        unsetvar distDrop
+        loop
+    endif
+    overhead 'Distillobot 1000 Initialized.'
+endif
+
+overhead 'Waiting for extract drop...' 920
+
+# check for empty bottles and mortal and pestles
+if not findtype 'empty bottle%s%'
+    overhead 'Need more empty bottles!' 38
+    wait 3000
+    # TODO: here we could add a restock command
+    loop
+elseif not findtype 'mortar and pestle'
+    overhead 'Need more mortal and pestles!' 38
+    wait 3000
+    # TODO: here we could add a restock command
+    loop
+endif
+
+# check for an extract in the drop bag
+@setvar! foundExtract 0
+while findtype 'bottle' distDrop as extract
+    @setvar! foundExtract 1
+    overhead 'Found an extract! Creating a new distill...'
+    getlabel extract extractName
+    say 'Ah ha! I see you have an extract for me to alchemetize!'
+    
+    wait 1000
+    say 'One second while I recongiggle this extract into a distillation...'
+
+    lift extract 99
+    drop backpack -1 -1 -1
+
+    if findtype 'mortar and pestle' self as tool
+        @setvar! alchGumpID 949095101
+        @setvar! aspectPageID 108
+        @setvar! nextPageResponse 11
+
+        gumpclose alchGumpID
+        dclick tool
+        waitforgump alchGumpID
+        gumpresponse aspectPageID
+        waitforgump alchGumpID
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+    else 
+        say 'It seems Distillobot has run out of mortar and pestles =('
+        wait 1000
+        say 'Rebooting... to try to restock'
+
+        # TODO: here we could add a restock command
+        loop
+    endif
+
+    if not findtype 'empty bottle%s%' self
+        overhead 'Need more empty bottles!' 38
+        wait 3000
+        loop
+    endif
+
+    // page 2/4
+    if 'Air' in extractName
+        overhead 'Air' 1001
+        say 'Air distillation coming right up!'
+        gumpresponse 207
+
+    elseif 'Artisan' in extractName
+        overhead 'Artisan' 544
+        say 'Artisan distillation coming right up!'
+        gumpresponse 208
+
+    elseif 'Blood' in extractName
+        overhead 'Blood' 38        
+        gumpresponse 209
+
+    // page 3/4
+    elseif 'Command' in extractName
+        overhead 'Command' 68
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 200
+
+    elseif 'Death' in extractName
+        overhead 'Death' 923
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 201
+
+    elseif 'Discipline' in extractName
+        overhead 'Discipline' 442
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 202
+
+    elseif 'Earth' in extractName
+        overhead 'Earth' 544
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 203
+
+    elseif 'Eldritch' in extractName
+        overhead 'Eldritch' 24
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 204
+
+    elseif 'Fire' in extractName
+        overhead 'Fire' 38
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 205
+
+    elseif 'Fortune' in extractName
+        overhead 'Fortune' 53
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 206
+
+    elseif 'Holy' in extractName
+        overhead 'Holy' 53
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 207
+
+    elseif 'Lyric' in extractName
+        overhead 'Lyric' 38
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 208
+
+    elseif 'Poison' in extractName
+        overhead 'Poison' 68
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 209
+
+    // page 4/4
+    elseif 'Shadow' in extractName
+        overhead 'Shadow' 923
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 200
+
+    elseif 'Void' in extractName
+        overhead 'Void' 14
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 201
+
+    elseif 'Water' in extractName
+        overhead 'Water' 8
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 202
+
+    else 
+        overhead 'Unknown extract type! {{extractName}}' 38
+    endif
+
+    gumpclose alchGumpID
+    wait 3500
+
+    # move the new distillations back into the drop bag
+    while findtype 'flask' self as distillation
+        lift distillation 99
+        drop distDrop -1 -1 -1
+    endwhile
+endwhile
+
+wait 2500
+
+if foundExtract == 1
+    say 'There you go! Thank you for using Distillo-bot 1000 and have a nice day.'
+endif
+
+loop
