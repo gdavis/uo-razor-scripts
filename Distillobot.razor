@@ -52,30 +52,32 @@ while findtype 'bottle' distDrop as extract
     say 'One moment please...'
     wait 1000
 
-    # check for resources
+    # check for empty bottles
     if not findtype 'empty bottle%s%' self
         overhead 'Need more empty bottles!' 38
         say "Oh no, I'm out of empty bottles!"
         # TODO: add a restock command here to refill bottles
         wait 3000
         loop
-    elseif not findtype 'mortar and pestle' self
+    endif
+
+    # open the alch gump, and go to page 2
+    # of the aspect section where distills begin
+    if findtype 'mortar and pestle' self as tool
+        gumpclose alchGumpID
+        dclick tool
+        waitforgump alchGumpID
+        gumpresponse aspectPageID
+        waitforgump alchGumpID
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+    else
         overhead 'Need more mortal and pestles!' 38
         say "Oh no! I'm out of mortar and pestles!"
         # TODO: add a restock command here to refill mortar and pestle
         wait 3000
         loop
     endif
-
-    # open the alch gump, and go to page 2
-    # of the aspect section where distills begin
-    gumpclose alchGumpID
-    dclick tool
-    waitforgump alchGumpID
-    gumpresponse aspectPageID
-    waitforgump alchGumpID
-    gumpresponse nextPageResponse
-    waitforgump alchGumpID
 
     # move the extract once we know we can make a distill
     lift extract 99
@@ -197,7 +199,7 @@ while findtype 'bottle' distDrop as extract
     endwhile
 endwhile
 
-wait 2500
+wait 1000
 
 if foundExtract == 1
     say 'There you go! Thank you for using Distillo-bot 1000 and have a nice day.'
