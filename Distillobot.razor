@@ -5,7 +5,7 @@
 #
 # Requirements:
 # A bag within reach used as a drop box for extracts. Cannot
-# be a bag in the crafter's backpack.
+# be a bag in the crafters backpack.
 #
 # The character running this script should have a stock
 # of empty bottles and mortal and pestles in their backpack.
@@ -14,6 +14,11 @@
 #
 # Written by:       Aphlux (aka Aphra)
 # Last updated:     September 4, 2022
+
+# gump vars
+@setvar! alchGumpID 949095101
+@setvar! aspectPageID 108
+@setvar! nextPageResponse 11
 
 # select the drop bag where people will place extracts
 if not varexist distDrop
@@ -31,59 +36,49 @@ endif
 
 overhead 'Waiting for extract drop...' 920
 
-# check for empty bottles and mortal and pestles
-if not findtype 'empty bottle%s%'
-    overhead 'Need more empty bottles!' 38
-    say 'DISTILLOBOT ERROR: Missing mortar and pestles.'
-    # TODO: here we could add a restock command
-    wait 3000
-    loop
-elseif not findtype 'mortar and pestle'
-    overhead 'Need more mortal and pestles!' 38
-    say 'DISTILLOBOT ERROR: Missing empty bottles!'
-    # TODO: here we could add a restock command
-    wait 3000
-    loop
-endif
-
 # check for an extract in the drop bag
 @setvar! foundExtract 0
 while findtype 'bottle' distDrop as extract
     @setvar! foundExtract 1
     overhead 'Found an extract! Creating a new distill...'
     getlabel extract extractName
-    say 'Ah ha! I see you have an extract for me to alchemetize!'
+    say 'Ah ha! I see you have an extract for me to distill!'
+    wait 2000
     
+    say 'One moment please...'
     wait 1000
-    say 'One second while I recongiggle this extract into a distillation...'
 
-    lift extract 99
-    drop backpack -1 -1 -1
-
-    if findtype 'mortar and pestle' self as tool
-        @setvar! alchGumpID 949095101
-        @setvar! aspectPageID 108
-        @setvar! nextPageResponse 11
-
-        gumpclose alchGumpID
-        dclick tool
-        waitforgump alchGumpID
-        gumpresponse aspectPageID
-        waitforgump alchGumpID
-        gumpresponse nextPageResponse
-        waitforgump alchGumpID
-    else
-        overhead 'Missing mortral and pestle' 38 
-        wait 1000
-        loop
-    endif
-
+    # check for resources
     if not findtype 'empty bottle%s%' self
         overhead 'Need more empty bottles!' 38
+        say "Oh no, I'm out of empty bottles!"
+        # TODO: add a restock command here to refill bottles
+        wait 3000
+        loop
+    elseif not findtype 'mortar and pestle' self
+        overhead 'Need more mortal and pestles!' 38
+        say "Oh no! I'm out of mortar and pestles!"
+        # TODO: add a restock command here to refill mortar and pestle
         wait 3000
         loop
     endif
 
+    # open the alch gump, and go to page 2
+    # of the aspect section where distills begin
+    gumpclose alchGumpID
+    dclick tool
+    waitforgump alchGumpID
+    gumpresponse aspectPageID
+    waitforgump alchGumpID
+    gumpresponse nextPageResponse
+    waitforgump alchGumpID
+
+    # move the extract once we know we can make a distill
+    lift extract 99
+    drop backpack -1 -1 -1
+
+    # go to the page for this extract,
+    # then create it
     // page 2/4
     if 'Air' in extractName
         overhead 'Air' 1001
