@@ -34,13 +34,15 @@ overhead 'Waiting for extract drop...' 920
 # check for empty bottles and mortal and pestles
 if not findtype 'empty bottle%s%'
     overhead 'Need more empty bottles!' 38
-    wait 3000
+    say 'DISTILLOBOT ERROR: Missing mortar and pestles.'
     # TODO: here we could add a restock command
+    wait 3000
     loop
 elseif not findtype 'mortar and pestle'
     overhead 'Need more mortal and pestles!' 38
-    wait 3000
+    say 'DISTILLOBOT ERROR: Missing empty bottles!'
     # TODO: here we could add a restock command
+    wait 3000
     loop
 endif
 
@@ -70,12 +72,9 @@ while findtype 'bottle' distDrop as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-    else 
-        say 'It seems Distillobot has run out of mortar and pestles =('
+    else
+        overhead 'Missing mortral and pestle' 38 
         wait 1000
-        say 'Rebooting... to try to restock'
-
-        # TODO: here we could add a restock command
         loop
     endif
 
