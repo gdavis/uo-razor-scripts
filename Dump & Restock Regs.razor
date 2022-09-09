@@ -7,6 +7,19 @@
 # run where we may have picked up regs
 # in loot bags, and want to restock.
 
+// open the chests in the room
+dclick 0x4E76DC61
+wait 250
+
+dclick 0x56C51632
+wait 250
+
+dclick 0x4934E10E
+wait 250
+
+dclick 0x46E23BE9
+wait 250
+
 ############
 # Jewels
 ############
@@ -24,6 +37,43 @@ else
     endwhile
     
     overhead 'Jewels unpacked.' 
+endif
+
+
+############
+# Leather
+############
+clearsysmsg 
+overhead 'Unpacking leather...'
+organizer 4
+
+if insysmsg 'Organize Agent did not find any'
+    overhead 'No leather to unpack??' 38
+else
+    while queued
+        overhead 'Waiting to unpack...' 920
+        wait 500
+    endwhile
+    
+    overhead 'Leather unpacked.' 
+endif
+
+############
+# Food
+############
+clearsysmsg 
+overhead 'Unpacking raw foods...'
+organizer 6
+
+if insysmsg 'Organize Agent did not find any'
+    overhead 'No food to unpack??' 38
+else
+    while queued
+        overhead 'Waiting to unpack...' 920
+        wait 500
+    endwhile
+    
+    overhead 'Foods unpacked.' 
 endif
 
 
@@ -63,11 +113,6 @@ if not varexist regs_bag
     setvar regs_bag
 endif
 
-if not find regs_bag
-    overhead 'Cannot find regs bag! Retarget:'
-    setvar regs_bag
-endif
-
 dclick regs_bag
 clearsysmsg 
 overhead 'Restocking reagents...'
@@ -91,7 +136,7 @@ overhead 'Reagents restocked.'
 ############
 # Shrooms
 ###########
-while counttype 'mushroom' self < 24 
+while counttype 'mushroom' self < 20 
     clearsysmsg 
     cast 'Create Food'
     wait 1500
