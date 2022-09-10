@@ -20,7 +20,7 @@
 #
 # Written by:       Aphlux (aka Aphra)
 # Created on:       September 4, 2022
-# Last updated:     September 5, 2022
+# Last updated:     September 9, 2022
 
 # gump vars
 @setvar! alchGumpID 949095101
@@ -84,7 +84,7 @@ while findtype 'bottle' distDrop as extract
     endif
 
     # move the extract once we know we can make a distill
-    lift extract 99
+    lift extract 1
     drop backpack -1 -1 -1
     wait 650
 
@@ -201,10 +201,9 @@ while findtype 'bottle' distDrop as extract
     while findtype 'flask' self as distillation
         lift distillation 99
         drop distDrop -1 -1 -1
+        wait 1500
     endwhile
 endwhile
-
-wait 1000
 
 if foundExtract == 1
     say 'There you go! Thank you for using Distillo-bot 1000 and have a nice day.'
