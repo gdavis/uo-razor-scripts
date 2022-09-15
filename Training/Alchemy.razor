@@ -7,6 +7,12 @@
 # the container that has bottles and kegs.
 @setvar alchChest 0x46E23BE9
 
+if skill 'alchemy' == 104 
+    overhead 'Need more skill orbs.' 38
+    wait 5000
+    loop
+endif
+
 if not varexist 'regbox'
     overhead 'Where to refill regs from?'
     setvar 'regbox'
