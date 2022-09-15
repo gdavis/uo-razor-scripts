@@ -1,0 +1,18 @@
+if findtype 'chest' ground as chest
+    getlabel chest chestName
+
+    if 'paragon chest' in chestName and ' locked' in chestName
+        overhead '{{chestName}}'
+        say 'Oh I see you have a paragon that needs opening!'
+        wait 1000
+        say "I'll just hold that real quick and open it..."
+    else
+        overhead 'Found a chest, but it is not locked.' 908
+        overhead chestName 1001
+    endif
+else
+    overhead 'No paragon chest found.' 908
+endif
+
+wait 1500
+loop
