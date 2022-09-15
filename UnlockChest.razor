@@ -1,5 +1,8 @@
+@setvar! lockedChestGumpID 736038070
+
 if dead 
     overhead 'Trap made a whoopsie! Need res.' 38
+    warmode on
     wait 5000
     loop
 endif
@@ -15,19 +18,23 @@ getlabel chest chestName
 overhead 'Unlocking chest:' 44
 overhead chestName 1001
 
-if not gumpexists 736038070
+if not gumpexists lockedChestGumpID
     dclick chest
-    waitforgump 736038070 1000
+    waitforgump lockedChestGumpID 1000
     
     if not insysmsg 'It appears to be locked'
         overhead 'That chest is not locked'
+        say 'This chest is not locked:'
+        wait 1000
+        say chestName
     endif
 endif
 
 if not ingump 'Cleared of Traps'
+    say 'This chest is dangerous! Wish me luck while I disarm this.'
     overhead 'Has traps...' 908
     gumpresponse 7
-    waitforgump 736038070 1000
+    waitforgump lockedChestGumpID 1000
     wait 1000
 
     if insysmsg 'You attempt to remove'
@@ -41,7 +48,7 @@ if not ingump 'Cleared of Traps'
 else
     overhead 'Still locked...' 908
     gumpresponse 4
-    waitforgump 736038070
+    waitforgump lockedChestGumpID
     wait 3500
     
     if insysmsg 'You attempt to pick the lock' 
