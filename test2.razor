@@ -1,12 +1,25 @@
-if mana >= 25 
-    overhead 'done'
-    wait 5000
-    loop
-endif
-    
-skill 'evaluatingintelligence'
-waitfortarget
-target 0x1C9DFC
+#while not findtype 3976|3981|3980|3973|3974|3962|3972|3963 self 
+#    overhead "did not find all regs!"
+#endwhile
+#
+#if not findtype 3976|3973 backpack
+#    overhead 'NOT found a reg'
+#endif
 
-wait 2500
-loop
+removelist 'testRegs'
+createlist 'testRegs'
+pushlist 'testRegs' 3976
+pushlist 'testRegs' 3981
+pushlist 'testRegs' 3980
+pushlist 'testRegs' 3973
+pushlist 'testRegs' 3974
+pushlist 'testRegs' 3962
+pushlist 'testRegs' 3972
+pushlist 'testRegs' 3963
+
+foreach x in 'testRegs'
+    #overhead '{{x}}' 38
+    if not findtype x self
+        overhead 'Missing reagent! {{x}}' 38
+    endif
+endfor
