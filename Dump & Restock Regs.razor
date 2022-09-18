@@ -119,19 +119,40 @@ overhead 'Restocking reagents...'
 restock 1
 wft
 target regs_bag
-
 wait 1000
 
 if insysmsg 'Organize Agent did not find any' and not queued
     overhead 'Nothing to restock??' 38
 else
     while queued
-    overhead 'Waiting to restock...' 920
+        overhead 'Waiting to restock...' 920
         wait 500
     endwhile
-endif
+    
+    # the following bits will check to make sure the restock finished.
+    # if not, the script will restart.
+    removelist allRegs
+    createlist allRegs
+    pushlist allRegs 3976
+    pushlist allRegs 3981
+    pushlist allRegs 3980
+    pushlist allRegs 3973
+    pushlist allRegs 3974
+    pushlist allRegs 3962
+    pushlist allRegs 3972
+    pushlist allRegs 3963
 
-overhead 'Reagents restocked.'
+    foreach reagent in allRegs
+        if not findtype reagent self
+            overhead 'Missing reagent! {{reagent}}' 38
+            wait 1000
+            overhead 'Restarting Script...' 920
+            loop
+        endif
+    endfor
+    
+    overhead 'Reagents restocked.'
+endif
 
 ############
 # Shrooms
