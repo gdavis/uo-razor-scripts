@@ -1,3 +1,19 @@
+# Move stuff to donkey
+
+### Configuration -------------
+
+# change this if you want to 
+# use a pack llama or horse
+@setvar! usePackie 0
+@setvar! maxWeight 475
+
+if usePackie == 1 and not varexist packie
+    overhead 'Select or pack horse or llama:'
+    setvar packie
+endif
+
+## Start ----------------------
+
 # PK check
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     clearsysmsg 
@@ -30,11 +46,22 @@ if insysmsg 'The world will save'
 endif
 
 # check if bags are full
-if weight >= 520
+if weight >= maxWeight
     overhead 'Carrying too much!' 38
     sysmsg 'Carrying too much!' 38
-    wait 5000
-    replay
+    
+    # move ore to the packie
+    if usePackie == 1 and findtype 'iron ore' backpack as ore
+        if find packie ground -1 -1 2
+            lift ore 60000
+            drop packie -1 -1 -1
+        else 
+            overhead 'Packie is out of range!' 38
+        endif
+    else
+        wait 5000
+        replay    
+    endif
 endif
 
 # equip a pickaxe
