@@ -1,0 +1,34 @@
+# Moves loose reagents picked up
+# while looting and places them
+# into a wizards satchel. 
+overhead 'Satchel Cleanup!' 53
+
+# the first satchel found is used, so only be carrying one.
+if findtype 'reagent satchel' as satchel
+    @setvar! foundRegs 0
+
+    while findtype 3976|3981|3980|3973|3974|3962|3972|3963 backpack as reg
+        # ignore reagents already in the satchel
+        if find reg satchel 
+            ignore reg
+            continue
+        endif
+        
+        @setvar! foundRegs 1
+        getlabel reg regName
+        overhead 'Moving {{regName}}...' 44
+        lift reg 60000
+        drop satchel -1 -1 -1
+        wait 650
+    endwhile
+    clearignore 
+    
+    if foundRegs == 1
+        overhead 'Reagents moved to satchel.' 68
+    else
+        overhead 'Regs organized.' 24
+    endif    
+else
+    overhead 'Not wearing a satchel!' 38
+    stop
+endif
