@@ -2,13 +2,51 @@
 
 ### Configuration -------------
 
+## Character Preferences
+# Change the variables below to
+# the character doing the mining.
+
 # change this if you want to 
 # use a pack llama or horse
 @setvar! usePackie 0
-@setvar! maxWeight 485
+
+# enter a weight that is 
+# 2 less than max to not go overweight.
+@setvar! maxWeight 488
+
+
+
+################################
+## !! DEVELOPER AREA BELOW !! ##
+## !! PROCEED WITH CAUTION !! ##
+
+## Script Init ------------------
+
+# isActive is set to true for the duration of the script,
+# and set to false whenever we reach and endpoint
+# and need to loop back to the start. this
+# gives us a mechanism to know if the script
+# was stopped during execution and needs 
+# the state variables reset to start a new run.
+if not varexist isActive
+    @setvar! isActive 0
+endif
+
+if isActive = 1
+    removetimer 'digTimeout'
+    removetimer 'digTime'
+    @setvar! isDigging 0
+    @setvar! hasCaptcha 0
+    @setvar! isActive 0
+    overhead 'Starting Miner' 24
+endif
+
+
 @setvar! actionDelay 250
 @setvar! digDuration 667
 @setvar! digWait 5000
+@setvar! isActive 1
+
 
 if usePackie == 1 and not varexist packie
     overhead 'Select or pack horse or llama:'
@@ -31,9 +69,17 @@ if not varexist hasCaptcha
     @setvar! hasCaptcha 0
 endif
 
-## Start ----------------------
+## Start ----------------------    
 
-sysmsg "Im mining"
+#sysmsg "Im mining"
+
+# TODO: Refactor this into another script.
+# Its too slow to loop every time and try to smelt,
+# and I haven't figured out how to detect
+# a nearby forge yet.
+
+if findtype 'forge' ground -1 -1 2 as forge
+endif
 
 # try to smelt ore if we are near a forge
 #while findtype 'iron ore' as ore
@@ -47,9 +93,19 @@ sysmsg "Im mining"
 #    endif
 #endwhile
 
-#
+# Ask user to provide the recall rune
 #if skill 'magery' >= 60 and not varexist 'recallTarget'
 #    overhead 'Target the recall runebook or rune to use:'
+#    setvar 'recallTarget'
+#endif
+#
+## Check if the stored rune 
+## is actually reachable
+#if not find 'recallTarget' backpack 
+#    overhead 'Stored recall target not found!' 38
+#    overhead 'Target a new recall runebook or rune to use:'
+#    
+#    unsetvar 'recallTarget'
 #    setvar 'recallTarget'
 #endif
 
@@ -88,10 +144,12 @@ if insysmsg 'The world will save'
             skill 'Hiding'
         endif
         
-        loop
+        @setvar! isActive 0
+        replay
     endif
     
-    loop
+    @setvar! isActive 0
+    replay
 endif
 
 # check if bags are full
@@ -114,6 +172,7 @@ if weight >= maxWeight
         endif
     else
         wait actionDelay
+        @setvar! isActive 0
         replay    
     endif
 endif
@@ -123,6 +182,7 @@ if rhandempty
     if not findtype 'pickaxe' backpack
         overhead 'Out of Pickaxes' 38
         wait 5000
+        @setvar! isActive 0
         replay
     else
         overhead 'Equipping Pickaxe' 53
@@ -144,6 +204,7 @@ if hasCaptcha = 1
         wait actionDelay
     endif
     
+    @setvar! isActive 0
     replay
 endif
 
@@ -169,6 +230,7 @@ if isDigging = 0 and hasCaptcha = 0
     else
         overhead 'Waiting...' 902
         wait actionDelay
+        @setvar! isActive 0
         replay
     endif
 endif
@@ -180,12 +242,12 @@ if isDigging = 1 and timer 'digTime' > digDuration
         overhead 'Dig timed out!' 38
         overhead 'Captcha?' 38
         @setvar! hasCaptcha 1
-        @setvar! isDigging 0
         
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
         endif
         
+        @setvar! isActive 0
         replay
     endif
 
@@ -201,6 +263,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
             skill 'Hiding'
         endif
     
+        @setvar! isActive 0
         replay
     endif
     
@@ -210,6 +273,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         removetimer 'digTimeout'
         clearsysmsg 
         @setvar! isDigging 0
+        @setvar! isActive 0
         replay
     endif
 
@@ -219,6 +283,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         removetimer 'digTimeout'    
         clearsysmsg 
         @setvar! isDigging 0
+        @setvar! isActive 0
         replay
     endif
 
@@ -227,17 +292,19 @@ if isDigging = 1 and timer 'digTime' > digDuration
         removetimer 'digTimeout'   
         clearsysmsg 
         @setvar! isDigging 0 
+        @setvar! isActive 0
         replay
     endif
 
-    if insysmsg 'You must wait'
-        overhead 'Too fast?' 44
-        removetimer 'digTimeout'    
-        clearsysmsg 
-        replay
-    endif
+#    if insysmsg 'You must wait'
+#        overhead 'Too fast?' 44
+#        #removetimer 'digTimeout'    
+#        clearsysmsg 
+#        replay
+#    endif
 else
     wait actionDelay
 endif
 
+@setvar! isActive 0
 replay
