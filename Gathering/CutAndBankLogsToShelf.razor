@@ -2,7 +2,8 @@
 # backpack and then deposits them
 # into a nearby resource pile.
 while findtype 'log%s' backpack as logs
-    overhead 'Cutting logs' 53
+    getlabel logs logsName
+    overhead 'Cutting {{logsName}}' 53
     dclicktype 'scissors' backpack
     waitfortarget 3000
     target logs
@@ -15,7 +16,7 @@ endwhile
 # set container that holds logs so we dont 
 # place everything into the stockpile
 if not varexist logsBag
-    overhead 'Select the bag that has the cut logs:'
+    overhead 'Select the bag that has the boards:'
     setvar logsBag
 endif
 
