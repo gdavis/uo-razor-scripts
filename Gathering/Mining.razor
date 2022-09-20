@@ -179,7 +179,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
     if timer 'digTimeout' > digWait
         overhead 'Dig timed out!' 38
         overhead 'Captcha?' 38
-        @setvar! hasCaptcha 0
+        @setvar! hasCaptcha 1
         @setvar! isDigging 0
         
         if not hidden and skill 'hiding' > 50
