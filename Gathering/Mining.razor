@@ -71,16 +71,19 @@ endif
 
 ## Start ----------------------    
 
+if dead
+    sysmsg 'YOU DIED' 38
+    sysmsg 'Stopping Miner.' 24
+    @setvar! isActive 0
+    stop
+endif
+
 #sysmsg "Im mining"
 
 # TODO: Refactor this into another script.
 # Its too slow to loop every time and try to smelt,
-# and I haven't figured out how to detect
+# and I havent figured out how to detect
 # a nearby forge yet.
-
-if findtype 'forge' ground -1 -1 2 as forge
-endif
-
 # try to smelt ore if we are near a forge
 #while findtype 'iron ore' as ore
 #    getlabel ore oreName
@@ -172,6 +175,7 @@ if weight >= maxWeight
         endif
     else
         wait actionDelay
+
         @setvar! isActive 0
         replay    
     endif
@@ -182,6 +186,7 @@ if rhandempty
     if not findtype 'pickaxe' backpack
         overhead 'Out of Pickaxes' 38
         wait 5000
+
         @setvar! isActive 0
         replay
     else
@@ -230,6 +235,7 @@ if isDigging = 0 and hasCaptcha = 0
     else
         overhead 'Waiting...' 902
         wait actionDelay
+
         @setvar! isActive 0
         replay
     endif
