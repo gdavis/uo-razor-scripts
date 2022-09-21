@@ -1,8 +1,20 @@
-# Move stuff to donkey
+# Miner WIP
+# Features:
+# - Non-blocking wait times.
+# - PK detection
+# - Automatic Recall Esacpe
+# - Configurable Weight
+# - Packie Support
+# - Pause and Hide during World Save
+# - Auto-smelt ore when in range of forge
+# - Captcha Detection
+# - Auto-equip Pickaxe
+# X Prints type of ore mined
+# - Overhead feedback
+# - Auto-hide when the node is empty
+# X Use organizer for smelted ore
 
-### Configuration -------------
-
-## Character Preferences
+### User Settings --------------
 # Change the variables below to
 # the character doing the mining.
 
@@ -32,6 +44,12 @@ if not varexist isActive
     @setvar! isActive 0
 endif
 
+# if the script is started with isActive = true
+# then the previous script was interrupted.
+# perform a reset of timers and state.
+# IMPORTANT DEVELOPER NOTE:
+# All replay/loop calls before the end
+# of the script must set `isActive=0`
 if isActive = 1
     removetimer 'digTimeout'
     removetimer 'digTime'
@@ -41,12 +59,10 @@ if isActive = 1
     overhead 'Starting Miner' 24
 endif
 
-
 @setvar! actionDelay 250
 @setvar! digDuration 667
 @setvar! digWait 5000
 @setvar! isActive 1
-
 
 if usePackie == 1 and not varexist packie
     overhead 'Select or pack horse or llama:'
@@ -69,57 +85,65 @@ if not varexist hasCaptcha
     @setvar! hasCaptcha 0
 endif
 
+if not varexist ingotBag
+    overhead 'Select a container to place smelted ingots:'
+    setvar ingotBag
+endif
+
+
 ## Start ----------------------    
+#sysmsg "Im mining"
 
 if dead
+    overhead 'YOU DIED' 38
     sysmsg 'YOU DIED' 38
     sysmsg 'Stopping Miner.' 24
     @setvar! isActive 0
     stop
 endif
 
-#sysmsg "Im mining"
 
-# TODO: Refactor this into another script.
-# Its too slow to loop every time and try to smelt,
-# and I havent figured out how to detect
-# a nearby forge yet.
-# try to smelt ore if we are near a forge
-#while findtype 'iron ore' as ore
-#    getlabel ore oreName
-#    overhead '*smelts {{oreName}}*' 44
-#    dclick ore
-#    wait actionDelay
-#    
-#    if insysmsg 'you do not see'
-#        break
-#    endif
-#endwhile
+## Recall Escape --------------
 
 # Ask user to provide the recall rune
-#if skill 'magery' >= 60 and not varexist 'recallTarget'
-#    overhead 'Target the recall runebook or rune to use:'
-#    setvar 'recallTarget'
-#endif
-#
-## Check if the stored rune 
-## is actually reachable
-#if not find 'recallTarget' backpack 
-#    overhead 'Stored recall target not found!' 38
-#    overhead 'Target a new recall runebook or rune to use:'
-#    
-#    unsetvar 'recallTarget'
-#    setvar 'recallTarget'
-#endif
+if skill 'magery' >= 60 and not varexist 'recallTarget'
+    overhead 'Target the recall runebook or rune to use:'
+    setvar 'recallTarget'
+endif
+
+# Check if the stored rune 
+# is actually reachable
+if not find 'recallTarget' backpack 
+    overhead 'Stored recall target not found!' 38
+    overhead 'Target a new recall runebook or rune to use:'
+    
+    unsetvar 'recallTarget'
+    setvar 'recallTarget'
+endif
+
+if not find 'recallTarget' backpack 
+    overhead 'WARNING! Recall target is not reachable and PK escape will fail!' 38
+    sysmsg 'WARNING! Recall target is not reachable and PK escape will fail!' 38
+endif
 
 # PK check
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
+    overhead 'PK WARNING - ESCAPE'
     clearsysmsg 
+
     if skill 'magery' >= 60
-        overhead 'Get out of here!' 34
+        overhead 'Time to leave!' 34
         hotkey 'Recall'
-        waitfortarget         
+        waitfortarget
         target 'recallTarget'
+        
+        if skill 'Hiding' >= 50 
+            while not hidden and not dead
+                skill 'hiding'
+                wait actionDelay
+            endwhile
+        endif
+        
     elseif skill 'Hiding' >= 50
         overhead 'Hiding from PK!' 34
         sysmsg 'Hiding from nearby PK!' 34
@@ -127,9 +151,14 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     else
         overhead 'PK Detected!' 38
     endif
+    
+    sysmsg 'Miner stopped after Escaping PK!' 44
+    stop
 endif
 
-# wait for world save
+
+## World Save -----------------
+# if we have hiding, hide
 if not varexist isWorldSaving
     @setvar! isWorldSaving 0
 endif
@@ -140,21 +169,41 @@ if insysmsg 'The world will save'
         overhead 'Save complete, continuing...' 53
         clearsysmsg 
         @setvar! isWorldSaving 0
-    else
+    elseif isWorldSave = 0
         @setvar! isWorldSaving 1    
     
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
         endif
-        
-        @setvar! isActive 0
-        replay
     endif
     
     @setvar! isActive 0
     replay
 endif
 
+
+## Smelt at Forge ---------------
+# Look for a forge within range.
+# If found, smelt all the ore
+# that we have in the backpack
+if findtype 'forge' ground -1 -1 2
+    while findtype 'iron ore' backpack as ore
+        getlabel ore oreName
+        overhead '*smelts {{oreName}}*' 44
+        dclick ore
+        wait actionDelay
+        
+        if insysmsg 'you do not see'
+            # moved out of range
+            break
+        endif
+    endwhile
+    
+    # TODO: place ingots into ingotBag
+endif
+
+
+## Check Weight ----------------
 # check if bags are full
 if weight >= maxWeight
     overhead 'Carrying too much!' 38
@@ -164,6 +213,7 @@ if weight >= maxWeight
         skill 'Hiding'
     endif
     
+    # TODO: need to check for packie being full
     # move ore to the packie
     if usePackie == 1 and findtype 'iron ore' backpack as ore
         if find packie ground -1 -1 2
@@ -181,7 +231,8 @@ if weight >= maxWeight
     endif
 endif
 
-# equip a pickaxe
+
+## Pickaxe --------------------
 if rhandempty
     if not findtype 'pickaxe' backpack
         overhead 'Out of Pickaxes' 38
@@ -197,6 +248,7 @@ if rhandempty
 endif
 
 
+## Captcha --------------------
 # check if we need to stop for captcha
 if hasCaptcha = 1
     if insysmsg 'Captcha successful'
@@ -214,6 +266,7 @@ if hasCaptcha = 1
 endif
 
 
+## Do the dig ----------------
 # use the pickaxe
 if isDigging = 0 and hasCaptcha = 0
     #overhead 'new dig'
@@ -241,7 +294,8 @@ if isDigging = 0 and hasCaptcha = 0
     endif
 endif
 
-
+## Dig Result -----------------
+# check results after digging
 if isDigging = 1 and timer 'digTime' > digDuration
     
     if timer 'digTimeout' > digWait
@@ -277,6 +331,9 @@ if isDigging = 1 and timer 'digTime' > digDuration
     if insysmsg 'You dig some'
         overhead 'SUCCESS' 68
         removetimer 'digTimeout'
+        
+        # TODO: add printout for ore mined
+            
         clearsysmsg 
         @setvar! isDigging 0
         @setvar! isActive 0
