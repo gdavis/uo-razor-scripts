@@ -7,13 +7,13 @@
 # - Configurable Weight
 # - Packie Support
 # - Pause and Hide during World Save
-# - Auto-smelt ore when in range of forge
+# - Smelt ore when in range of forge
 # - Captcha Detection
 # - Auto-equip Pickaxe
 # - Prints type of ore mined
 # - Overhead feedback
-# - Auto-hide when the node is empty
-# X Use organizer for smelted ore
+# - Hide when the node is empty
+# - Move smelted ore to container
 
 ### User Settings --------------
 # Change the variables below to
@@ -50,17 +50,22 @@ if isActive = 1
     removetimer 'digTimeout'
     removetimer 'digTime'
     removetimer 'waitAlert'
+    
     @setvar! isDigging 0
     @setvar! hasCaptcha 0
     @setvar! isActive 0
+    
     overhead 'Starting Miner' 24
 endif
 
+# constants
 @setvar! actionDelay 250
 @setvar! digDuration 667
 @setvar! digWait 5000
-@setvar! isActive 1
 @setvar! messageThrottle 3000
+
+# mark script as running
+@setvar! isActive 1
 
 if usePackie == 1 and not varexist packie
     overhead 'Select or pack horse or llama:'
@@ -118,7 +123,7 @@ if skill 'Tracking' >= 50 and not findbuff 'Tracking'
     endwhile
 
     if gumpexists tracking_gump_id
-        if not ingump 'Stop Hunting' 4267467659 # NOTE: using the id here causes a script error
+        if not ingump 'Stop Hunting' 4267467659 # NOTE: using tracking_gump_id here causes a script error
             overhead 'Started tracking' 65
             sysmsg 'Tracking players enabled' 65
             gumpresponse 6
@@ -211,10 +216,13 @@ endif
 # If found, smelt all the ore
 # that we have in the backpack
 if findtype 'forge' ground -1 -1 2
+    @setvar didSmelt 1
+
     while findtype 'iron ore' backpack as ore
         getlabel ore oreName
         overhead '*smelts {{oreName}}*' 44
         dclick ore
+        @setvar didSmelt 1
         wait actionDelay
         
         if insysmsg 'you do not see'
@@ -223,7 +231,24 @@ if findtype 'forge' ground -1 -1 2
         endif
     endwhile
     
-    # TODO: place ingots into ingotBag
+    # place ingots into bag
+    if didSmelt = 1 and varexist ingotBag
+        @clearignore 
+        while findtype 'iron ingot%s' backpack as ingots    
+            if find ingots ingotBag
+                @ignore ingots
+                continue
+            endif
+        
+            getlabel ingots ingotName
+            overhead 'Stashing: {{ingotName}}'
+            
+            lift ingots 60000
+            drop ingotBag -1 -1 -1
+            @ignore ingots
+        endwhile
+        @clearignore 
+    endif
 endif
 
 
@@ -261,17 +286,27 @@ endif
 
 
 ## Pickaxe --------------------
-if rhandempty
+getlabel righthand rhandItem
+@setvar! pickaxeEquipped 0
+if 'pickaxe' in rhandItem
+    @setvar! pickaxeEquipped 1
+endif
+
+if rhandempty or pickaxeEquipped = 0
     if not findtype 'pickaxe' backpack
         overhead 'Out of Pickaxes' 38
-        wait 5000
-
+        
+        if not hidden and skill 'hiding' > 50
+            skill 'Hiding'
+        endif
+        
+        wait actionDelay
         @setvar! isActive 0
         replay
     else
         overhead 'Equipping Pickaxe' 53
         dclicktype 'pickaxe' backpack
-        wait 1000    
+        wait actionDelay    
     endif
 endif
 
@@ -350,19 +385,28 @@ if isDigging = 1 and timer 'digTime' > digDuration
         replay
     endif
 
+    if insysmsg 'Harvesting is not allowed'
+        overhead 'Cannot mine here!' 38
+        removetimer 'digTimeout'    
+        clearsysmsg 
+        @setvar! isDigging 0
+        @setvar! isActive 0
+        replay
+    endif
+    
     if insysmsg 'You do not see any harvestable'
         overhead 'EMPTY' 923
         sysmsg 'No ore here to mine.' 138
         
         removetimer 'digTimeout'
         clearsysmsg
-        @setvar! isDigging 0
         
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
             wait actionDelay
         endif
     
+        @setvar! isDigging 0
         @setvar! isActive 0
         replay
     endif
@@ -425,6 +469,12 @@ if isDigging = 1 and timer 'digTime' > digDuration
         overhead 'Travel Cooldown...' 24
         removetimer 'digTimeout'    
         clearsysmsg 
+
+        if not hidden and skill 'hiding' > 50
+            skill 'Hiding'
+            wait actionDelay
+        endif
+        
         @setvar! isDigging 0
         @setvar! isActive 0
         replay
