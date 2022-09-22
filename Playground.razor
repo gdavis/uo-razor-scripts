@@ -1,0 +1,11 @@
+# Anything here is ephemeral
+# and can be deleted at any time.
+
+getlabel righthand item
+overhead '{{item}} equipped'
+
+@setvar! pickaxeEquipped 0
+if 'pickaxe' in item
+    overhead 'Pickaxe!' 38
+    @setvar! pickaxeEquipped 1
+endif
