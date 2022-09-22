@@ -192,7 +192,7 @@ if not varexist isWorldSaving
     @setvar! isWorldSaving 0
 endif
 
-if insysmsg 'The world will save'
+if insysmsg 'The world will save' or isWorldSaving = 1
 
     if insysmsg 'World save complete'
         overhead 'Save complete, continuing...' 53
