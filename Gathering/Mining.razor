@@ -10,7 +10,7 @@
 # - Auto-smelt ore when in range of forge
 # - Captcha Detection
 # - Auto-equip Pickaxe
-# X Prints type of ore mined
+# - Prints type of ore mined
 # - Overhead feedback
 # - Auto-hide when the node is empty
 # X Use organizer for smelted ore
@@ -60,6 +60,7 @@ endif
 @setvar! digDuration 667
 @setvar! digWait 5000
 @setvar! isActive 1
+@setvar! messageThrottle 3000
 
 if usePackie == 1 and not varexist packie
     overhead 'Select or pack horse or llama:'
@@ -229,8 +230,12 @@ endif
 ## Check Weight ----------------
 # check if bags are full
 if weight >= maxWeight
-    overhead 'Carrying too much!' 38
-    sysmsg 'Carrying too much!' 38
+    
+    if timer 'waitAlert' > messageThrottle
+        settimer 'waitAlert' 0
+        overhead 'Carrying too much!' 38
+        sysmsg 'Carrying too much!' 38
+    endif
     
     if not hidden and skill 'hiding' > 50
         skill 'Hiding'
@@ -280,7 +285,12 @@ if hasCaptcha = 1
         settimer 'digTimeout' 0
         settimer 'digTime' 0
     else
-        overhead 'Waiting for captcha...' 44
+        # only show an overhead every few seconds
+        if timer 'waitAlert' > messageThrottle
+            overhead 'Waiting for captcha...' 44
+            settimer 'waitAlert' 0
+        endif
+    
         wait actionDelay
     endif
     
@@ -298,7 +308,7 @@ if isDigging = 0 and hasCaptcha = 0
         if findtype 'pickaxe' self as pick
             clearsysmsg 
             overhead ' '
-            overhead '*swings pickaxe*' 920
+            overhead '*swings pickaxe*' 645
             hotkey 'Use item in hand'
             
             settimer 'digTimeout' 0
@@ -310,7 +320,7 @@ if isDigging = 0 and hasCaptcha = 0
         endif
     else
         # only show an overhead every few seconds
-        if timer 'waitAlert' > 3000
+        if timer 'waitAlert' > messageThrottle
             overhead 'Waiting...' 902
             settimer 'waitAlert' 0
         endif
@@ -333,6 +343,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
+            wait actionDelay
         endif
         
         @setvar! isActive 0
@@ -349,28 +360,69 @@ if isDigging = 1 and timer 'digTime' > digDuration
         
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
+            wait actionDelay
         endif
     
         @setvar! isActive 0
         replay
     endif
     
-    # check if we were successful
-    if insysmsg 'You dig some'
-        overhead 'SUCCESS' 68
-        removetimer 'digTimeout'
-        
-        # TODO: add printout for ore mined
-            
+    # check if we fail
+    if insysmsg 'You loosen some rocks'
+        overhead 'YOU FAILED' 38
+        removetimer 'digTimeout'    
         clearsysmsg 
         @setvar! isDigging 0
         @setvar! isActive 0
         replay
     endif
-
-    # check if we fail
-    if insysmsg 'You loosen some rocks'
-        overhead 'YOU FAILED' 38
+    
+    # check if we were successful
+    @setvar! digSuccess 0
+    
+    if insysmsg 'some iron ore'
+        overhead 'IRON' 924
+        @setvar! digSuccess 1
+    elseif insysmsg 'some dull'
+        overhead 'DULL COPPER' 442
+        @setvar! digSuccess 1
+    elseif insysmsg 'some shadow'
+        overhead 'SHADOW IRON' 902
+        @setvar! digSuccess 1
+    elseif insysmsg 'some copper'
+        overhead 'COPPER' 444
+        @setvar! digSuccess 1
+    elseif insysmsg 'some bronze'
+        overhead 'BRONZE' 44
+        @setvar! digSuccess 1
+    elseif insysmsg 'some gold'
+        overhead 'GOLD' 53
+        @setvar! digSuccess 1
+    elseif insysmsg 'some agapite'
+        overhead 'AGAPITE' 36
+        @setvar! digSuccess 1
+    elseif insysmsg 'some verite'
+        overhead 'VEREITE' 68
+        @setvar! digSuccess 1
+    elseif insysmsg 'some valorite'
+        overhead 'VALORITE' 8
+        @setvar! digSuccess 1
+    elseif insysmsg 'some avarite'
+        overhead 'AVARITE' 14
+        @setvar! digSuccess 1
+    endif
+    
+    if digSuccess = 1
+        removetimer 'digTimeout'
+        clearsysmsg 
+        @setvar! isDigging 0
+        @setvar! isActive 0
+        replay
+    endif
+    
+    # recent travel
+    if insysmsg 'You have recently traveled'
+        overhead 'Travel Cooldown...' 24
         removetimer 'digTimeout'    
         clearsysmsg 
         @setvar! isDigging 0
@@ -387,12 +439,14 @@ if isDigging = 1 and timer 'digTime' > digDuration
         replay
     endif
 
-#    if insysmsg 'You must wait'
-#        overhead 'Too fast?' 44
-#        #removetimer 'digTimeout'    
-#        clearsysmsg 
-#        replay
-#    endif
+    if insysmsg 'You must wait'
+        overhead 'Too fast?' 44
+        removetimer 'digTimeout'    
+        clearsysmsg 
+        @setvar! isDigging 0 
+        @setvar! isActive 0
+        replay
+    endif
 else
     wait actionDelay
 endif
