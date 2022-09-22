@@ -54,6 +54,7 @@ if isActive = 1
     @setvar! isDigging 0
     @setvar! hasCaptcha 0
     @setvar! isActive 0
+    @setvar! isWorldSaving 0
     
     overhead 'Starting Miner' 24
 endif
@@ -245,6 +246,7 @@ if findtype 'forge' ground -1 -1 2
             
             lift ingots 60000
             drop ingotBag -1 -1 -1
+            wait actionDelay
             @ignore ingots
         endwhile
         @clearignore 
@@ -340,11 +342,10 @@ if isDigging = 0 and hasCaptcha = 0
     #overhead 'new dig'
 
     if not hidden
-        if findtype 'pickaxe' self as pick
-            clearsysmsg 
+        if findtype 'pickaxe' righthand as pick
             overhead ' '
             overhead '*swings pickaxe*' 645
-            hotkey 'Use item in hand'
+            dclick pick
             
             settimer 'digTimeout' 0
             settimer 'digTime' 0
@@ -491,9 +492,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
 
     if insysmsg 'You must wait'
         overhead 'Too fast?' 44
-        removetimer 'digTimeout'    
         clearsysmsg 
-        @setvar! isDigging 0 
         @setvar! isActive 0
         replay
     endif
