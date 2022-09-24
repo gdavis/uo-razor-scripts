@@ -1,0 +1,22 @@
+# Recalls to the selected rune,
+# then runs the enter rental room.
+# The recall location should be
+# within 12 tiles of an innkeeper.
+
+if not varexist recallInnTarget
+    overhead 'Select recall target:'
+    setvar recallInnTarget
+endif    
+
+hotkey 'Cancel Current Target'
+
+cast 'Recall'
+wft 6000
+target recallInnTarget
+
+while not position 4301 826
+    overhead 'Waiting to arrive...' 902
+    wait 250
+endwhile
+
+script 'Enter Room'
