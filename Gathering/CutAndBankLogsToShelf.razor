@@ -1,0 +1,43 @@
+# Cuts all logs currently in the
+# backpack and then deposits them
+# into a nearby resource pile.
+while findtype 'log%s' backpack as logs
+    getlabel logs logsName
+    overhead 'Cutting {{logsName}}' 53
+    dclicktype 'scissors' backpack
+    waitfortarget 3000
+    target logs
+    wait 750
+    loop
+endwhile
+
+@setvar! stockpileGumpID 1859005118
+
+# set container that holds logs so we dont 
+# place everything into the stockpile
+if not varexist logsBag
+    overhead 'Select the bag that has the boards:'
+    setvar logsBag
+endif
+
+# find the nearest resource stockpile
+if findtype 'resource container' ground -1 -1 2 as pile
+    overhead 'Found resource stockpile' 908
+    dclick pile
+    waitforgump stockpileGumpID
+    gumpresponse 2
+    waitfortarget 5000
+    target logsBag
+    wait 500
+    gumpclose stockpileGumpID
+
+    if findtype 'log%s' backpack as logs
+        overhead 'Failed to cut all logs!' 38
+        overhead 'Found {{logs}} still in backpack!' 38
+    else
+        overhead 'Logs cut and piled.'    
+    endif
+else
+    overhead 'Did not find a nearyby stockpile!' 38
+    stop
+endif
