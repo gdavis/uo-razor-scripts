@@ -3,6 +3,7 @@
 # - use "unidentified" in the label
 # Resupplies from the shelf
 # Creates shrooms
+# Eat food if hungry
 
 @setvar! shroomCount 24
 @setvar! delay 666
@@ -58,6 +59,34 @@ else
     overhead 'missing storage shelf!' 38
 endif
 
+# move loot to magic item bag
+# list of loot items to unload
+# TODO: need to add all the things
+removelist basicItems
+createlist basicItems
+pushlist basicItems 'spellbook'
+pushlist basicItems 'plate helm'
+pushlist basicItems 'quarter staff'
+pushlist basicItems 'crossbow'
+pushlist basicItems 'martial arts scroll'
+pushlist basicItems 'leather skirt'
+pushlist basicItems 'lute'
+pushlist basicItems 'hammer pick'
+# pushlist basicItems ''
+
+@clearignore 
+foreach itemID in basicItems
+    while findtype itemID lootBag as item
+        getlabel item itemName
+        overhead 'moving {{itemName}}' 908
+        lift item
+        drop magicItemBag -1 -1 -1
+        @ignore itemID
+    endwhile
+endfor
+@clearignore 
+
+
 # create shrooms
 if findtype 'wizards grimoire' backpack
     while counttype 'mushroom' self < shroomCount
@@ -73,24 +102,17 @@ if findtype 'wizards grimoire' backpack
     overhead 'Shrooms restocked' 53
 endif
 
-overhead 'Dump & Stock Finished' 24
-
-# list of loot items to unload
-# TODO: need to add all the things
-removelist basicItems
-createlist basicItems
-pushlist basicItems 'spellbook'
-pushlist basicItems 'plate helm'
-pushlist basicItems 'quarter staff'
-
-@clearignore 
-foreach itemID in basicItems
-    if findtype itemID lootBag as item
-        getlabel item itemName
-        overhead 'moving {{itemName}}'
-        lift item
-        drop magicItemBag -1 -1 -1
-        @ignore itemID
+# eat foot if hungry
+if not findbuff 'Food Satisfaction'
+    if findtype 'tray' backpack as food 
+        dclick food
+        overhead 'NOM NOM NOM' 44
+    else
+        overhead 'HUNGRY! Need Food!' 38
     endif
-endfor
-@clearignore 
+else 
+    overhead 'Not hungry.' 902
+endif
+
+# DONE
+overhead 'Dungeon Restock Done' 68
