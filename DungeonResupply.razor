@@ -1,0 +1,96 @@
+# Dumps loot bag into resource pile
+# Dumps magic items into bag
+# - use "unidentified" in the label
+# Resupplies from the shelf
+# Creates shrooms
+
+@setvar! shroomCount 24
+@setvar! delay 666
+
+# be at home
+if not position 247 455
+    overhead 'Not home!' 38
+    stop
+endif
+
+# setup targets
+if not varexist lootBag or not find lootBag
+    overhead 'Select your loot container:'
+    setvar lootBag
+endif
+
+if not varexist magicItemBag 
+    overhead 'Select the bag for unidentified magic items:'
+    setvar magicItemBag
+endif
+
+# add loot to the resource stockpile
+if findtype 'resource container' ground -1 -1 2 as pile
+    # add loot to the pile    
+    menu pile 0
+    wft 6000
+    target lootBag
+    wait delay
+    overhead 'Supplies dumped' 908
+else
+    overhead 'missing stockpile or shelf!' 38
+endif
+
+# restock from the shelf
+if findtype 'storage shelf' ground -1 -1 2 as shelf
+    # add reagents from the satchel.
+    # we do this becaues we are poor and still pickup regs.
+    # to save space the regs go in the satchel, so we
+    # are likely carrying more than we want to for 
+    # the next dungeon run.
+    if findtype 'reagent satchel' self as satchel
+        menu shelf 0
+        wft 6000
+        target satchel
+        wait delay
+        overhead 'Satchel dumped' 68
+    endif    
+
+    menu shelf 1
+    wait delay
+    overhead 'Resupplied' 49
+else 
+    overhead 'missing storage shelf!' 38
+endif
+
+# create shrooms
+if findtype 'wizards grimoire' backpack
+    while counttype 'mushroom' self < shroomCount
+        clearsysmsg 
+        cast 'Create Food'
+        wait 1500
+        
+        if not insysmsg 'You create'
+            overhead 'Restock failed!' 38
+            stop
+        endif
+    endwhile
+    overhead 'Shrooms restocked' 53
+endif
+
+overhead 'Dump & Stock Finished' 24
+
+# list of loot items to unload
+# TODO: need to add all the things
+removelist basicItems
+createlist basicItems
+pushlist basicItems 'spellbook'
+pushlist basicItems 'plate helm'
+pushlist basicItems 'quarter staff'
+
+@clearignore 
+foreach itemID in basicItems
+    if findtype itemID lootBag as item
+        getlabel item itemName
+        overhead 'moving {{itemName}}'
+        lift item
+        drop magicItemBag -1 -1 -1
+        @ignore itemID
+    endif
+endfor
+@clearignore 
