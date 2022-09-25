@@ -67,20 +67,42 @@ createlist basicItems
 pushlist basicItems 'spellbook'
 pushlist basicItems 'plate helm'
 pushlist basicItems 'quarter staff'
+pushlist basicItems 'bow'
 pushlist basicItems 'crossbow'
+pushlist basicItems 'heavy crossbow'
 pushlist basicItems 'martial arts scroll'
 pushlist basicItems 'leather skirt'
 pushlist basicItems 'lute'
 pushlist basicItems 'hammer pick'
+pushlist basicItems 'Long Spear'
+pushlist basicItems 'war fork'
+pushlist basicItems 'short spear'
+pushlist basicItems 'leather gorget'
+pushlist basicItems 'leather shorts'
+pushlist basicItems 'Leather Gloves'
+pushlist basicItems 'leather sleeves'
+pushlist basicItems 'studded tunic'
+pushlist basicItems 'studded gorget'
+pushlist basicItems 'plate armor'
+pushlist basicItems 'kite shield'
+pushlist basicItems 'wooden shield'
+pushlist basicItems 'bronze shield'
+pushlist basicItems 'buckler '
+pushlist basicItems 'chainmail leggings'
+pushlist basicItems 'platemail gloves'
+pushlist basicItems 'large battle axe'
+
+
 # pushlist basicItems ''
 
 @clearignore 
 foreach itemID in basicItems
     while findtype itemID lootBag as item
         getlabel item itemName
-        overhead 'moving {{itemName}}' 908
+        overhead "Moving: '{{itemName}}'" 444
         lift item
         drop magicItemBag -1 -1 -1
+        wait 250
         @ignore itemID
     endwhile
 endfor
@@ -115,4 +137,4 @@ else
 endif
 
 # DONE
-overhead 'Dungeon Restock Done' 68
+overhead 'Dungeon Restock Done.' 68
