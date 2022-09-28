@@ -88,21 +88,37 @@ pushlist basicItems 'kite shield'
 pushlist basicItems 'wooden shield'
 pushlist basicItems 'bronze shield'
 pushlist basicItems 'buckler '
-pushlist basicItems 'chainmail leggings'
 pushlist basicItems 'platemail gloves'
 pushlist basicItems 'large battle axe'
-
-
+pushlist basicItems 'chainmail coif'
+pushlist basicItems 'chainmail leggings'
+pushlist basicItems 'maul'
+pushlist basicItems 'bone arms'
+pushlist basicItems 'ringmail tunic'
+pushlist basicItems 'ringmail sleeves'
+pushlist basicItems 'studded armor'
+pushlist basicItems 'halberd'
+pushlist basicItems 'bardiche'
+pushlist basicItems 'bamboo flute'
+pushlist basicItems 'helmet'
+pushlist basicItems 'bone legs'
+pushlist basicItems 'platemail arms'
+pushlist basicItems 'longsword'
+pushlist basicItems 'katana'
+pushlist basicItems 'pitchfork'
 # pushlist basicItems ''
 
 @clearignore 
 foreach itemID in basicItems
     while findtype itemID lootBag as item
         getlabel item itemName
-        overhead "Moving: '{{itemName}}'" 444
-        lift item
-        drop magicItemBag -1 -1 -1
-        wait 250
+        if 'unidentified' in itemName
+            overhead "Moving: '{{itemName}}'" 444
+            lift item
+            drop magicItemBag -1 -1 -1
+            wait 250
+        endif
+        
         @ignore itemID
     endwhile
 endfor
