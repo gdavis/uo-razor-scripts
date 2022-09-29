@@ -1,0 +1,65 @@
+# Trains Necromancy by first
+# casting Magic Arrow and healing
+# in Shelter Island dungeon.
+# Next, casts Magic Mushroom
+# to create a huge stockpile
+# of shrooms
+clearsysmsg 
+
+if skill 'camping' == 20
+    setskill 'camping' lock
+    setskill 'spirit speak' down
+endif
+
+if skill 'necromancy' < 75    
+    if hp < 50
+        cast 'Greater Heal'
+        wft 6000
+        target self
+        wait 2500
+    endif
+
+    if hp > 25
+        hotkey 'Magic Arrow'
+        waitfortarget
+        target 'self'
+        wait 2500
+    endif
+elseif skill 'necromancy' < 100
+    cast 'Create Food'
+    wait 1500
+    
+    if findtype 'reagent satchel' self as satchel
+        if counttype 'Garlic' satchel < 10 or counttype 'Ginseng' satchel < 10 or counttype 'Mandrake Root%s%' satchel < 10
+            overhead 'low on regs!'
+    
+            if findtype 'storage shelf' ground -1 -1 2 as shelf
+                overhead 'Resupplying...'
+                menu shelf 1
+                wait 1000
+            endif
+        endif
+    endif
+else
+    overhead 'done for now'
+    wait 3500
+endif
+
+if mana < 20
+    skill 'Meditation'
+    wait 500
+            
+    if findbuff 'actively meditating'
+        while mana < maxmana
+            overhead 'Meditating...'
+            wait 3500
+        endwhile
+        replay
+    else
+        overhead 'Retrying meditation...'
+        wait 5500
+        replay
+    endif
+endif
+
+loop
