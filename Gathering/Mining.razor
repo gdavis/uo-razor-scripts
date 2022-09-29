@@ -43,10 +43,13 @@
 # the state variables reset to start a new run.
 if not varexist isActive
     @setvar! isActive 0
+    clearsysmsg 
 endif
 
 # check if the previous script was interrupted
 if isActive = 1
+    clearsysmsg 
+
     removetimer 'digTimeout'
     removetimer 'digTime'
     removetimer 'waitAlert'
@@ -165,7 +168,7 @@ endif
 # PK check
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     overhead 'PK WARNING - ESCAPE'
-    clearsysmsg 
+    #clearsysmsg 
 
     if skill 'magery' >= 60
         overhead 'Time to leave!' 34
@@ -224,7 +227,7 @@ if findtype 'forge' ground -1 -1 2
         overhead '*smelts {{oreName}}*' 44
         dclick ore
         @setvar didSmelt 1
-        wait actionDelay
+        wait 1250
         
         if insysmsg 'you do not see'
             # moved out of range
@@ -389,7 +392,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
     if insysmsg 'Harvesting is not allowed'
         overhead 'Cannot mine here!' 38
         removetimer 'digTimeout'    
-        clearsysmsg 
+        #clearsysmsg 
         @setvar! isDigging 0
         @setvar! isActive 0
         replay
@@ -400,7 +403,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         sysmsg 'No ore here to mine.' 138
         
         removetimer 'digTimeout'
-        clearsysmsg
+        #clearsysmsg
         
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
@@ -416,7 +419,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
     if insysmsg 'You loosen some rocks'
         overhead 'YOU FAILED' 38
         removetimer 'digTimeout'    
-        clearsysmsg 
+        #clearsysmsg 
         @setvar! isDigging 0
         @setvar! isActive 0
         replay
@@ -459,7 +462,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
     
     if digSuccess = 1
         removetimer 'digTimeout'
-        clearsysmsg 
+        #clearsysmsg 
         @setvar! isDigging 0
         @setvar! isActive 0
         replay
@@ -469,7 +472,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
     if insysmsg 'You have recently traveled'
         overhead 'Travel Cooldown...' 24
         removetimer 'digTimeout'    
-        clearsysmsg 
+        #clearsysmsg 
 
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
@@ -484,7 +487,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
     if insysmsg 'That is too far away'
         overhead 'Moving...' 24
         removetimer 'digTimeout'   
-        clearsysmsg 
+        #clearsysmsg 
         @setvar! isDigging 0 
         @setvar! isActive 0
         replay
@@ -492,7 +495,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
 
     if insysmsg 'You must wait'
         overhead 'Too fast?' 44
-        clearsysmsg 
+        #clearsysmsg 
         @setvar! isActive 0
         replay
     endif
