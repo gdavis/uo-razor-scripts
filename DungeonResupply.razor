@@ -72,6 +72,7 @@ pushlist basicItems 'crossbow'
 pushlist basicItems 'heavy crossbow'
 pushlist basicItems 'martial arts scroll'
 pushlist basicItems 'lute'
+pushlist basicItems 'tambourine'
 pushlist basicItems 'hammer pick'
 pushlist basicItems 'Long Spear'
 pushlist basicItems 'war fork'
@@ -86,6 +87,7 @@ pushlist basicItems 'wooden shield'
 pushlist basicItems 'bronze shield'
 pushlist basicItems 'heater shield'
 pushlist basicItems 'buckler '
+pushlist basicItems 'bascinet'
 pushlist basicItems 'helmet'
 pushlist basicItems 'plate helm'
 pushlist basicItems 'plate armor'
@@ -95,6 +97,7 @@ pushlist basicItems 'platemail'
 pushlist basicItems 'large battle axe'
 pushlist basicItems 'chainmail coif'
 pushlist basicItems 'chainmail leggings'
+pushlist basicItems 'chainmail tunic'
 pushlist basicItems 'maul'
 pushlist basicItems 'bone arms'
 pushlist basicItems 'bone gloves'
@@ -105,15 +108,16 @@ pushlist basicItems 'studded armor'
 pushlist basicItems 'studded leggings'
 pushlist basicItems 'studded tunic'
 pushlist basicItems 'studded gorget'
+pushlist basicItems 'studded sleeves'
 pushlist basicItems 'halberd'
 pushlist basicItems 'bardiche'
 pushlist basicItems 'bamboo flute'
 pushlist basicItems 'longsword'
 pushlist basicItems 'katana'
 pushlist basicItems 'pitchfork'
-
 # pushlist basicItems ''
 
+clearsysmsg 
 @clearignore 
 foreach itemID in basicItems
     while findtype itemID lootBag as item
@@ -123,6 +127,11 @@ foreach itemID in basicItems
             lift item
             drop magicItemBag -1 -1 -1
             wait 250
+            
+            if insysmsg 'That container cannot hold more'
+                overhead 'Loot bag is full!' 38
+                stop
+            endif
         endif
         
         @ignore itemID
