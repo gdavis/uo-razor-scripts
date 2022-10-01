@@ -1,80 +1,110 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
+@setvar! buffCooldown 60000
+@setvar! speakCooldown 90000
 
 overhead ' '
 clearsysmsg 
 hotkey "Clear Target Queue"
+hotkey "Cancel Current Target"
 hotkey "Next Friendly Player Target"
+@setvar! player lasttarget
 
-#@setvar! buffCooldown 60000
-
-#if not listexists buffed
-#    createlist buffed
-#endif
-@setvar! player lasttarget 
-
-#if not listexists buffedPlayers
-#    createlist buffedPlayers
-#    createlist buffedTime
-#endif
-
-if not timerexists buffedTimer
-    createtimer buffedTimer
+if not varexist scratchpad
+    overhead 'Select a marked rune that can be used as a scratchpad:'
+    setvar scratchpad
 endif
 
-if insysmsg 'New target set'
-#if insysmsg 'New target set' and not inlist buffedPlayers player
+if not timerexists speakTimer
+    createtimer speakTimer
+endif
+
+if timer speakTimer > speakCooldown
+    settimer speakTimer 0
+    say 'Hello NEW! members! I am training to become a reliable buff provider.'
+    wait 4000
+    say 'Come stand next to me to receive my blessing.'
+    wait 2000
+endif
+
+if mana < 30
+    
+endif
+
+if insysmsg 'New target set' 
     
     if findtype 'scissors' backpack as scissors
         dclick scissors
         wft 6000
-        lasttarget 
+        target player 
         wait 650
         
-        @setvar! isWaiting 1
-        while isWaiting = 1 
+        while 1 = 1
             if insysmsg 'cannot be used on that'
-                @setvar! isWaiting 0
-                overhead 'in range'
+                #overhead 'in range'
             
-                if timerexists '{{player}}'
-                    if timer '{{player}}' > 15000
-                        sysmsg '{{player}} can be buffed again.' 38
-                        settimer '{{player}}' 0
+                if timerexists playerID
+                    if timer playerID > buffCooldown
+                        sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 38
+                        settimer playerID 0
                     else
-                        overhead '{{player}} buffed too recently.' 908
+                        sysmsg 'BUFFBOT: {{playerID}} buffed too recently.' 908
                         break
                     endif
                 endif
-            
-                say 'Looking pretty weak. You will need my help'
-                wait 650
+                
+                # store the player ID as the name of the rune,
+                # so we can then get that player ID and use for
+                # storing a timer for that player.
+                dclick scratchpad
+                waitforprompt 1036 1000
+                promptresponse player
+                getlabel scratchpad playerID    
+                sysmsg 'BUFFBOT: found target {{playerID}}'
+                
+                emote 'lifts head toward you'
+                wait 1500
+                
+                say 'Hello friend. Hold still while I bring the blessings of Sosaria to you...'
+                wait 1000
+                
+                emote 'opens spellbook'
+                wait 100
                 
                 cast 'Bless'
                 wft 6000
-                lasttarget
+                target player
                 wait 1500
                 
                 if insysmsg 'existing effect of equal or greater'
-                    say 'Oh! Back for another buff too soon so you can waste all my reagents.'
-                    wait 650
-                    say 'Harrummph!! Off with you!'
+                    say 'Bah! You are already buffed. Stop wasting my time!'
+                    wait 2250
+                    say 'Off with you!'
+                    wait 1500
+                    emote 'slams spellbook closed'
+                else             
+                    cast 'Arch Protection'
+                    wft 6000
+                    target player
+                    wait 2000
+                    
+                    say 'You are ready for an adventure.'
+                    wait 1500
+                    say 'Now shoo!'
+                    wait 1500
+                    emote 'closes spellbook'
+                    
+                    createtimer playerID
+                    settimer playerID 0
                 endif
+
+                break
                 
-                cast 'Arch Protection'
-                wft 6000
-                lasttarget
-                
-    #            pushlist buffedPlayers player back
-    #            settimer buffedTimer 0
-                
-                createtimer '{{player}}'
-                settimer '{{player}}' 0
-                
-            elseif insysmsg 'too far away.'
-                @setvar! isWaiting 0
+            elseif insysmsg 'too far away.' or insysmsg 'target is out of range'
                 overhead 'not in range'
+                hotkey "Cancel Current Target"
+                break
             else
                 wait 100
             endif
@@ -83,12 +113,5 @@ if insysmsg 'New target set'
         overhead 'Scissors are required for a range check' 38
     endif
 endif
-
-wait 1000
-
-#if timer buffedTimer > buffCooldown
-#    sysmsg 'Resetting buffed player list' 38
-#    removelist buffedPlayers
-#endif
 
 loop
