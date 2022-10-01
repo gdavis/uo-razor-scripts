@@ -1,0 +1,94 @@
+# Inspired by NBK bot.
+# Uses inscription character to cast 
+# long buffs on players.
+
+overhead ' '
+clearsysmsg 
+hotkey "Clear Target Queue"
+hotkey "Next Friendly Player Target"
+
+#@setvar! buffCooldown 60000
+
+#if not listexists buffed
+#    createlist buffed
+#endif
+@setvar! player lasttarget 
+
+#if not listexists buffedPlayers
+#    createlist buffedPlayers
+#    createlist buffedTime
+#endif
+
+if not timerexists buffedTimer
+    createtimer buffedTimer
+endif
+
+if insysmsg 'New target set'
+#if insysmsg 'New target set' and not inlist buffedPlayers player
+    
+    if findtype 'scissors' backpack as scissors
+        dclick scissors
+        wft 6000
+        lasttarget 
+        wait 650
+        
+        @setvar! isWaiting 1
+        while isWaiting = 1 
+            if insysmsg 'cannot be used on that'
+                @setvar! isWaiting 0
+                overhead 'in range'
+            
+                if timerexists '{{player}}'
+                    if timer '{{player}}' > 15000
+                        sysmsg '{{player}} can be buffed again.' 38
+                        settimer '{{player}}' 0
+                    else
+                        overhead '{{player}} buffed too recently.' 908
+                        break
+                    endif
+                endif
+            
+                say 'Looking pretty weak. You will need my help'
+                wait 650
+                
+                cast 'Bless'
+                wft 6000
+                lasttarget
+                wait 1500
+                
+                if insysmsg 'existing effect of equal or greater'
+                    say 'Oh! Back for another buff too soon so you can waste all my reagents.'
+                    wait 650
+                    say 'Harrummph!! Off with you!'
+                endif
+                
+                cast 'Arch Protection'
+                wft 6000
+                lasttarget
+                
+    #            pushlist buffedPlayers player back
+    #            settimer buffedTimer 0
+                
+                createtimer '{{player}}'
+                settimer '{{player}}' 0
+                
+            elseif insysmsg 'too far away.'
+                @setvar! isWaiting 0
+                overhead 'not in range'
+            else
+                wait 100
+            endif
+        endwhile
+    else
+        overhead 'Scissors are required for a range check' 38
+    endif
+endif
+
+wait 1000
+
+#if timer buffedTimer > buffCooldown
+#    sysmsg 'Resetting buffed player list' 38
+#    removelist buffedPlayers
+#endif
+
+loop
