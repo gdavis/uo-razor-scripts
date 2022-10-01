@@ -32,7 +32,7 @@ if findtype 'resource container' ground -1 -1 2 as pile
     wft 6000
     target lootBag
     wait delay
-    overhead 'Supplies dumped' 908
+    overhead 'Resources stored.' 53
 else
     overhead 'missing stockpile or shelf!' 38
 endif
@@ -49,12 +49,13 @@ if findtype 'storage shelf' ground -1 -1 2 as shelf
         wft 6000
         target satchel
         wait delay
-        overhead 'Satchel dumped' 68
+        overhead 'Satchel emptied.' 53
     endif    
 
     menu shelf 1
     wait delay
-    overhead 'Resupplied' 49
+    overhead 'Resupplied.' 53
+    gumpclose
 else 
     overhead 'missing storage shelf!' 38
 endif
@@ -64,58 +65,78 @@ endif
 # TODO: need to add all the things
 removelist basicItems
 createlist basicItems
+# magery
 pushlist basicItems 'spellbook'
-pushlist basicItems 'quarter staff'
-pushlist basicItems 'gnarled staff'
+pushlist basicItems 'wand'
+# archery
 pushlist basicItems 'bow'
 pushlist basicItems 'crossbow'
 pushlist basicItems 'heavy crossbow'
+# martial
 pushlist basicItems 'martial arts scroll'
+# barding
 pushlist basicItems 'lute'
+pushlist basicItems 'drum'
 pushlist basicItems 'lap harp'
-pushlist basicItems 'hammer pick'
+pushlist basicItems 'bamboo flute'
+# fencing
 pushlist basicItems 'Long Spear'
 pushlist basicItems 'war fork'
 pushlist basicItems 'short spear'
+# leather
 pushlist basicItems 'leather gorget'
 pushlist basicItems 'leather shorts'
 pushlist basicItems 'Leather Gloves'
 pushlist basicItems 'leather sleeves'
 pushlist basicItems 'leather skirt'
+# shields
 pushlist basicItems 'kite shield'
 pushlist basicItems 'wooden shield'
 pushlist basicItems 'bronze shield'
 pushlist basicItems 'heater shield'
 pushlist basicItems 'buckler '
+# platemail
 pushlist basicItems 'helmet'
 pushlist basicItems 'plate helm'
+pushlist basicItems 'platemail gorget'
 pushlist basicItems 'plate armor'
 pushlist basicItems 'platemail gloves'
 pushlist basicItems 'platemail arms'
 pushlist basicItems 'platemail'
-pushlist basicItems 'large battle axe'
+pushlist basicItems 'platemail legs'
+# chainmail
 pushlist basicItems 'chainmail coif'
 pushlist basicItems 'chainmail leggings'
-pushlist basicItems 'maul'
+# bone
 pushlist basicItems 'bone arms'
 pushlist basicItems 'bone gloves'
 pushlist basicItems 'bone legs'
+# ringmail
 pushlist basicItems 'ringmail tunic'
 pushlist basicItems 'ringmail sleeves'
+# studded leather
 pushlist basicItems 'studded armor'
 pushlist basicItems 'studded leggings'
 pushlist basicItems 'studded tunic'
 pushlist basicItems 'studded gorget'
+# swords
 pushlist basicItems 'halberd'
 pushlist basicItems 'bardiche'
-pushlist basicItems 'bamboo flute'
 pushlist basicItems 'longsword'
 pushlist basicItems 'katana'
 pushlist basicItems 'pitchfork'
+pushlist basicItems 'large battle axe'
+# maces
+pushlist basicItems 'maul'
+pushlist basicItems 'hammer pick'
+pushlist basicItems 'quarter staff'
+pushlist basicItems 'gnarled staff'
+pushlist basicItems 'black staff'
 
 # pushlist basicItems ''
 
 @clearignore 
+overhead 'Unloading items...' 53
 foreach itemID in basicItems
     while findtype itemID lootBag as item
         getlabel item itemName
@@ -126,11 +147,11 @@ foreach itemID in basicItems
             wait 250
         endif
         
-        @ignore itemID
+        @ignore item
     endwhile
 endfor
 @clearignore 
-
+overhead 'Items unloaded.' 53
 
 # create shrooms
 if findtype 'wizards grimoire' backpack
@@ -160,4 +181,4 @@ else
 endif
 
 # DONE
-overhead 'Dungeon Restock Done.' 68
+overhead 'Locked & Stocked!' 68
