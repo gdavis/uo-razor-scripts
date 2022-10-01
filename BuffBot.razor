@@ -2,7 +2,7 @@
 # Uses inscription character to cast 
 # long buffs on players.
 @setvar! buffCooldown 60000
-@setvar! speakCooldown 90000
+@setvar! speakCooldown 120000
 
 overhead ' '
 clearsysmsg 
@@ -20,28 +20,43 @@ if not timerexists speakTimer
     createtimer speakTimer
 endif
 
+@setvar! rangeTimeout 6000
+if not timerexists rangeTimer
+    createtimer rangeTimer
+endif
+
 if timer speakTimer > speakCooldown
     settimer speakTimer 0
     say 'Hello NEW! members! I am training to become a reliable buff provider.'
     wait 4000
     say 'Come stand next to me to receive my blessing.'
     wait 2000
+    say 'If anything goes wrong blame my maker.'
+    wait 2000
 endif
 
 if mana < 30
-    
+    say 'I am feeling a bit exhausted. Let me rest a moment...'
+    wait 5000
+    loop
 endif
 
 if insysmsg 'New target set' 
     
     if findtype 'scissors' backpack as scissors
+        settimer rangeTimer 0
         dclick scissors
         wft 6000
         target player 
         wait 650
         
         while 1 = 1
-            if insysmsg 'cannot be used on that'
+            if timer rangeTimer > rangeTimeout
+                hotkey 'Cancel Current Target'
+                overhead 'Player moved away?' 38
+                break
+                
+            elseif insysmsg 'cannot be used on that'
                 #overhead 'in range'
             
                 if timerexists playerID
@@ -112,6 +127,9 @@ if insysmsg 'New target set'
     else
         overhead 'Scissors are required for a range check' 38
     endif
+else
+    overhead 'Target: None' 908
+    wait 250
 endif
 
 loop
