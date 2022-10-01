@@ -1,0 +1,34 @@
+if not varexist ingotBag
+    overhead 'Select the container with ingots to store:'
+    setvar ingotBag
+endif
+
+if not position 247 455
+    overhead 'Not at inn!' 38
+    stop
+endif
+
+@setvar! hasIngots 0
+@clearignore 
+while findtype 'iron ingot%s' backpack as ingots
+    if hasIngots = 0
+        overhead 'Storing ingots...'
+        @setvar! hasIngots 1
+    endif
+    getlabel ingots ingotsName
+    overhead '{{ingotsName}}' 444
+    @ignore ingots
+endwhile
+@clearignore 
+
+if hasIngots = 0
+    overhead 'No ingots to store.'
+elseif findtype 'resource container' ground -1 -1 2 as pile
+    menu pile 0
+    wft 6000
+    target ingotBag
+    wait 750
+    overhead 'Done stashing.' 44
+else 
+    overhead 'Could not find a resource stockpile!' 38
+endif
