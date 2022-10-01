@@ -1,15 +1,31 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
+@setvar! globalDelay 575
+@setvar! speechDelay 1750
 @setvar! buffCooldown 60000
-@setvar! speakCooldown 120000
+@setvar! introCooldown 120000
+@setvar! rangeTimeout 6000
+
+removelist ignoreList
+createlist ignoreList
+# add player IDs to ignore here:
+# Alchmist Trav
+pushlist ignoreList 2910331 back    
+# Dobbey
+pushlist ignoreList 353391 back
 
 overhead ' '
 clearsysmsg 
-hotkey "Clear Target Queue"
+
 hotkey "Cancel Current Target"
 hotkey "Next Friendly Player Target"
 @setvar! player lasttarget
+
+if inlist ignoreList player
+    sysmsg 'IGNORING: {{player}}' 44
+    loop
+endif
 
 if not varexist scratchpad
     overhead 'Select a marked rune that can be used as a scratchpad:'
@@ -20,44 +36,61 @@ if not timerexists speakTimer
     createtimer speakTimer
 endif
 
-@setvar! rangeTimeout 6000
 if not timerexists rangeTimer
     createtimer rangeTimer
 endif
 
-if timer speakTimer > speakCooldown
-    settimer speakTimer 0
-    say 'Hello NEW! members! I am training to become a reliable buff provider.'
-    wait 4000
-    say 'Come stand next to me to receive my blessing.'
-    wait 2000
-    say 'If anything goes wrong blame my maker.'
-    wait 2000
-endif
-
 if mana < 30
     say 'I am feeling a bit exhausted. Let me rest a moment...'
-    wait 5000
+    wait speechDelay
     loop
 endif
 
-if insysmsg 'New target set' 
-    
+if insysmsg 'New target set'
+    overhead 'playerID: {{player}}' 908
+
     if findtype 'scissors' backpack as scissors
         settimer rangeTimer 0
         dclick scissors
-        wft 6000
+        wft 5000
         target player 
-        wait 650
+        wait 1500
         
         while 1 = 1
-            if timer rangeTimer > rangeTimeout
+            
+            if insysmsg 'too far away.' or insysmsg 'target is out of range'
+                overhead 'not in range'
+                hotkey "Cancel Current Target"
+                break
+                
+            elseif timer rangeTimer > rangeTimeout
                 hotkey 'Cancel Current Target'
                 overhead 'Player moved away?' 38
                 break
                 
             elseif insysmsg 'cannot be used on that'
-                #overhead 'in range'
+                # store the player ID as the name of the rune,
+                # so we can then get that player ID and use for
+                # storing a timer for that player.
+                createtimer runeChange
+                settimer runeChange 0
+                
+                dclick scratchpad
+                waitforprompt 'any'
+                promptresponse player
+                
+                while not insysmsg 'rune has been changed'
+                    wait 100
+                
+                    if timer runeChange > 6000
+                        overhead 'something went wrong changing the rune!' 38
+                        @setvar! shouldLoop 0
+                        break
+                    endif
+                endwhile
+                
+                getlabel scratchpad playerID
+                sysmsg 'BUFFBOT: {{playerID}} is in range'
             
                 if timerexists playerID
                     if timer playerID > buffCooldown
@@ -65,71 +98,69 @@ if insysmsg 'New target set'
                         settimer playerID 0
                     else
                         sysmsg 'BUFFBOT: {{playerID}} buffed too recently.' 908
+                        say 'I just buffed you, come back later.'
+                        wait speechDelay
                         break
                     endif
-                endif
-                
-                # store the player ID as the name of the rune,
-                # so we can then get that player ID and use for
-                # storing a timer for that player.
-                dclick scratchpad
-                waitforprompt 1036 1000
-                promptresponse player
-                getlabel scratchpad playerID    
-                sysmsg 'BUFFBOT: found target {{playerID}}'
-                
-                emote 'lifts head toward you'
-                wait 1500
-                
-                say 'Hello friend. Hold still while I bring the blessings of Sosaria to you...'
-                wait 1000
-                
-                emote 'opens spellbook'
-                wait 100
-                
-                cast 'Bless'
-                wft 6000
-                target player
-                wait 1500
-                
-                if insysmsg 'existing effect of equal or greater'
-                    say 'Bah! You are already buffed. Stop wasting my time!'
-                    wait 2250
-                    say 'Off with you!'
-                    wait 1500
-                    emote 'slams spellbook closed'
-                else             
-                    cast 'Arch Protection'
-                    wft 6000
-                    target player
-                    wait 2000
-                    
-                    say 'You are ready for an adventure.'
-                    wait 1500
-                    say 'Now shoo!'
-                    wait 1500
-                    emote 'closes spellbook'
-                    
+                else 
+                    overhead 'No timer for {{playerID}}' 38
                     createtimer playerID
                     settimer playerID 0
+                    
+                    emote 'lifts head toward you'
+                    wait speechDelay
+                    
+                    say 'Hello there. Stay there while I bring the blessings of Sosaria onto you...'
+                    wait speechDelay
+                    
+                    emote 'thumbs through spellbook'
+                    wait speechDelay
+                    
+                    cast 'Bless'
+                    wft 6000
+                    target player
+                    wait 1500
+                    
+                    if insysmsg 'existing effect of equal or greater'
+                        say 'Bah! You are already buffed. Stop wasting my time!'
+                        wait speechDelay
+                        say 'Off with you!'
+                        wait speechDelay
+                        emote 'slams spellbook closed'
+                    else             
+                        cast 'Arch Protection'
+                        wft 6000
+                        target player
+                        wait 2000
+                        
+                        say 'You are ready for adventure.'
+                        wait speechDelay
+                        say 'Now shoo!'
+                        wait speechDelay
+                        emote 'closes spellbook'
+                    endif
+                    
+                    break
                 endif
-
-                break
-                
-            elseif insysmsg 'too far away.' or insysmsg 'target is out of range'
-                overhead 'not in range'
-                hotkey "Cancel Current Target"
-                break
             else
                 wait 100
             endif
         endwhile
     else
         overhead 'Scissors are required for a range check' 38
+        wait globalDelay
     endif
 else
     overhead 'Target: None' 908
-    wait 250
+    wait globalDelay
+endif
+
+if timer speakTimer > introCooldown
+    settimer speakTimer 0
+    say 'Hello NEW! members! I am testing out some buffs today.'
+    wait speechDelay
+    say 'Come stand next to me to receive my blessings.'
+    wait speechDelay
 endif
 
 loop
