@@ -1,0 +1,22 @@
+# Poison a weapon with a 
+# selected potion potion
+
+if not varexist poisonPotion or not find poisonPotion backpack
+    overhead 'Select your poison:'
+    setvar! poisonPotion
+endif
+
+if not varexist poisonTarget or not find poisonTarget self
+    overhead 'Select your weapon:'
+    setvar! poisonTarget
+endif
+
+skill 'poisoning'
+waitfortarget
+target poisonPotion
+
+# use on item
+waitfortarget 1000
+target poisonTarget
+
+wait 500
