@@ -2,8 +2,43 @@
 # Uses inscription character to cast 
 # long buffs on players.
 @setvar! buffCooldown 60000
-@setvar! speakCooldown 120000
+@setvar! speakCooldown 180000
 
+
+# check for reagents
+@setvar! needRegsDelay 8000
+
+while findtype 3972|3974|3980|3973 ground any any any as regs
+    lift regs 60000
+    
+    if findtype 'reagent satchel' self as satchel
+        drop satchel -1 -1 -1
+    else 
+        drop backpack -1 -1 -1
+    endif
+    wait 500
+endwhile
+
+if counttype 3972 self == 0
+    say "I'm out of garlic! Drop some on the ground for me please."
+    wait needRegsDelay
+    replay
+elseif counttype 3974 self == 0
+    say "I'm out of mandrake root! Drop some on the ground for me please."
+    wait needRegsDelay
+    replay
+elseif counttype 3980 self == 0
+    say "I'm out of sulphurous ash! Drop some on the ground for me please."
+    wait needRegsDelay
+    replay
+elseif counttype 3973 self == 0
+    say "I'm out of ginseng! Drop some on the ground for me please."
+    wait needRegsDelay
+    replay
+endif
+
+
+# find a target
 overhead ' '
 clearsysmsg 
 hotkey "Clear Target Queue"
@@ -11,6 +46,7 @@ hotkey "Cancel Current Target"
 hotkey "Next Friendly Player Target"
 @setvar! player lasttarget
 
+    
 if not varexist scratchpad
     overhead 'Select a marked rune that can be used as a scratchpad:'
     setvar scratchpad
@@ -27,12 +63,8 @@ endif
 
 if timer speakTimer > speakCooldown
     settimer speakTimer 0
-    say 'Hello NEW! members! I am training to become a reliable buff provider.'
+    say 'Hello NEW! members! Come hither and let me bless you.'
     wait 4000
-    say 'Come stand next to me to receive my blessing.'
-    wait 2000
-    say 'If anything goes wrong blame my maker.'
-    wait 2000
 endif
 
 if mana < 30
