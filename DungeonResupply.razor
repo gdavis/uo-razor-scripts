@@ -46,6 +46,7 @@ if findtype 'storage shelf' ground -1 -1 2 as shelf
     # the next dungeon run.
     if findtype 'reagent satchel' self as satchel
         menu satchel 0
+        wait 250
         menu shelf 0
         wft 6000
         target satchel
@@ -92,14 +93,15 @@ pushlist basicItems 'Leather Gloves'
 pushlist basicItems 'leather sleeves'
 pushlist basicItems 'leather skirt'
 pushlist basicItems 'leather leggings'
+pushlist basicItems 'leather armor'
 # shields
 pushlist basicItems 'kite shield'
 pushlist basicItems 'wooden shield'
 pushlist basicItems 'bronze shield'
 pushlist basicItems 'heater shield'
 pushlist basicItems 'buckler '
+pushlist basicItems 'metal shield'
 # platemail
-pushlist basicItems 'close helm'
 pushlist basicItems 'bascinet'
 pushlist basicItems 'helmet'
 pushlist basicItems 'plate helm'
@@ -117,36 +119,38 @@ pushlist basicItems 'chainmail tunic'
 pushlist basicItems 'bone arms'
 pushlist basicItems 'bone gloves'
 pushlist basicItems 'bone legs'
+pushlist basicItems 'bone armor'
 # ringmail
 pushlist basicItems 'ringmail tunic'
 pushlist basicItems 'ringmail sleeves'
-pushlist basicItems 'ringmail leggings'
 pushlist basicItems 'ringmail gloves'
+pushlist basicItems 'ringmail leggings'
 # studded leather
 pushlist basicItems 'studded armor'
 pushlist basicItems 'studded leggings'
 pushlist basicItems 'studded tunic'
 pushlist basicItems 'studded gorget'
 pushlist basicItems 'studded sleeves'
-pushlist basicItems 'studded bustier'
 # swords
-pushlist basicItems 'bardiche'
 pushlist basicItems 'halberd'
 pushlist basicItems 'bardiche'
 pushlist basicItems 'longsword'
 pushlist basicItems 'katana'
 pushlist basicItems 'pitchfork'
 pushlist basicItems 'large battle axe'
-pushlist basicItems 'two handed axe'
+pushlist basicItems 'viking sword'
+pushlist basicItems 'broadsword'
+pushlist basicItems 'double axe'
+pushlist basicItems 'war axe'
+pushlist basicItems "executioner's axe"
 # maces
-pushlist basicItems 'mace'
 pushlist basicItems 'maul'
 pushlist basicItems 'hammer pick'
 pushlist basicItems 'quarter staff'
 pushlist basicItems 'gnarled staff'
 pushlist basicItems 'black staff'
 pushlist basicItems 'hammer pick'
-pushlist basicItems 'bladed staff'
+
 # pushlist basicItems ''
 
 clearsysmsg 
