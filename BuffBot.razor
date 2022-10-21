@@ -4,11 +4,48 @@
 @setvar! buffCooldown 60000
 @setvar! speakCooldown 180000
 
+# ignore list
+# 0x5646F aka 353391 - Dobbey
+removelist ignoreList
+if not listexists ignoreList
+    createlist ignoreList
+    pushlist ignoreList 353391 back
+endif
+
+# scratchpad for saving player IDs
+if not varexist scratchpad
+    overhead 'Select a marked rune that can be used as a scratchpad:'
+    setvar scratchpad
+endif
+
+# timer for announcing service
+if not timerexists speakTimer
+    createtimer speakTimer
+endif
+
+# timeout for someone moving out of range
+@setvar! rangeTimeout 6000
+if not timerexists rangeTimer
+    createtimer rangeTimer
+endif
+
+if timer speakTimer > speakCooldown
+    settimer speakTimer 0
+    say 'Hello NEW! members! Come hither and let me bless you.'
+    wait 4000
+endif
+
+if mana < 30
+    say 'I am feeling a bit exhausted. Let me rest a moment...'
+    wait 5000
+    loop
+endif
 
 # check for reagents
 @setvar! needRegsDelay 8000
 
 while findtype 3972|3974|3980|3973 ground any any any as regs
+    say 'Ah! Thank you for your donation!'
     lift regs 60000
     
     if findtype 'reagent satchel' self as satchel
@@ -41,39 +78,21 @@ endif
 # find a target
 overhead ' '
 clearsysmsg 
-hotkey "Clear Target Queue"
-hotkey "Cancel Current Target"
+
+if targetexists 
+    hotkey "Clear Target Queue"
+    hotkey "Cancel Current Target"
+endif
+
 hotkey "Next Friendly Player Target"
 @setvar! player lasttarget
 
-    
-if not varexist scratchpad
-    overhead 'Select a marked rune that can be used as a scratchpad:'
-    setvar scratchpad
-endif
-
-if not timerexists speakTimer
-    createtimer speakTimer
-endif
-
-@setvar! rangeTimeout 6000
-if not timerexists rangeTimer
-    createtimer rangeTimer
-endif
-
-if timer speakTimer > speakCooldown
-    settimer speakTimer 0
-    say 'Hello NEW! members! Come hither and let me bless you.'
-    wait 4000
-endif
-
-if mana < 30
-    say 'I am feeling a bit exhausted. Let me rest a moment...'
-    wait 5000
-    loop
-endif
-
 if insysmsg 'New target set' 
+    
+    if inlist ignoreList player
+        sysmsg 'IGNORING: {{player}}' 38
+        loop
+    endif
     
     if findtype 'scissors' backpack as scissors
         settimer rangeTimer 0
@@ -90,7 +109,17 @@ if insysmsg 'New target set'
                 
             elseif insysmsg 'cannot be used on that'
                 #overhead 'in range'
-            
+                
+                # store the player ID as the name of the rune,
+                # so we can then get that player ID and use for
+                # storing a timer for that player.
+                dclick scratchpad
+                waitforprompt 1036 1000
+                promptresponse player
+                getlabel scratchpad playerID    
+                sysmsg 'BUFFBOT: found target {{playerID}}'
+                
+                
                 if timerexists playerID
                     if timer playerID > buffCooldown
                         sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 38
@@ -101,14 +130,6 @@ if insysmsg 'New target set'
                     endif
                 endif
                 
-                # store the player ID as the name of the rune,
-                # so we can then get that player ID and use for
-                # storing a timer for that player.
-                dclick scratchpad
-                waitforprompt 1036 1000
-                promptresponse player
-                getlabel scratchpad playerID    
-                sysmsg 'BUFFBOT: found target {{playerID}}'
                 
                 emote 'lifts head toward you'
                 wait 1500
