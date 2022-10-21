@@ -31,12 +31,12 @@ endif
 
 if timer speakTimer > speakCooldown
     settimer speakTimer 0
-    say 'Hello NEW! members! Come hither and let me bless you.'
+    say "Hey, you! Come here to ole Sully for a buff."
     wait 4000
 endif
 
 if mana < 30
-    say 'I am feeling a bit exhausted. Let me rest a moment...'
+    say "Gah, I cannot concentrate! Shut up and let me think a moment..."
     wait 5000
     loop
 endif
@@ -44,8 +44,8 @@ endif
 # check for reagents
 @setvar! needRegsDelay 8000
 
-while findtype 3972|3974|3980|3973 ground any any any as regs
-    say 'Ah! Thank you for your donation!'
+while findtype 3972|3974|3980|3973 ground any any 2 as regs
+    say 'Oh ho! Just what I needed. Thanks pal.'
     lift regs 60000
     
     if findtype 'reagent satchel' self as satchel
@@ -57,19 +57,19 @@ while findtype 3972|3974|3980|3973 ground any any any as regs
 endwhile
 
 if counttype 3972 self == 0
-    say "I'm out of garlic! Drop some on the ground for me please."
+    say "I am out of garlic! Please drop some on the ground for me."
     wait needRegsDelay
     replay
 elseif counttype 3974 self == 0
-    say "I'm out of mandrake root! Drop some on the ground for me please."
+    say "I am out of mandrake root! Please drop some on the ground for me."
     wait needRegsDelay
     replay
 elseif counttype 3980 self == 0
-    say "I'm out of sulphurous ash! Drop some on the ground for me please."
+    say "I am out of sulphurous ash! Please drop some on the ground for me."
     wait needRegsDelay
     replay
 elseif counttype 3973 self == 0
-    say "I'm out of ginseng! Drop some on the ground for me please."
+    say "I am out of ginseng! Please drop some on the ground for me."
     wait needRegsDelay
     replay
 endif
@@ -85,10 +85,21 @@ if targetexists
 endif
 
 hotkey "Next Friendly Player Target"
-@setvar! player lasttarget
+wait 100
 
 if insysmsg 'New target set' 
+    @setvar! player lasttarget
+
+    if not varexist lastPlayerID
+        @setvar! lastPlayerID player
+    elseif lastPlayerID = player
+        sysmsg 'NO ONE AROUND DELAY'
+        wait 2500
+    else 
+        @setvar! lastPlayerID player
+    endif
     
+
     if inlist ignoreList player
         sysmsg 'IGNORING: {{player}}' 38
         loop
@@ -130,15 +141,11 @@ if insysmsg 'New target set'
                     endif
                 endif
                 
-                
-                emote 'lifts head toward you'
-                wait 1500
-                
-                say 'Hello friend. Hold still while I bring the blessings of Sosaria to you...'
-                wait 1000
-                
                 emote 'opens spellbook'
-                wait 100
+                wait 500
+                
+                say 'Ah, lets get you ready for action.'
+                wait 1000
                 
                 cast 'Bless'
                 wft 6000
@@ -146,22 +153,24 @@ if insysmsg 'New target set'
                 wait 1500
                 
                 if insysmsg 'existing effect of equal or greater'
-                    say 'Bah! You are already buffed. Stop wasting my time!'
+                    say 'What!? You are already buffed. Do not waste my time.'
                     wait 2250
-                    say 'Off with you!'
+                    say 'Come back later!'
                     wait 1500
                     emote 'slams spellbook closed'
+                
+                elseif targetexists 
+                    say 'Did you walk away from me? Hrmph.'
                 else             
                     cast 'Arch Protection'
                     wft 6000
                     target player
-                    wait 2000
+                    wait 1000
                     
-                    say 'You are ready for an adventure.'
-                    wait 1500
-                    say 'Now shoo!'
-                    wait 1500
-                    emote 'closes spellbook'
+                    say 'Next!'
+                    wait 1000
+                    
+                    
                     
                     createtimer playerID
                     settimer playerID 0
