@@ -1,0 +1,21 @@
+
+while mana >= 50 
+    hotkey 'Water Elemental'
+    wait 3000
+endif
+
+say 'all release'
+waitforgump 931181454
+gumpresponse 1
+wait 250
+
+while mana < maxmana
+    while not findbuff 'actively meditating'
+        skill 'Meditation'
+        wait 2500
+    endwhile
+    
+    wait 1000
+endwhile
+
+loop
