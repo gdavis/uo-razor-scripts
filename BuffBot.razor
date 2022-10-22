@@ -89,7 +89,7 @@ if insysmsg 'New target set'
     if not varexist lastPlayerID
         @setvar! lastPlayerID player
     elseif lastPlayerID = player
-        sysmsg 'NO ONE AROUND DELAY'
+        sysmsg 'NO ONE AROUND DELAY' 908
         wait 2500
     else 
         @setvar! lastPlayerID player
@@ -97,7 +97,7 @@ if insysmsg 'New target set'
     
 
     if inlist ignoreList player
-        sysmsg 'IGNORING: {{player}}' 38
+        #sysmsg 'IGNORING: {{player}}' 908
         loop
     endif
     
@@ -111,7 +111,7 @@ if insysmsg 'New target set'
         while 1 = 1
             if timer rangeTimer > rangeTimeout
                 hotkey 'Cancel Current Target'
-                overhead 'Player moved away?' 38
+                overhead 'Player moved away?' 44
                 break
                 
             elseif insysmsg 'cannot be used on that'
@@ -124,15 +124,15 @@ if insysmsg 'New target set'
                 waitforprompt 1036 1000
                 promptresponse player
                 getlabel scratchpad playerID    
-                sysmsg 'BUFFBOT: found target {{playerID}}'
+                sysmsg 'BUFFBOT: found target {{playerID}}' 48
                 
                 
                 if timerexists playerID
                     if timer playerID > buffCooldown
-                        sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 38
+                    sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 84
                         settimer playerID 0
                     else
-                        sysmsg 'BUFFBOT: {{playerID}} buffed too recently.' 908
+                        sysmsg 'BUFFBOT: {{playerID}} buffed too recently.' 38
                         break
                     endif
                 endif
@@ -151,7 +151,7 @@ if insysmsg 'New target set'
                     emote 'slams spellbook closed'
                 
                 elseif targetexists 
-                    say 'Did you walk away from me? Hrmph.'
+                    say 'Did you just walk away from me? Hrmph.'
                 else             
                     cast 'Arch Protection'
                     wft 6000
@@ -173,7 +173,7 @@ if insysmsg 'New target set'
                 # announce when new person enters, on a cooldown
                 if timer speakTimer > speakCooldown
                     settimer speakTimer 0
-                    say "Come stand next to me for a buff before you head out!"
+                    say "C'mon over and stand next to ol' Sully for a buff!"
                     wait 2000
                 endif
 
