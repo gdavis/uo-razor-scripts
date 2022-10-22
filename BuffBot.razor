@@ -29,12 +29,6 @@ if not timerexists rangeTimer
     createtimer rangeTimer
 endif
 
-if timer speakTimer > speakCooldown
-    settimer speakTimer 0
-    say "Hey, you! Come here to ole Sully for a buff."
-    wait 4000
-endif
-
 if mana < 30
     say "Gah, I cannot concentrate! Shut up and let me think a moment..."
     wait 5000
@@ -72,6 +66,14 @@ elseif counttype 3973 self == 0
     say "I am out of ginseng! Please drop some on the ground for me."
     wait needRegsDelay
     replay
+endif
+
+
+# announce when new person enters, on cooldown
+if timer speakTimer > speakCooldown
+    settimer speakTimer 0
+    say "Hey, you! Come here to ole Sully for a buff."
+    wait 2000
 endif
 
 
@@ -142,10 +144,10 @@ if insysmsg 'New target set'
                 endif
                 
                 emote 'opens spellbook'
-                wait 500
+                wait 1500
                 
                 say 'Ah, lets get you ready for action.'
-                wait 1000
+                wait 1500
                 
                 cast 'Bless'
                 wft 6000
