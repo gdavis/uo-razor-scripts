@@ -146,7 +146,7 @@ if insysmsg 'New target set'
                 wait 1500
                 
                 if insysmsg 'existing effect of equal or greater'
-                    say 'What!? You are already buffed. Do not waste my time.'
+                    say 'Ahrrg! You are already buffed. Do not waste my time.'
                     wait 2000
                     emote 'slams spellbook closed'
                 
@@ -173,7 +173,7 @@ if insysmsg 'New target set'
                 # announce when new person enters, on a cooldown
                 if timer speakTimer > speakCooldown
                     settimer speakTimer 0
-                    say "Hey, you! Come stand next to me for a blessing."
+                    say "Come stand next to me for a buff before you head out!"
                     wait 2000
                 endif
 
