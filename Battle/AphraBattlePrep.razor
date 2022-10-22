@@ -58,8 +58,14 @@ while not findbuff 'Herbal Poultice'
     wait 500
 endwhile
 
+
 if not findbuff 'Food Satisfaction'
-    overhead 'HUNGRY! Need Food!' 38
+    if findtype 'tray' backpack as food 
+        dclick food
+        overhead 'NOM NOM NOM' 44
+    else
+        overhead 'HUNGRY! Need Food!' 38
+    endif
 else 
     overhead 'Not hungry.'
 endif
