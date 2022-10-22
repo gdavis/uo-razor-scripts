@@ -1,4 +1,4 @@
-if not varexist loot_bag
+if not varexist loot_bag or not find loot_bag backpack
     overhead 'Select your loot bag'
     @setvar! loot_bag
 endif
