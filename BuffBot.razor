@@ -1,7 +1,7 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
-@setvar! buffCooldown 60000
+@setvar! buffCooldown 300000
 @setvar! speakCooldown 180000
 
 # ignore list
@@ -68,14 +68,6 @@ elseif counttype 3973 self == 0
     say "I am out of ginseng! Please drop some on the ground for me."
     wait needRegsDelay
     replay
-endif
-
-
-# announce when new person enters, on cooldown
-if timer speakTimer > speakCooldown
-    settimer speakTimer 0
-    say "Hey, you! Come stand next to me for a blessing."
-    wait 2000
 endif
 
 
@@ -176,7 +168,15 @@ if insysmsg 'New target set'
                 break
                 
             elseif insysmsg 'too far away.' or insysmsg 'target is out of range'
-                overhead 'not in range'
+                #overhead 'not in range'
+            
+                # announce when new person enters, on a cooldown
+                if timer speakTimer > speakCooldown
+                    settimer speakTimer 0
+                    say "Hey, you! Come stand next to me for a blessing."
+                    wait 2000
+                endif
+
                 break
             else
                 wait 100
