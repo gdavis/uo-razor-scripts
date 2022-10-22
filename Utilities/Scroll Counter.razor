@@ -1,0 +1,9 @@
+
+if not varexist ssBag or not find ssBag
+    overhead 'Select the bag with skill scrolls to count.'    
+    @setvar! ssBag
+endif
+
+if counttype "scroll of calling" ssBag as total
+    overhead "Total scrolls: {{total}}" 88
+endif
