@@ -72,7 +72,7 @@ endif
 # announce when new person enters, on cooldown
 if timer speakTimer > speakCooldown
     settimer speakTimer 0
-    say "Hey, you! Come here to ole Sully for a buff."
+    say "Hey, you! Come stand next to me for a blessing."
     wait 2000
 endif
 
@@ -87,7 +87,7 @@ if targetexists
 endif
 
 hotkey "Next Friendly Player Target"
-wait 100
+wait 250
 
 if insysmsg 'New target set' 
     @setvar! player lasttarget
@@ -107,7 +107,7 @@ if insysmsg 'New target set'
         loop
     endif
     
-    if findtype 'scissors' backpack as scissors
+    if findtype 3999 backpack as scissors
         settimer rangeTimer 0
         dclick scissors
         wft 6000
@@ -146,9 +146,6 @@ if insysmsg 'New target set'
                 emote 'opens spellbook'
                 wait 1500
                 
-                say 'Ah, lets get you ready for action.'
-                wait 1500
-                
                 cast 'Bless'
                 wft 6000
                 target player
@@ -156,9 +153,7 @@ if insysmsg 'New target set'
                 
                 if insysmsg 'existing effect of equal or greater'
                     say 'What!? You are already buffed. Do not waste my time.'
-                    wait 2250
-                    say 'Come back later!'
-                    wait 1500
+                    wait 2000
                     emote 'slams spellbook closed'
                 
                 elseif targetexists 
@@ -172,8 +167,6 @@ if insysmsg 'New target set'
                     say 'Next!'
                     wait 1000
                     
-                    
-                    
                     createtimer playerID
                     settimer playerID 0
                 endif
@@ -182,7 +175,6 @@ if insysmsg 'New target set'
                 
             elseif insysmsg 'too far away.' or insysmsg 'target is out of range'
                 overhead 'not in range'
-                hotkey "Cancel Current Target"
                 break
             else
                 wait 100
@@ -190,6 +182,7 @@ if insysmsg 'New target set'
         endwhile
     else
         overhead 'Scissors are required for a range check' 38
+        wait 2000
     endif
 else
     overhead 'Target: None' 908
