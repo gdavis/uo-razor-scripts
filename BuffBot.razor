@@ -38,7 +38,7 @@ if mana < 30
 endif
 
 # check for reagents
-@setvar! needRegsDelay 8000
+@setvar! needRegsDelay 15000
 
 while findtype 3972|3974|3980|3973 ground any any 2 as regs
     say 'Oh ho! Just what I needed. Thanks pal.'
@@ -89,7 +89,7 @@ if insysmsg 'New target set'
     if not varexist lastPlayerID
         @setvar! lastPlayerID player
     elseif lastPlayerID = player
-        sysmsg 'NO ONE AROUND DELAY' 908
+        sysmsg 'Waiting for new target...' 908
         wait 2500
     else 
         @setvar! lastPlayerID player
@@ -137,9 +137,12 @@ if insysmsg 'New target set'
                     endif
                 endif
                 
-                emote 'opens spellbook'
-                wait 1500
+                if insysmsg 'The world is saving'
+                    clearsysmsg 
+                    wait 6000
+                endif
                 
+                emote 'opens spellbook'
                 cast 'Bless'
                 wft 6000
                 
@@ -147,8 +150,7 @@ if insysmsg 'New target set'
                 wait 1500
                 
                 if insysmsg 'existing effect of equal or greater'
-                    say 'Ahrrg! You are already buffed, do not waste my supplies.'
-                    wait 2000
+                    say 'Bah! You are already buffed, come back later.'
                     emote 'slams spellbook closed'
                 
                 elseif targetexists 
@@ -156,11 +158,11 @@ if insysmsg 'New target set'
                 else             
                     cast 'Arch Protection'
                     wft 6000
+                    
                     target player
                     wait 1000
                     
                     say 'Next!'
-                    wait 1000
                     
                     createtimer playerID
                     settimer playerID 0
@@ -174,7 +176,7 @@ if insysmsg 'New target set'
                 # announce when new person enters, on a cooldown
                 if timer speakTimer > speakCooldown
                     settimer speakTimer 0
-                    say "C'mon over and stand next to ol' Sully for a bless!"
+                    say "Come stand next to me for a blessin'!"
                     wait 2000
                 endif
 
