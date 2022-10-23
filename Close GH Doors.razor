@@ -1,0 +1,7 @@
+@setvar! doorID 0x4033C36D
+
+if find doorID ground -1 -1 2 as door
+    dclick door
+else 
+    overhead 'Not near the door!' 38
+endif
