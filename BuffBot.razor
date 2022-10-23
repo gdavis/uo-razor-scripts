@@ -126,13 +126,13 @@ if insysmsg 'New target set'
                 getlabel scratchpad playerID    
                 sysmsg 'BUFFBOT: found target {{playerID}}' 48
                 
-                
+                # check if player is on cooldown
                 if timerexists playerID
                     if timer playerID > buffCooldown
-                    sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 84
+                        sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 84
                         settimer playerID 0
                     else
-                        sysmsg 'BUFFBOT: {{playerID}} buffed too recently.' 38
+                        sysmsg 'BUFFBOT: {{playerID}} has been buffed too recently.' 38
                         break
                     endif
                 endif
@@ -142,6 +142,7 @@ if insysmsg 'New target set'
                 
                 cast 'Bless'
                 wft 6000
+                
                 target player
                 wait 1500
                 
@@ -173,7 +174,7 @@ if insysmsg 'New target set'
                 # announce when new person enters, on a cooldown
                 if timer speakTimer > speakCooldown
                     settimer speakTimer 0
-                    say "C'mon over and stand next to ol' Sully for a buff!"
+                    say "C'mon over and stand next to ol' Sully for a bless!"
                     wait 2000
                 endif
 
