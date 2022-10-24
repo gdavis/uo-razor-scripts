@@ -1,7 +1,34 @@
-@setvar! doorID 0x4033C36D
-
-if find doorID ground -1 -1 2 as door
-    dclick door
-else 
-    overhead 'Not near the door!' 38
+# Shut the dang door!
+# Start the script when outside.
+# Run in and stand on one of the
+# 3 tiles behind the door.
+if not timerexists closeDoorTimer
+    createtimer closeDoorTimer
+else
+    settimer closeDoorTimer 0
 endif
+
+while 1 = 1
+    if timer closeDoorTimer > 5000
+        overhead 'Close door timed out!' 38
+        stop
+    endif
+
+    # check for the 3 tiles behind the door
+    if position 4300 822 or position 4301 822 or position 4302 822 
+        # check for the opened door. closed = 1653, open = 1654
+        if findtype '1654' ground -1 -1 2 as door
+            overhead 'Shutting door...' 44
+            dclick door
+        elseif findtype '1653' ground -1 -1 2 
+            overhead 'Door closed.'
+            stop
+        else
+            overhead 'Door not found!'
+            stop
+        endif
+    else 
+        overhead 'Waiting to enter GH...' 908
+        wait 250
+    endif
+endwhile
