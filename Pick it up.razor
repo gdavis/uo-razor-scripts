@@ -1,0 +1,11 @@
+# Picks up items on the ground
+
+overhead 'Select the drop bag:' 54
+@setvar! dropBag
+
+clearignore 
+while findtype 4233 ground -1 -1 2 as item
+    lift item 60000
+    drop dropBag -1 -1 -1
+    ignore item
+endwhile
