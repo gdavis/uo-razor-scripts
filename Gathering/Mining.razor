@@ -53,11 +53,13 @@ if isActive = 1
     removetimer 'digTimeout'
     removetimer 'digTime'
     removetimer 'waitAlert'
+    removetimer equipTimer
     
     @setvar! isDigging 0
     @setvar! hasCaptcha 0
     @setvar! isActive 0
     @setvar! isWorldSaving 0
+    @setvar! isEquipping 0
     
     overhead 'Starting Miner' 24
 endif
@@ -67,6 +69,7 @@ endif
 @setvar! digDuration 667
 @setvar! digWait 5000
 @setvar! messageThrottle 3000
+@setvar! pickaxeID 3718
 
 # mark script as running
 @setvar! isActive 1
@@ -187,6 +190,7 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     endif
     
     sysmsg 'Miner stopped after Escaping PK!' 44
+    @setvar! isActive 0
     stop
 endif
 
@@ -297,21 +301,43 @@ if 'pickaxe' in rhandItem
     @setvar! pickaxeEquipped 1
 endif
 
+# timer started after equipping a new pickaxe.
+# used to fix an issue where immediately
+# trying to use the axe would
+# not work if it was just equipped.
+@setvar! equipDelay 3000
+if not timerexists equipTimer
+    createtimer equipTimer
+endif
+
+if isEquipping = 1 
+    if timer equipTimer < equipDelay
+        overhead 'waiting to equip' 44
+        wait actionDelay
+        replay
+    else 
+        @setvar! isEquipping 0
+    endif
+endif
+
 if rhandempty or pickaxeEquipped = 0
-    if not findtype 'pickaxe' backpack
+    if not findtype pickaxeID backpack
         overhead 'Out of Pickaxes' 38
         
         if not hidden and skill 'hiding' > 50
             skill 'Hiding'
+            wait actionDelay
         endif
         
-        wait actionDelay
         @setvar! isActive 0
         replay
-    else
+    else 
         overhead 'Equipping Pickaxe' 53
-        dclicktype 'pickaxe' backpack
-        wait actionDelay    
+        dclicktype pickaxeID backpack
+        settimer equipTimer 0
+        @setvar! isEquipping 1
+        @setvar! isActive 0
+        replay
     endif
 endif
 
@@ -341,11 +367,11 @@ endif
 
 ## Do the dig ----------------
 # use the pickaxe
-if isDigging = 0 and hasCaptcha = 0
+if isDigging = 0 and hasCaptcha = 0 and isEquipping = 0
     #overhead 'new dig'
 
     if not hidden
-        if findtype 'pickaxe' righthand as pick
+        if findtype pickaxeID righthand as pick
             overhead ' '
             overhead '*swings pickaxe*' 645
             dclick pick
