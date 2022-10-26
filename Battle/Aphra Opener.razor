@@ -1,0 +1,196 @@
+# Performs an initial salvo of 
+# spells on a target
+
+if targetexists 
+    hotkey 'Cancel Current Target'
+endif
+
+overhead 'Salvo what?' 54
+#@unsetvar! monster
+@setvar! monster
+
+if not varexist monster
+    overhead 'Must select a target.' 38
+endif
+
+if dead monster 
+    overhead 'That is dead.' 36
+    stop
+endif
+
+if noto monster = innocent
+    overhead 'Cannot attack!' 38
+    stop
+elseif noto monster = hostile or noto monster = 'criminal'
+    overhead 'Monster!'
+else 
+    overhead 'Invalid target!' 38
+    stop
+endif
+
+clearsysmsg 
+say 'all attack'
+waitfortarget 1500
+target monster
+
+@setvar! magicArrowID 101
+@setvar! fireballID 102
+@setvar! harmID 103
+@setvar! lightningID 104
+@setvar! manaDrainID 201
+@setvar! curseID 202
+
+getlabel monster monsterName
+if not timerexists monsterName
+    createtimer monsterName
+    settimer monsterName 60000
+endif
+
+overhead monsterName
+#@setvar! spell manaDrainID
+
+removelist spellOrder
+removelist spellDelay
+
+createlist spellOrder
+createlist spellDelay
+
+# only include debuffs every 1m
+if timer monsterName >= 60000
+    pushlist spellOrder manaDrainID
+    pushlist spellDelay 1000
+
+    pushlist spellOrder curseID
+    pushlist spellDelay 1000
+endif
+
+pushlist spellOrder fireballID
+pushlist spellDelay 750
+
+pushlist spellOrder magicArrowID
+pushlist spellDelay 500
+
+pushlist spellOrder harmID
+pushlist spellDelay 750
+
+pushlist spellOrder lightningID
+pushlist spellDelay 1000
+
+@setvar! endSpellID lightningID
+
+while not dead monster
+    if insysmsg 'You have not yet recovered'
+        wait 100
+    elseif insysmsg 'Target cannot be seen'
+        overhead 'CANNOT SEE!' 38
+        stop
+    else 
+        if poplist spellOrder front as spellID and poplist spellDelay front as delay
+            if spellID = manaDrainID                
+                cast 'Mana Drain'
+                settimer monsterName 0
+            elseif spellID = curseID
+                cast 'Curse'
+                settimer monsterName 0
+            elseif spellID = fireballID
+                cast 'Fireball'    
+            elseif spellID = magicArrowID
+                cast 'Magic Arrow'
+            elseif spellID = harmID
+                cast 'Harm'
+            elseif spellID = lightningID
+                cast 'Lightning'
+            else
+                overhead 'Unknown spell!' 38
+                stop
+            endif
+            
+#            if poplist spellDelay front as delay
+#                overhead 'Delay: {{delay}}'
+#                wait delay
+#            endif
+            
+            wait delay
+            
+            if dead monster
+                hotkey 'Cancel Current Target'
+                break
+            endif
+            
+            waitfortarget 1000
+            target monster
+            
+            if spellID = endSpellID
+                stop
+            endif
+        else 
+            overhead 'No spells left in list!' 38
+            break
+        endif
+    endif
+
+#    if spell = manaDrainID
+#        cast 'Mana Drain'
+#        waitfortarget 1500
+#        target monster
+#        wait 1000
+#        @setvar! spell curseID
+#        
+#    elseif spell = curseID
+#        cast 'Curse'
+#        waitfortarget 1500
+#        target monster
+#        wait 1000
+#        @setvar! spell fireballID
+#        
+#    elseif spell = fireballID
+#        cast 'Fireball'
+#        waitfortarget 1500
+#        target monster
+#        wait 1000
+#        @setvar! spell magicArrowID
+#        
+#    elseif spell = magicArrowID
+#        cast 'Magic Arrow'
+#        waitfortarget 1500
+#        target monster 
+#        wait 500
+#        @setvar! spell harmID
+#         
+#    elseif spell = harmID
+#        cast 'Harm'
+#        waitfortarget 1500
+#        target monster
+#        wait 1000
+#        @setvar! spell lightningID
+#        
+#    elseif spell = lightningID
+#        cast 'Lightning'
+#        waitfortarget 1500
+#        target monster
+#        break
+#    else 
+#        overhead spell 38
+#    endif
+endwhile
+
+
+
+#hotkey 'Fireball'
+#waitfortarget 1500
+#target monster
+#wait 1500
+#
+#hotkey 'Magic Arrow'
+#waitfortarget 1500
+#hotkey 'Last Target'
+#wait 500
+#
+#hotkey 'Harm'
+#waitfortarget 1500
+#hotkey 'Last Target'
+#wait 1000
+#
+#hotkey 'Lightning'
+#waitfortarget 1500
+#hotkey 'Last Target'
