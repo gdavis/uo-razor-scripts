@@ -6,7 +6,6 @@ if targetexists
 endif
 
 overhead 'Salvo what?' 54
-#@unsetvar! monster
 @setvar! monster
 
 if not varexist monster
@@ -41,13 +40,14 @@ target monster
 @setvar! curseID 202
 
 getlabel monster monsterName
-if not timerexists monsterName
-    createtimer monsterName
-    settimer monsterName 60000
+@setvar! monsterDebuffTimer monster
+
+if not timerexists monsterDebuffTimer
+    createtimer monsterDebuffTimer
+    settimer monsterDebuffTimer 60000
 endif
 
-overhead monsterName
-#@setvar! spell manaDrainID
+overhead monsterDebuffTimer
 
 removelist spellOrder
 removelist spellDelay
@@ -56,12 +56,14 @@ createlist spellOrder
 createlist spellDelay
 
 # only include debuffs every 1m
-if timer monsterName >= 60000
+if timer monsterDebuffTimer >= 60000
     pushlist spellOrder manaDrainID
     pushlist spellDelay 1000
 
     pushlist spellOrder curseID
     pushlist spellDelay 1000
+else
+    overhead 'Debuffs on cooldown' 87
 endif
 
 pushlist spellOrder fireballID
@@ -74,24 +76,22 @@ pushlist spellOrder harmID
 pushlist spellDelay 750
 
 pushlist spellOrder lightningID
-pushlist spellDelay 1000
+pushlist spellDelay 1500
 
 @setvar! endSpellID lightningID
 
 while not dead monster
-    if insysmsg 'You have not yet recovered'
-        wait 100
-    elseif insysmsg 'Target cannot be seen'
+    #overhead 'loop'
+    
+    if insysmsg 'Target cannot be seen'
         overhead 'CANNOT SEE!' 38
         stop
     else 
         if poplist spellOrder front as spellID and poplist spellDelay front as delay
             if spellID = manaDrainID                
                 cast 'Mana Drain'
-                settimer monsterName 0
             elseif spellID = curseID
                 cast 'Curse'
-                settimer monsterName 0
             elseif spellID = fireballID
                 cast 'Fireball'    
             elseif spellID = magicArrowID
@@ -105,73 +105,39 @@ while not dead monster
                 stop
             endif
             
-#            if poplist spellDelay front as delay
-#                overhead 'Delay: {{delay}}'
-#                wait delay
-#            endif
-            
-            wait delay
+            overhead 'delay = {{delay}}'
+            waitfortarget delay
             
             if dead monster
                 hotkey 'Cancel Current Target'
-                break
-            endif
-            
-            waitfortarget 1000
-            target monster
-            
-            if spellID = endSpellID
                 stop
             endif
+            
+            target monster
+            
+            if insysmsg 'That is too far away'
+                overhead 'TOO FAR!' 38
+                stop
+            elseif insysmsg 'Your concentration is distrubed' or insysmsg 'You have not yet recovered'
+                # re-queue this spell and cast again
+                pushlist spellOrder spellID front
+                pushlist spellDelay delay front
+                wait 100
+            elseif spellID = endSpellID
+                overhead 'SALVO FINISHED' 54
+                stop
+            else 
+                if spellID = curseID or spellID = manaDrainID 
+                    settimer monsterDebuffTimer 0
+                endif
+            endif
         else 
-            overhead 'No spells left in list!' 38
+            overhead 'No spells in list!' 38
             break
         endif
     endif
-
-#    if spell = manaDrainID
-#        cast 'Mana Drain'
-#        waitfortarget 1500
-#        target monster
-#        wait 1000
-#        @setvar! spell curseID
-#        
-#    elseif spell = curseID
-#        cast 'Curse'
-#        waitfortarget 1500
-#        target monster
-#        wait 1000
-#        @setvar! spell fireballID
-#        
-#    elseif spell = fireballID
-#        cast 'Fireball'
-#        waitfortarget 1500
-#        target monster
-#        wait 1000
-#        @setvar! spell magicArrowID
-#        
-#    elseif spell = magicArrowID
-#        cast 'Magic Arrow'
-#        waitfortarget 1500
-#        target monster 
-#        wait 500
-#        @setvar! spell harmID
-#         
-#    elseif spell = harmID
-#        cast 'Harm'
-#        waitfortarget 1500
-#        target monster
-#        wait 1000
-#        @setvar! spell lightningID
-#        
-#    elseif spell = lightningID
-#        cast 'Lightning'
-#        waitfortarget 1500
-#        target monster
-#        break
-#    else 
-#        overhead spell 38
-#    endif
+    
+    wait 100
 endwhile
 
 
