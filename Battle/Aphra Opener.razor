@@ -58,22 +58,22 @@ createlist spellDelay
 # only include debuffs every 1m
 if timer monsterDebuffTimer >= 60000
     pushlist spellOrder manaDrainID
-    pushlist spellDelay 1000
+    pushlist spellDelay 1500
 
     pushlist spellOrder curseID
-    pushlist spellDelay 1000
+    pushlist spellDelay 1500
 else
     overhead 'Debuffs on cooldown' 87
 endif
 
 pushlist spellOrder fireballID
-pushlist spellDelay 750
+pushlist spellDelay 1250
 
 pushlist spellOrder magicArrowID
-pushlist spellDelay 500
+pushlist spellDelay 750
 
 pushlist spellOrder harmID
-pushlist spellDelay 750
+pushlist spellDelay 1000
 
 pushlist spellOrder lightningID
 pushlist spellDelay 1500
@@ -137,7 +137,7 @@ while not dead monster
         endif
     endif
     
-    wait 100
+    wait 200
 endwhile
 
 
