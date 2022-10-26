@@ -150,7 +150,19 @@ if insysmsg 'New target set'
                 wait 1500
                 
                 if insysmsg 'existing effect of equal or greater'
-                    say 'Bah! You are already buffed, come back later.'
+
+                    random 4
+                    if insysmsg 'Random: 1'
+                        say "Ahem. You've already been blessed. Save some for the unblessed."
+                    elseif insysmsg 'Random: 2'
+                        say "Think you're special? You've already been buffed. Go away."
+                    elseif insysmsg 'Random: 3'
+                        say "Nice! You used some of my reagents when you're already buffed. Thank you so much!"
+                    elseif insysmsg 'Random: 4'
+                        say 'HARUMPH! You are already buffed, come back later.'
+                    endif
+                    wait 500
+
                     emote 'slams spellbook closed'
                 
                 elseif targetexists 
