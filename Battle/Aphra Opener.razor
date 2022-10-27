@@ -20,8 +20,8 @@ endif
 if noto monster = innocent
     overhead 'Cannot attack!' 38
     stop
-elseif noto monster = hostile or noto monster = 'criminal'
-    overhead 'Monster!'
+elseif noto monster = hostile or noto monster = criminal
+    overhead 'Attack salvo!' 54
 else 
     overhead 'Invalid target!' 38
     stop
@@ -47,7 +47,7 @@ if not timerexists monsterDebuffTimer
     settimer monsterDebuffTimer 60000
 endif
 
-overhead monsterDebuffTimer
+#overhead monsterDebuffTimer
 
 removelist spellOrder
 removelist spellDelay
@@ -58,25 +58,25 @@ createlist spellDelay
 # only include debuffs every 1m
 if timer monsterDebuffTimer >= 60000
     pushlist spellOrder manaDrainID
-    pushlist spellDelay 1000
+    pushlist spellDelay 1500
 
     pushlist spellOrder curseID
-    pushlist spellDelay 1000
+    pushlist spellDelay 1500
 else
     overhead 'Debuffs on cooldown' 87
 endif
 
 pushlist spellOrder fireballID
-pushlist spellDelay 750
+pushlist spellDelay 1250
 
 pushlist spellOrder magicArrowID
-pushlist spellDelay 500
-
-pushlist spellOrder harmID
 pushlist spellDelay 750
 
+pushlist spellOrder harmID
+pushlist spellDelay 1000
+
 pushlist spellOrder lightningID
-pushlist spellDelay 1500
+pushlist spellDelay 1250
 
 @setvar! endSpellID lightningID
 
@@ -105,8 +105,9 @@ while not dead monster
                 stop
             endif
             
-            overhead 'delay = {{delay}}'
-            waitfortarget delay
+            #overhead 'delay = {{delay}}'
+            wait delay
+            waitfortarget 250
             
             if dead monster
                 hotkey 'Cancel Current Target'
@@ -137,26 +138,5 @@ while not dead monster
         endif
     endif
     
-    wait 100
+    wait 200
 endwhile
-
-
-
-#hotkey 'Fireball'
-#waitfortarget 1500
-#target monster
-#wait 1500
-#
-#hotkey 'Magic Arrow'
-#waitfortarget 1500
-#hotkey 'Last Target'
-#wait 500
-#
-#hotkey 'Harm'
-#waitfortarget 1500
-#hotkey 'Last Target'
-#wait 1000
-#
-#hotkey 'Lightning'
-#waitfortarget 1500
-#hotkey 'Last Target'
