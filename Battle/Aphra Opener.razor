@@ -76,7 +76,7 @@ pushlist spellOrder harmID
 pushlist spellDelay 1000
 
 pushlist spellOrder lightningID
-pushlist spellDelay 1500
+pushlist spellDelay 1250
 
 @setvar! endSpellID lightningID
 
@@ -106,7 +106,8 @@ while not dead monster
             endif
             
             overhead 'delay = {{delay}}'
-            waitfortarget delay
+            wait delay
+            waitfortarget 250
             
             if dead monster
                 hotkey 'Cancel Current Target'
