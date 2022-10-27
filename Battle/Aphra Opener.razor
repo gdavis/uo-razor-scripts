@@ -105,8 +105,8 @@ while not dead monster
                 stop
             endif
             
-            overhead 'delay = {{delay}}'
-            wait delay
+            #overhead 'delay = {{delay}}'
+            wait delays
             waitfortarget 250
             
             if dead monster
@@ -140,24 +140,3 @@ while not dead monster
     
     wait 200
 endwhile
-
-
-
-#hotkey 'Fireball'
-#waitfortarget 1500
-#target monster
-#wait 1500
-#
-#hotkey 'Magic Arrow'
-#waitfortarget 1500
-#hotkey 'Last Target'
-#wait 500
-#
-#hotkey 'Harm'
-#waitfortarget 1500
-#hotkey 'Last Target'
-#wait 1000
-#
-#hotkey 'Lightning'
-#waitfortarget 1500
-#hotkey 'Last Target'
