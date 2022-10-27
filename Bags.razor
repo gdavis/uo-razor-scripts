@@ -1,16 +1,34 @@
 # Opens all non-trapped bags
-clearignore 
+@clearignore
 overhead 'Opening bags...' 54
 
-@setvar! actionDelay 80
+@setvar! actionDelay 666
 dclick backpack
 wait actionDelay
+
+# the findtype
+# can also return the top
+# level bag, which is no good.
+@setvar! backpackID backpack
+#sysmsg '{{backpackID}}' 85
+@ignore backpackID
 
 # 3505 = pouch
 # 3702 = bag
 # 3701 = backpack
 while findtype 3705|3702|3701 backpack 0 any any as bag
-    ignore bag
+    clearsysmsg 
+    getlabel bag bagName
+    #overhead '{{bag}}:' 908
+    overhead '{{bagName}}' 1001
+    
+    @ignore bag
     dclick bag
     wait actionDelay
+    
+    if insysmsg 'You must wait'
+        overhead 'trying again...'
+        dclick bag
+        wait actionDelay
+    endif
 endwhile
