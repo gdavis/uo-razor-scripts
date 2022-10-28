@@ -23,6 +23,8 @@ if counttype 'pouch' backpack 38 < 6
     stop
 endif
 
+overhead 'Setting up bags...' 54
+
 # organize pouches into child/parent lists
 clearignore 
 for 3
@@ -115,3 +117,5 @@ if findtype 'atlas' backpack as atlas
     lift atlas 1
     drop backpack 44 123 0
 endif
+
+overhead 'Bag setup done.' 54
