@@ -150,19 +150,8 @@ if insysmsg 'New target set'
                 wait 1500
                 
                 if insysmsg 'existing effect of equal or greater'
-
-                    random 4
-                    if insysmsg 'Random: 1'
-                        say "Ahem. You've already been blessed. Save some for the unblessed."
-                    elseif insysmsg 'Random: 2'
-                        say "Think you're special? You've already been buffed. Go away."
-                    elseif insysmsg 'Random: 3'
-                        say "Nice! You used some of my reagents when you're already buffed. Thank you so much!"
-                    elseif insysmsg 'Random: 4'
-                        say 'HARUMPH! You are already buffed, come back later.'
-                    endif
+                    say "You still have an old buff on, come back later."
                     wait 500
-
                     emote 'slams spellbook closed'
                 
                 elseif targetexists 
@@ -189,23 +178,15 @@ if insysmsg 'New target set'
                 if timer speakTimer > speakCooldown
                     settimer speakTimer 0
 
-                    random 8
+                    random 4
                     if insysmsg 'Random: 1'
-                        say "Come and touch the demon inside me."
+                        say "I provide free buffs if you stand next to me."
                     elseif insysmsg 'Random: 2'
                         say "Nice day for a blessin', ain't it?"
                     elseif insysmsg 'Random: 3'
-                        emote 'whistles a tune'
+                        emote 'whistles'
                     elseif insysmsg 'Random: 4'
-                        say 'Bearer of the curse... seek souls. Larger, more powerful souls.'
-                    elseif insysmsg 'Random: 5'
-                        say "Touch the darkness within me. Take nourishment from these sovereignless souls."
-                    elseif insysmsg 'Random: 6'
-                        say "I don't get paid enough for this."
-                    elseif insysmsg 'Random: 7'
-                        emote 'looks bored'
-                    elseif insysmsg 'Random: 8'
-                        say "Come here and let old Sully give you a real good buffin'"
+                        say "Headed out? Grab a blessing before you go."
                     endif
 
                     wait 2000
