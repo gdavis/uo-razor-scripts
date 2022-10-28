@@ -1,0 +1,10 @@
+if not findtype "kindling" backpack
+    overhead "Need more kindling" 34
+    wait 5000
+    replay
+endif
+
+while not findtype "campfire" ground 0 1 1
+    dclicktype "kindling" backpack
+    wait 3500
+endwhile
