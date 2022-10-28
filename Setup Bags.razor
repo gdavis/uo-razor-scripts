@@ -12,10 +12,12 @@
 # are placed in the top level pouch.
 @setvar! actionDelay 666
 
-removelist parentPouches
+removelist parentPouches1
+removelist parentPouches2
 removelist childPouches
 
-createlist parentPouches
+createlist parentPouches1
+createlist parentPouches2
 createlist childPouches
 
 if counttype 'pouch' backpack 38 < 6
@@ -28,18 +30,19 @@ overhead 'Setting up bags...' 54
 # organize pouches into child/parent lists
 clearignore 
 for 3
-    if findtype 'pouch' backpack 38 as trappedPouch
+    if findtype 'pouch' backpack 38 as parentPouch
         overhead 'adding parent pouch'
-        pushlist parentPouches trappedPouch
-        ignore trappedPouch
+        pushlist parentPouches1 parentPouch
+        pushlist parentPouches2 parentPouch
+        ignore parentPouch
     endif
 endfor
 
 for 3
-    if findtype 'pouch' backpack 38 as trappedPouch
+    if findtype 'pouch' backpack 38 as childPouch
         overhead 'adding child pouch'
-        pushlist childPouches trappedPouch
-        ignore trappedPouch
+        pushlist childPouches childPouch
+        ignore childPouch
     endif
 endfor
 
@@ -56,28 +59,32 @@ clearignore
 for 3
     if poplist childPouches front as child
         if findtype 'kindling' backpack as kindling
+            overhead 'moving kindling to bag'
             lift kindling 1
             drop child -1 -1 -1
             wait actionDelay
         endif
         
-        if poplist parentPouches fron as parent
-            lift child
-            drop parent
+        if poplist parentPouches1 front as parent
+            overhead 'moving child to parent'
+            lift child 1
+            drop parent -1 -1 -1
             wait actionDelay
         endif
     endif
 endfor
 
 # move bags into position
-if poplist parentPouches front as topLeftPouch
+if poplist parentPouches2 front as topLeftPouch
+    overhead 'moving top left pouch'
     lift topLeftPouch
-    drop backpack 0 0 0
+    drop backpack 44 64 0
     wait actionDelay
 endif
 
 # trapped pouch under real bag
-if poplist parentPouches front as btmLeftPouch
+if poplist parentPouches2 front as btmLeftPouch
+    overhead 'moving lower bottom left pouch'
     lift btmLeftPouch
     drop backpack 44 133 0
     wait actionDelay
@@ -86,8 +93,10 @@ endif
 # main bag gets the supplies and loot bags added
 # and then placed into bottom left of backpack
 if findtype 'pouch' backpack 0 as pouch
+    
     # move loot bag (backpack) to pouch
     if findtype 3701 backpack 0 as lootBag
+        overhead 'moving loot bag to top pouch'
         lift lootBag
         drop pouch 93 65 0
         wait actionDelay
@@ -95,6 +104,7 @@ if findtype 'pouch' backpack 0 as pouch
     
     # move supplies bag to pouch
     if findtype 'bag' backpack 0 as suppliesBag
+        overhead 'moving supplies bag to top pouch'
         lift suppliesBag
         drop pouch 135 65 0
         wait actionDelay
@@ -106,7 +116,8 @@ if findtype 'pouch' backpack 0 as pouch
 endif
 
 # trapped pouch on top of content bag
-if poplist parentPouches front as btmLeftPouch
+if poplist parentPouches2 front as btmLeftPouch
+    overhead 'moving lower left top pouch'
     lift btmLeftPouch
     drop backpack 44 133 0
     wait actionDelay
@@ -114,8 +125,10 @@ endif
 
 # place atlas over bags
 if findtype 'atlas' backpack as atlas
+    overhead 'moving atlas'
     lift atlas 1
     drop backpack 44 123 0
+    wait actionDelay
 endif
 
 overhead 'Bag setup done.' 54
