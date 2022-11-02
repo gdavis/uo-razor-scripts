@@ -1,0 +1,9 @@
+# Traps all untrapped pouches
+# in the backpack.
+
+while findtype 3705 backpack 0 as pouch
+    cast 'Magic Trap'
+    wft 6000
+    target pouch
+    wait 500
+endwhile
