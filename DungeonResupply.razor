@@ -15,8 +15,13 @@ if not position 247 455
 endif
 
 # setup targets
-if not varexist lootBag or not find lootBag
+if not varexist lootBag
     overhead 'Select your loot container:'
+    setvar lootBag
+endif
+
+if not find lootBag
+    overhead 'Could not find loot bag. Retarget:'
     setvar lootBag
 endif
 
@@ -170,6 +175,7 @@ pushlist basicItems 'black staff'
 pushlist basicItems 'hammer pick'
 pushlist basicItems 'bladed staff'
 pushlist basicItems 'club'
+pushlist basicItems 'quarter staff'
 # pushlist basicItems ''
 
 clearsysmsg 
