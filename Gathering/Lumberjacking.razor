@@ -13,6 +13,35 @@ else
     overhead 'Recall Escape Disabled'
 endif
 
+
+## Enable Tracking Buff
+@setvar! tracking_gump_id 4267467659
+
+if skill 'Tracking' >= 50 and not findbuff 'Tracking'
+    overhead 'Setup tracking...' 48    
+
+    while not gumpexists tracking_gump_id
+        sysmsg 'Opening tracking gump...' 53
+        skill 'tracking'
+        waitforgump tracking_gump_id 5000
+    endwhile
+
+    if gumpexists tracking_gump_id
+        if not ingump 'Stop Hunting' 4267467659 # NOTE: using tracking_gump_id here causes a script error
+            overhead 'Started tracking' 65
+            sysmsg 'Tracking players enabled' 65
+            gumpresponse 6
+            wait actionDelay
+        else
+            overhead 'Already Hunting' 55
+            sysmsg 'Tracking already enabled' 55
+        endif
+        
+        gumpclose tracking_gump_id
+    endif
+endif
+
+# Check for tracked enemy
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     clearsysmsg 
     if skill 'magery' >= 60 and 'use_recall' == 1
