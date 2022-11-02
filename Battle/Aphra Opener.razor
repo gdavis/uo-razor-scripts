@@ -66,22 +66,30 @@ else
     overhead 'Debuffs on cooldown' 87
 endif
 
-pushlist spellOrder fireballID
+pushlist spellOrder lightningID
 pushlist spellDelay 1250
 
-pushlist spellOrder magicArrowID
-pushlist spellDelay 750
+pushlist spellOrder fireballID
+pushlist spellDelay 1250
 
 pushlist spellOrder harmID
 pushlist spellDelay 1000
 
-pushlist spellOrder lightningID
-pushlist spellDelay 1250
+pushlist spellOrder magicArrowID
+pushlist spellDelay 750
 
-@setvar! endSpellID lightningID
+if poplist spellOrder back as finalSpellID
+    @setvar! endSpellID finalSpellID
+    pushlist spellOrder finalSpellID back
+endif
 
 while not dead monster
     #overhead 'loop'
+
+    if hp < 35
+        overhead 'LOW HEALTH!' 38 
+        stop
+    endif
     
     if insysmsg 'Target cannot be seen'
         overhead 'CANNOT SEE!' 38
