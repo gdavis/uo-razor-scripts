@@ -6,23 +6,22 @@ endif
 
 while poisoned and not dead
     if targetexists 
-        hotkey 'Clear Current Target'
+        hotkey 'Cancel Current Target'
     endif
     
     clearsysmsg 
     cast 'Cure'
     overhead '[Cure Self]' 24
-    wait 250
+    waitfortarget 1000
     
     if insysmsg 'You are already casting a spell'
         overhead '[Cancel Last Spell]' 38
-        waitfortarget 
-        hotkey 'Cancel Current Target' 38
+        wait 100
+        
     elseif insysmsg 'You have not yet recovered'
         overhead '[Not Recovered]' 38
         wait 100
     else
-        waitfortarget 
         target self
         wait 500
     endif
