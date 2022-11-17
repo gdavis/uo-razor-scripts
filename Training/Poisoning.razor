@@ -4,7 +4,7 @@ if not varexist poisonTrainingWeapon or not find poisonTrainingWeapon backpack
     setvar poisonTrainingWeapon
 endif
 
-while poisoned
+while poisoned and not dead
     if targetexists 
         hotkey 'Clear Current Target'
     endif
@@ -24,11 +24,11 @@ while poisoned
     else
         waitfortarget 
         target self
-        break
+        wait 500
     endif
 endwhile
 
-while not dead and hp < 50
+while not dead and hp < 80
     clearsysmsg 
     cast 'Greater Heal'
     overhead '[G-Heal Self]' 24
@@ -115,7 +115,7 @@ else
             else
                 @ignore potion
             endif
-        elseif skill 'poisoning' < 102
+        elseif skill 'poisoning' < 110
             overhead '100-120 Lethal'
             if 'lethal poison' in potName 
                 @setvar! potionTarget potion
@@ -123,6 +123,9 @@ else
             else
                 @ignore potion
             endif
+        else 
+            overhead 'Cannot skill up further' 38
+            stop
         endif
     endwhile
     
