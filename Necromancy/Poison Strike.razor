@@ -1,0 +1,11 @@
+clearsysmsg 
+say '[PoisonStrike'
+wait 100
+
+if insysmsg 'You must wait'
+    overhead 'Not ready!' 38
+elseif insysmsg 'You do not have enough unholy'
+    overhead 'No symbols!' 44
+else    
+    cooldown 'Poison Strike' 30000
+endif
