@@ -1,0 +1,10 @@
+clearsysmsg 
+say '[CorpseSkin'
+
+if insysmsg 'You must wait'
+    overhead 'Not ready!' 38
+elseif insysmsg 'You do not have enough unholy'
+    overhead 'No symbols!' 44
+else    
+    cooldown 'Corpse Skin' 30000
+endif

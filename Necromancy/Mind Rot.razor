@@ -1,0 +1,10 @@
+clearsysmsg 
+say '[MindRot'
+
+if insysmsg 'You must wait'
+    overhead 'Not ready!' 38
+elseif insysmsg 'You do not have enough unholy'
+    overhead 'No symbols!' 44
+else    
+    cooldown 'Mind Rot' 30000
+endif
