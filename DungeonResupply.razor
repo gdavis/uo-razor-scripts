@@ -20,7 +20,10 @@ if not varexist lootBag
     setvar lootBag
 endif
 
-if not find lootBag self
+# note: using 'not find' does not seem to work reliably.
+if find lootBag self as bag
+    overhead 'Found loot bag...' 53
+else
     overhead 'Could not find loot bag. Retarget:'
     setvar lootBag
 endif
