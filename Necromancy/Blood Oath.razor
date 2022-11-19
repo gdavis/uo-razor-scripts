@@ -1,0 +1,10 @@
+clearsysmsg 
+say '[BloodOath'
+
+if insysmsg 'You must wait'
+    overhead 'Not ready!' 38
+elseif insysmsg 'You do not have enough unholy'
+    overhead 'No symbols!' 44
+else    
+    cooldown 'Blood Oath' 30000
+endif
