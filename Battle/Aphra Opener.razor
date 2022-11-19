@@ -32,12 +32,15 @@ say 'all attack'
 waitfortarget 1500
 target monster
 
+@setvar! castRecoveryTime 200
+
 @setvar! magicArrowID 101
 @setvar! fireballID 102
 @setvar! harmID 103
 @setvar! lightningID 104
 @setvar! manaDrainID 201
 @setvar! curseID 202
+@setvar! poisonID 203
 
 getlabel monster monsterName
 @setvar! monsterDebuffTimer monster
@@ -55,28 +58,36 @@ removelist spellDelay
 createlist spellOrder
 createlist spellDelay
 
+# NOTE: spell delays are the circle cast time + 100 ms for latency
+# https://uooutlands.com/wiki/Magery
+
 # only include debuffs every 1m
 if timer monsterDebuffTimer >= 60000
     pushlist spellOrder manaDrainID
-    pushlist spellDelay 1500
+    pushlist spellDelay 1350
 
     pushlist spellOrder curseID
-    pushlist spellDelay 1500
+    pushlist spellDelay 1350
 else
     overhead 'Debuffs on cooldown' 87
 endif
 
+if skill 'Poisoning' > 50
+    pushlist spellOrder poisonID
+    pushlist spellDelay 1100
+endif
+
 pushlist spellOrder lightningID
-pushlist spellDelay 1250
+pushlist spellDelay 1350
 
 pushlist spellOrder fireballID
-pushlist spellDelay 1250
+pushlist spellDelay 1100
 
 pushlist spellOrder harmID
-pushlist spellDelay 1000
+pushlist spellDelay 850
 
 pushlist spellOrder magicArrowID
-pushlist spellDelay 750
+pushlist spellDelay 600
 
 if poplist spellOrder back as finalSpellID
     @setvar! endSpellID finalSpellID
@@ -108,6 +119,8 @@ while not dead monster
                 cast 'Harm'
             elseif spellID = lightningID
                 cast 'Lightning'
+            elseif spellID = poisonID
+                cast 'Poison'
             else
                 overhead 'Unknown spell!' 38
                 stop
@@ -123,6 +136,7 @@ while not dead monster
             endif
             
             target monster
+            wait castRecoveryTime
             
             if insysmsg 'That is too far away'
                 overhead 'TOO FAR!' 38
