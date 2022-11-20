@@ -1,5 +1,6 @@
 if not varexist dressBag
     overhead 'Select a bag to use for dressing:'
+    unsetvar dressBag
     setvar dressBag
 endif
 
@@ -13,10 +14,10 @@ elseif not rhandempty
     drop dressBag -1 -1 -1
 endif
 
-# 1790 == shadow aspect color
-if findtype 'heavy crossbow' self 1790 as xbow
-    dclick xbow
-    overhead 'Heavy XBow Equipped' 53
+# 2599 == void aspect color
+if findtype 'crossbow' self 2599 as bow 
+    dclick bow
+    overhead 'Crossbow Equipped' 53
 else
-    overhead 'Could not find shadow aspect heavy xbow!' 38
+    overhead 'Could not find void aspect crossbow!' 38
 endif

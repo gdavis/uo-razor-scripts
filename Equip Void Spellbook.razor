@@ -3,8 +3,21 @@
 hotkey 'Cancel Current Target'
 clearsysmsg 
 
-undress righthand
-undress lefthand
+if not varexist dressBag
+    overhead 'Select a bag to use for dressing:'
+    unsetvar dressBag
+    setvar dressBag
+endif
+
+if not lhandempty
+    lift lefthand
+    wait 100
+    drop dressBag -1 -1 -1
+elseif not rhandempty
+    lift righthand
+    wait 100
+    drop dressBag -1 -1 -1
+endif
 
 if findtype 'spellbook' backpack 2599 as voidbook
     dclick voidbook

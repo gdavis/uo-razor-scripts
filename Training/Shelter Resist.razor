@@ -1,0 +1,61 @@
+# cast on yourself at shelter
+while hp < 60 and not dead
+    clearsysmsg 
+    cast 'Greater Heal'
+    overhead '[G-Heal Self]' 24
+    wait 250
+    
+    if insysmsg 'You are already casting a spell'
+        overhead '[Cancel Last Spell]' 38
+        waitfortarget 
+        hotkey 'Cancel Current Target' 38
+        loop
+    endif
+
+    if insysmsg 'You have not yet recovered'
+        overhead '[Not Recovered]' 38
+        wait 100
+        loop
+    endif
+    
+    waitfortarget 
+    target self
+    warmode 'on'
+    warmode 'off'
+    wait 500
+    break
+endwhile
+
+
+if skill 'resisting spells' < 60
+    if mana < 11
+        skill 'Meditation'
+        wait 500
+    
+        if findbuff 'actively meditating'
+            while mana < maxmana
+                overhead 'Meditating...'
+                wait 3500
+            endwhile
+            replay
+        else
+            overhead 'Retrying meditation...'
+            wait 5500
+            replay
+        endif
+    endif 
+    
+    overhead '50-60'
+    hotkey 'Lightning'
+elseif skill 'resisting spells' < 70
+    overhead '60-70'
+    hotkey 'Mind Blast'
+else
+    overhead 'unfinished' 38
+endif
+
+
+waitfortarget
+target 'self'
+wait 1000
+loop
