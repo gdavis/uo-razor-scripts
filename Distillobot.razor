@@ -1,4 +1,4 @@
-# Distillo-bot 1000
+# Distillo-bot 3000
 #
 # Automatically creates new distillations when 
 # extracts are placed into a selected container.
@@ -20,7 +20,7 @@
 #
 # Written by:       Aphlux (aka Aphra)
 # Created on:       September 4, 2022
-# Last updated:     September 9, 2022
+# Last updated:     November 20, 2022
 
 # gump vars
 @setvar! alchGumpID 949095101
@@ -38,29 +38,64 @@ if not varexist distDrop
         unsetvar distDrop
         loop
     endif
-    overhead 'Distillo-bot 1000 Initialized.'
+    overhead 'Distillo-bot 3000 Initialized.'
 endif
 
 overhead 'Waiting for extract drop...' 920
 wait 250
 
+# pickup bottles on the floor
+if counttype 'empty bottle%s%' self = 0
+    @setvar bottleID 0
+    if findtype 'empty bottle%s%' ground -1 -1 2 as bottles
+        @setvar bottleID bottles 
+    elseif findtype 'empty bottle%s%' distDrop as bottles
+        @setvar bottleID bottles 
+    endif
+    
+    if bottleID > 0
+        lift bottleID 60000
+        drop backpack -1 -1 -1
+        say 'Thank you for the bottles!'
+        wait 1000
+    endif
+endif
+
+# pickup mortal and pestle on the floor
+if counttype 'mortar and pestle' self = 0 
+    @setvar! toolID 0
+    if findtype 'mortar and pestle' ground -1 -1 2 as tool
+        @setvar! toolID tool
+    elseif findtype 'mortar and pestle' distDrop as tool
+        @setvar! toolID tool
+    endif
+    
+    if toolID > 0
+        lift toolID 60000
+        drop backpack -1 -1 -1
+        say 'Thank you for the tools!'
+        wait 1000
+   endif
+endif
+
 # check for an extract in the drop bag
 @setvar! foundExtract 0
+@setvar! shouldSpeak 1
 while findtype 'bottle' distDrop as extract
     @setvar! foundExtract 1
     overhead 'Found an extract! Creating a new distill...'
     getlabel extract extractName
-    say 'Ah ha! I see you have an extract for me to distill!'
-    wait 2000
     
-    say 'One moment please...'
-    wait 1000
+    if shouldSpeak = 1
+        @setvar! shouldSpeak 0
+        say 'Ah, an extract. Let me distill that for you...'
+        wait 250
+    endif
 
     # check for empty bottles
     if not findtype 'empty bottle%s%' self
         overhead 'Need more empty bottles!' 38
-        say "Oh no, I'm out of empty bottles!"
-        # TODO: add a restock command here to refill bottles
+        say "I am out of empty bottles! Please drop some on the floor for me."
         wait 3000
         loop
     endif
@@ -78,8 +113,7 @@ while findtype 'bottle' distDrop as extract
         wait 650
     else
         overhead 'Need more mortal and pestles!' 38
-        say "Oh no! I'm out of mortar and pestles!"
-        # TODO: add a restock command here to refill mortar and pestle
+        say "I am out of mortar and pestles! Please drop some on the floor for me."
         wait 3000
         loop
     endif
@@ -94,85 +128,87 @@ while findtype 'bottle' distDrop as extract
     // page 2/4
     if 'Air' in extractName
         overhead 'Air' 1001
-        gumpresponse 207
+        gumpresponse 208
 
     elseif 'Artisan' in extractName
         overhead 'Artisan' 544
-        gumpresponse 208
-
-    elseif 'Blood' in extractName
-        overhead 'Blood' 38        
         gumpresponse 209
 
     // page 3/4
+    elseif 'Blood' in extractName
+        overhead 'Blood' 38        
+        gumpresponse 200
+        
     elseif 'Command' in extractName
         overhead 'Command' 68
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 200
+        gumpresponse 201
 
     elseif 'Death' in extractName
         overhead 'Death' 923
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 201
+        gumpresponse 202
 
     elseif 'Discipline' in extractName
         overhead 'Discipline' 442
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 202
+        gumpresponse 203
 
     elseif 'Earth' in extractName
         overhead 'Earth' 544
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 203
+        gumpresponse 204
 
     elseif 'Eldritch' in extractName
         overhead 'Eldritch' 24
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 204
+        gumpresponse 205
 
     elseif 'Fire' in extractName
         overhead 'Fire' 38
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 205
+        gumpresponse 206
 
     elseif 'Fortune' in extractName
         overhead 'Fortune' 53
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 206
+        gumpresponse 207
 
     elseif 'Holy' in extractName
         overhead 'Holy' 53
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 207
+        gumpresponse 208
 
     elseif 'Lyric' in extractName
         overhead 'Lyric' 38
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 208
+        gumpresponse 209
 
+    // page 4/4
     elseif 'Poison' in extractName
         overhead 'Poison' 68
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 209
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 200
 
-    // page 4/4
     elseif 'Shadow' in extractName
         overhead 'Shadow' 923
         gumpresponse nextPageResponse
         waitforgump alchGumpID
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 200
+        gumpresponse 201
 
     elseif 'Void' in extractName
         overhead 'Void' 14
@@ -180,7 +216,7 @@ while findtype 'bottle' distDrop as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 201
+        gumpresponse 202
 
     elseif 'Water' in extractName
         overhead 'Water' 8
@@ -188,7 +224,7 @@ while findtype 'bottle' distDrop as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 202
+        gumpresponse 203
 
     else 
         overhead 'Unknown extract type! {{extractName}}' 38
@@ -196,18 +232,18 @@ while findtype 'bottle' distDrop as extract
     endif
 
     gumpclose alchGumpID
-    wait 3500
+    wait 3000
+endwhile
 
-    # move the new distillations back into the drop bag
-    while findtype 'flask' self as distillation
-        lift distillation 99
-        drop distDrop -1 -1 -1
-        wait 1500
-    endwhile
+# move the new distillations back into the drop bag
+while findtype 'flask' self as distillation
+    lift distillation 99
+    drop distDrop -1 -1 -1
+    wait 1500
 endwhile
 
 if foundExtract == 1
-    say 'There you go! Thank you for using Distillo-bot 1000 and have a nice day.'
+    say 'There you go! Thank you for using Distillo-bot 3000 and have a nice day.'
 endif
 
 loop
