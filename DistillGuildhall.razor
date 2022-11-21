@@ -28,10 +28,15 @@
 @setvar! aspectPageID 108
 @setvar! nextPageResponse 11
 
-if varexist distillFinished and distillFinished = 0
-    @setvar! distillFinished 1
-    settimer distillScriptTimer 0
+if not varexist distillRetunToBuff
+    @setvar distillRetunToBuff 1
+elseif distillRetunToBuff = 1
+    overhead 'Returning to Buffing' 920
+    @setvar distillRetunToBuff 0
     script 'BuffBot'
+else
+    overhead 'Performing distill check...' 44
+    @setvar distillRetunToBuff 1
 endif
 
 # set to 1 to also run a buff-bot script.
@@ -148,6 +153,8 @@ while findtype 'bottle' distDrop as extract
     // page 3/4
     elseif 'Blood' in extractName
         overhead 'Blood' 38        
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
         gumpresponse 200
         
     elseif 'Command' in extractName
@@ -242,12 +249,15 @@ while findtype 'bottle' distDrop as extract
         say 'DISTILLO-BOT FATAL ERROR! CANNOT COMPUTE! CANNOT COMPUTE!'
     endif
 
+    waitforgump alchGumpID 1000
     gumpclose alchGumpID
     wait 3000
 endwhile
 
 # move the new distillations back into the drop bag
 while findtype 'flask' self as distillation
+    getlabel distillation distillName
+    overhead 'moving {{distillName}} to drop box'
     lift distillation 99
     drop distDrop -1 -1 -1
     wait 1500
@@ -271,5 +281,6 @@ if buffScript = 1
     settimer distillScriptTimer 0
     script 'BuffBot'
 else 
+    @setvar! distillFinished 1
     loop
 endif

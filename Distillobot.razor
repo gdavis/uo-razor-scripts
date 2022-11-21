@@ -136,7 +136,9 @@ while findtype 'bottle' distDrop as extract
 
     // page 3/4
     elseif 'Blood' in extractName
-        overhead 'Blood' 38        
+        overhead 'Blood' 38  
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID    
         gumpresponse 200
         
     elseif 'Command' in extractName
@@ -231,6 +233,7 @@ while findtype 'bottle' distDrop as extract
         say 'DISTILLO-BOT FATAL ERROR! CANNOT COMPUTE! CANNOT COMPUTE!'
     endif
 
+    waitforgump alchGumpID 1000
     gumpclose alchGumpID
     wait 3000
 endwhile
