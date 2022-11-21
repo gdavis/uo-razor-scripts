@@ -190,8 +190,21 @@ if insysmsg 'New target set'
             elseif insysmsg 'too far away.' or insysmsg 'target is out of range'
                 #overhead 'not in range'
             
+                @setvar! shouldSpeak 0
+                # the larger the random number,
+                # the less frequent the speech
+                random 240
+                # needs to be the length of
+                # the number of digits from
+                # the random
+                if insysmsg 'Random: 111'
+                    @setvar! shouldSpeak 1
+                    clearsysmsg 
+                endif
+            
                 # announce when new person enters, on a cooldown
-                if timer speakTimer > speakCooldown
+                #if timer speakTimer > speakCooldow
+                if shouldSpeak = 1
                     settimer speakTimer 0
 
                     # NOTE: now that this script also goes
@@ -202,7 +215,7 @@ if insysmsg 'New target set'
                     # use a random value higher
                     # than the messages we have
                     # to effectively be silent sometimes.
-                    random 60
+                    random 5
                     
                     if insysmsg 'Random: 1'
                         say "I provide free buffs if you stand next to me."
@@ -216,6 +229,7 @@ if insysmsg 'New target set'
                         say "I can also make distills! Place an extract in box next to me."
                     else 
                         # do nothing. 
+                        overhead 'No message defined.' 38
                     endif
 
                     wait 2000
