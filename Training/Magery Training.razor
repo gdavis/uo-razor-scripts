@@ -4,8 +4,7 @@
 #    @setvar! regs_restock
 #endif
 
-if findtype 3976|3981|3980|3973|3974|3962|3972|3963
-else
+if not findtype 3976 self or not findtype 3981 self or not findtype 3980 self or not findtype 3973 self or not findtype 3974 self or not findtype 3962 self or not findtype 3972 self or not findtype 3963 self
     overhead 'Out of regs!' 38
     if findtype 'storage shelf' ground -1 -1 2 as shelf
         overhead 'Restocking from shelf...' 53
@@ -96,13 +95,6 @@ elseif skill 'Magery' < 100
             replay
         endif
     endif    
-    
-    if counttype 'Blood moss' self < 10 or counttype 'Mandrake Root%s%' self < 10 or counttype "Spider's Silk" self < 10
-        restock 10
-        wft 5000
-        target regs_restock
-        wait 750
-    endif
 
     cast 'Water Elemental'
     wait 6000
