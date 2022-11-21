@@ -3,7 +3,17 @@
 #    sysmsg 'Select Restock Bag for Reagents'
 #    @setvar! regs_restock
 #endif
-#
+
+if findtype 3976|3981|3980|3973|3974|3962|3972|3963
+else
+    overhead 'Out of regs!' 38
+    if findtype 'storage shelf' ground -1 -1 2 as shelf
+        overhead 'Restocking from shelf...' 53
+        menu shelf 1
+    endif
+endif
+
+
 # Summon Creature from 50-60
 if skill 'Magery' < 60
     if mana < 20
