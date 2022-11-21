@@ -4,6 +4,20 @@
 @setvar! buffCooldown 300000
 @setvar! speakCooldown 180000
 
+# set to 1 to callback to check for distillations
+# on a given delay
+@setvar! distillBot 1
+@setvar! runDistillScriptDelay 10000
+
+if not timerexists distillScriptTimer
+    createtimer distillScriptTimer
+endif
+
+if distillBot = 1 and timer distillScriptTimer > runDistillScriptDelay
+    settimer distillScriptTimer 0
+    script 'DistillGuildhall'
+endif
+
 # ignore list
 # 0x5646F aka 353391 - Dobbey
 # 2910331 - Alchemist Trav
