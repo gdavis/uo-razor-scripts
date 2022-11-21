@@ -254,7 +254,17 @@ while findtype 'flask' self as distillation
 endwhile
 
 if foundExtract == 1
-    say 'There you go! Thank you for using Distillo-bot 3000 and have a nice day.'
+    clearsysmsg 
+    random 4
+    if insysmsg 'Random: 1'
+        say 'There you go! Only a few small animals were harmed in the making of this distillation.'
+    elseif insysmsg 'Random: 2'
+        say 'Wow, its about time you leveled your aspect. You, really, I mean really, needed this. Thank you, come again!'
+    elseif insysmsg 'Random: 3'
+        say 'This distillation is brought to you free of charge by NEW!. Well, aside from those boss taxes. Yeah.'
+    elseif insysmsg 'Random: 4'
+        say 'Please enjoy your new distillation! No guarantees all extracts will be returned. Tips are appreciated. Goodbye!'
+    endif    
 endif
 
 if buffScript = 1

@@ -194,7 +194,12 @@ if insysmsg 'New target set'
                 if timer speakTimer > speakCooldown
                     settimer speakTimer 0
 
-                    random 4
+                    if distillBot = 1
+                        random 5
+                    else 
+                        random 4
+                    endif
+                    
                     if insysmsg 'Random: 1'
                         say "I provide free buffs if you stand next to me."
                     elseif insysmsg 'Random: 2'
@@ -203,6 +208,8 @@ if insysmsg 'New target set'
                         emote 'whistles'
                     elseif insysmsg 'Random: 4'
                         say "Headed out? Grab a blessing before you go."
+                    elseif insysmsg 'Random: 5'
+                        say "I can now make distills as well! Place an extract in the vomit colored box next to me."
                     endif
 
                     wait 2000
