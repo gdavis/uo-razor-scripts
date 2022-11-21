@@ -277,10 +277,4 @@ if foundExtract == 1
     endif    
 endif
 
-if buffScript = 1
-    settimer distillScriptTimer 0
-    script 'BuffBot'
-else 
-    @setvar! distillFinished 1
-    loop
-endif
+loop
