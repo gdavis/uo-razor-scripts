@@ -4,20 +4,41 @@ if not varexist dressBag
     setvar dressBag
 endif
 
-if not lhandempty
-    lift lefthand
-    wait 100
-    drop dressBag -1 -1 -1
-elseif not rhandempty
-    lift righthand
-    wait 100
-    drop dressBag -1 -1 -1
+if findtype 'crossbow' lefthand
+    overhead 'Already wearing!' 38
+    stop
 endif
 
-# 2599 == void aspect color
+if not lhandempty
+    lift lefthand
+    drop dressBag -1 -1 -1
+    while not lhandempty
+    endwhile
+elseif not rhandempty
+    lift righthand
+    drop dressBag -1 -1 -1
+    while not rhandempty
+    endwhile
+endif
+
+# 2599 == void aspect
 if findtype 'crossbow' self 2599 as bow 
     dclick bow
-    overhead 'Crossbow Equipped' 53
+    while rhandempty
+    endwhile
+    overhead 'Void Xbow Equipped' 14
+# 2504 == war aspect
+elseif findtype 'crossbow' self 2503 as bow 
+    dclick bow
+    while rhandempty
+    endwhile
+    overhead 'War Xbow Equipped' 36
+# normal
+elseif findtype 'crossbow' self as bow
+    dclick bow
+    while rhandempty
+    endwhile
+    overhead 'Xbow Equipped' 920
 else
-    overhead 'Could not find void aspect crossbow!' 38
+    overhead 'Xbow not found!' 38
 endif

@@ -1,24 +1,43 @@
 # equips a spellbook with void
 # aspect in the backpack
-hotkey 'Cancel Current Target'
-clearsysmsg 
-
 if not varexist dressBag
     overhead 'Select a bag to use for dressing:'
     unsetvar dressBag
     setvar dressBag
 endif
 
-if not lhandempty
-    lift lefthand
-    wait 100
-    drop dressBag -1 -1 -1
-elseif not rhandempty
-    lift righthand
-    wait 100
-    drop dressBag -1 -1 -1
+if findtype 'spellbook' righthand
+    overhead 'Spellbook equipped!' 54
+    stop
 endif
 
-if findtype 'spellbook' backpack 2599 as voidbook
-    dclick voidbook
+if not lhandempty
+    lift lefthand
+    drop dressBag
+    while not lhandempty
+    endwhile
+elseif not rhandempty
+    lift righthand
+    drop dressBag
+    while not rhandempty
+    endwhile
+endif
+
+if findtype 'spellbook' self 2599 as book
+    dclick book
+    while not lhandempty
+    endwhile
+    overhead 'Void Spellbook Equipped' 14
+elseif findtype 'spellbook' self 2503 as book
+    dclick book
+    while not lhandempty
+    endwhile
+    overhead 'War Spellbook Equipped' 36
+elseif findtype 'spellbook' self as book
+    dclick book
+    while not lhandempty
+    endwhile
+    overhead 'Spellbook Equipped' 920
+else
+    overhead 'Aspect spellbook not found!' 38
 endif
