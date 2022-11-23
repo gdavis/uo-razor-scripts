@@ -4,38 +4,37 @@ if not varexist dressBag
     setvar dressBag
 endif
 
-if findtype 'bow' lefthand
-    overhead 'Already wearing!' 38
+if findtype 'bow' RightHand
+    overhead 'Already Equipped!' 54
     stop
 endif
 
 if not lhandempty
     lift lefthand
     wait 100
-    drop dressBag -1 -1 -1
+    drop dressBag
     while not lhandempty
     endwhile
 elseif not rhandempty
     lift righthand
     wait 100
-    drop dressBag -1 -1 -1
-    wait 100
+    drop dressBag
     while not rhandempty
     endwhile    
 endif
 
-if findtype 'bow' self 2599 as bow
-    dclick bow
+if findtype 'bow' self 2599 as aspectBow
+    dclick aspectBow
     while lhandempty
     endwhile
     overhead 'Void Bow Equipped' 14
-elseif findtype 'bow' self 2503 as bow
-    dclick bow
+elseif findtype 'bow' self 2503 as aspectBow
+    dclick aspectBow
     while lhandempty
     endwhile
     overhead 'War Bow Equipped' 36
-elseif findtype 'bow' self as bow
-    dclick bow
+elseif findtype 'bow' self as aspectBow
+    dclick aspectBow
     while lhandempty
     endwhile
     overhead 'Bow Equipped' 920
