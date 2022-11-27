@@ -1,0 +1,24 @@
+# Doorman script for NEW! GH
+# check for the 3 tiles behind the door
+if position 4300 822 or position 4301 822 or position 4302 822 
+    # check for the opened door. closed = 1653, open = 1654
+    if findtype '1654' ground -1 -1 2 as door
+        overhead 'Shutting door...' 44
+        wait 500
+        dclick door
+        wait 69
+        loop
+    elseif findtype '1653' ground -1 -1 2 
+        overhead 'Door closed.'
+        wait 100
+        loop
+    else
+        overhead 'Door not found!' 38
+        sysmsg 'You do not appear to be in the NEW! GH.'
+        stop
+    endif
+else 
+    overhead 'Waiting to get into position...' 908
+    wait 250
+    loop
+endif
