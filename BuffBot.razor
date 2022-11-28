@@ -89,7 +89,7 @@ endif
 
 
 # find a target
-overhead ' '
+#overhead ' '
 clearsysmsg 
 
 if targetexists 
@@ -98,7 +98,6 @@ if targetexists
 endif
 
 hotkey "Next Friendly Player Target"
-wait 250
 
 if insysmsg 'New target set' 
     @setvar! player lasttarget
@@ -195,7 +194,7 @@ if insysmsg 'New target set'
                 @setvar! shouldSpeak 0
                 # the larger the random number,
                 # the less frequent the speech
-                random 360
+                random 1000
                 # needs to be the length of
                 # the number of digits from
                 # the random
