@@ -26,26 +26,17 @@ endif
 # PK check
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     overhead 'PK WARNING - ESCAPE'
-
-    if skill 'magery' >= 60
-        overhead 'Time to leave!' 34
-        hotkey 'Recall'
-        waitfortarget
-        target 'recallTarget'
-    else
-        overhead 'PK Detected!' 38
-    endif
     
-    if skill 'Hiding' >= 50 
-        while not hidden and not dead
-            skill 'hiding'
-            wait actionDelay
-        endwhile
-    endif
-    
-    sysmsg 'Miner stopped after Escaping PK!' 44
+    dclick 'recallTarget'
+    waitforgump 1551740969
+    gumpresponse 2
+    sysmsg 'Escaped PK!' 44
     @setvar! isActive 0
     stop
 endif
 
 loop
+
+
+
+
