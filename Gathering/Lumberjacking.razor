@@ -48,18 +48,20 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     clearsysmsg 
     if skill 'magery' >= 60 and 'use_recall' == 1
         overhead 'Escaping PK!' 34
-        hotkey 'Recall'
-        waitfortarget         
-        target 'loggingEscapeRune'
-        wait 3000
-        clearsysmsg 
+        script 'RecallInn'
         
-        if skill 'Hiding' >= 50 
-            skill 'Hiding'
-            overhead 'Recall escaped from PK'
-            sysmsg 'Recall escaped from PK'
-            stop
-        endif        
+#        hotkey 'Recall'
+#        waitfortarget         
+#        target 'loggingEscapeRune'
+#        wait 3000
+#        clearsysmsg 
+#        
+#        if skill 'Hiding' >= 50 
+#            skill 'Hiding'
+#            overhead 'Recall escaped from PK'
+#            sysmsg 'Recall escaped from PK'
+#            stop
+#        endif        
         
     elseif skill 'Hiding' >= 50
         overhead 'Hiding from PK!' 34
