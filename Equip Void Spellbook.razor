@@ -23,6 +23,13 @@ elseif not rhandempty
     endwhile
 endif
 
+if findtype 'spellbook' self 0 as book
+    getlabel book bookName
+    if '[blessed]' in bookName
+        ignore book
+    endif
+endif
+
 if findtype 'spellbook' self 2599 as book
     dclick book
     while not lhandempty
