@@ -27,6 +27,10 @@
 # after turning on the lantern.
 @setvar! buffSessionDuration 30000
 
+if not varexist buffsEnabled
+    setvar! buffsEnabled 0
+endif
+
 if not timerexists buffTimer
     createtimer buffTimer
     settimer buffTimer 999999
@@ -113,16 +117,32 @@ endif
 
 # use a lantern to start buffs
 if findtype 2594 ground any any 1 as lantern
-    if buffsEnabled = 1 and timer buffTimer > buffSessionDuration
+    if buffsEnabled = 1 and timer buffTimer > 30000
         dclick lantern
         overhead 'Done buffing round.'
     elseif buffsEnabled = 0
         overhead 'Starting buffs...' 54
         emote 'opens spellbook'
         wait 500
-        say 'Oh, hello there. Give me a second to focus on you...'
         
-        @setvar! buffsEnabled 1
+        clearsysmsg 
+        random 6
+        
+        if insysmsg 'Random: 1'
+            say 'Oh, hello. One second while I focus...'
+        elseif insysmsg 'Random: 2'
+            say 'Well met! I shall put a mighty blessing upon you!'
+        elseif insysmsg 'Random: 3'
+            say 'KAMEHAMEHA!'
+        elseif insysmsg 'Random: 4'
+            say 'Oh, is that mistletoe above us? *wink*'
+        elseif insysmsg 'Random: 5'
+            say 'Ah, excellent! My talents were wasting away there...'
+        elseif insysmsg 'Random: 6'
+            say 'We all need a little boost once in a while...'
+        endif
+        
+        setvar! buffsEnabled 1
         settimer buffTimer 0
     else
         overhead 'Looking for nearby player'
@@ -130,9 +150,22 @@ if findtype 2594 ground any any 1 as lantern
     
 elseif findtype 2597 ground any any 1 as lantern
     if buffsEnabled = 1 
-        overhead 'buffs off' 902
+        overhead 'Stopping buffs...' 54
+
+        clearsysmsg 
+        random 3
+        
+        if insysmsg 'Random: 1'
+            say 'All done? Nap time it is.'
+        elseif insysmsg 'Random: 2'
+            say 'Hope you got what you needed!'
+        elseif insysmsg 'Random: 3'
+            say 'Good luck out there.'
+        endif
+        wait 1000
+        
         emote 'closes spellbook'
-        @setvar! buffsEnabled 0
+        setvar! buffsEnabled 0
         settimer buffTimer 999999
     endif
 else 
@@ -144,7 +177,51 @@ endif
 # from the latnern. if not,
 # briefly pause and try again.
 if buffsEnabled = 0
-    wait 100
+    overhead 'Waiting for a light...' 902
+    wait 500
+    
+    if timer speakTimer > speakCooldown
+        settimer speakTimer 0
+    
+        # randomize if something should be announced
+        @setvar! shouldSpeak 0
+        # the larger the random number,
+        # the less frequent the speech
+        random 12
+        # needs to be the length of
+        # the number of digits from
+        # the random
+        if insysmsg 'Random: 10'
+            @setvar! shouldSpeak 1
+        endif
+
+        # announce randomly and when enough time has elapsed.
+        if shouldSpeak = 1
+            # random what should be said
+            clearsysmsg 
+            random 6
+            
+            if insysmsg 'Random: 1'
+                say "I provide free buffs! Come light my lantern."
+            elseif insysmsg 'Random: 2'
+                say "Nice day for a blessin', ain't it?"
+            elseif insysmsg 'Random: 3'
+                emote 'looks bored'
+            elseif insysmsg 'Random: 4'
+                say "Headed out? Grab a blessing before you go."
+            elseif insysmsg 'Random: 5'
+                say "I also make distills! Place an extract in box and I will craft it for you."
+            elseif insysmsg 'Random: 6'
+                say "Sometimes the best of us need 11 more hp."
+            else 
+                # do nothing. 
+                overhead 'No message defined.' 38
+            endif
+
+            wait 500
+        endif
+    endif
+    
     loop
 endif
 
@@ -249,52 +326,6 @@ if insysmsg 'New target set'
                 
             elseif insysmsg 'too far away.' or insysmsg 'target is out of range' or insysmsg 'Target cannot be seen'
                 #overhead 'not in range'
-            
-                @setvar! shouldSpeak 0
-                # the larger the random number,
-                # the less frequent the speech
-                random 99
-                # needs to be the length of
-                # the number of digits from
-                # the random
-                if insysmsg 'Random: 11'
-                    @setvar! shouldSpeak 1
-                    clearsysmsg 
-                endif
-            
-                # announce when new person enters, on a cooldown
-                #if timer speakTimer > speakCooldow
-                if shouldSpeak = 1
-                    settimer speakTimer 0
-
-                    # NOTE: now that this script also goes
-                    # back to the distill script, we cannot
-                    # keep timers going that are longer than 
-                    # the delay to go to the next script.
-                    # therefore, to not spam, 
-                    # use a random value higher
-                    # than the messages we have
-                    # to effectively be silent sometimes.
-                    random 5
-                    
-                    if insysmsg 'Random: 1'
-                        say "I provide free buffs if you stand next to me."
-                    elseif insysmsg 'Random: 2'
-                        say "Nice day for a blessin', ain't it?"
-                    elseif insysmsg 'Random: 3'
-                        emote 'whistles'
-                    elseif insysmsg 'Random: 4'
-                        say "Headed out? Grab a blessing before you go."
-                    elseif insysmsg 'Random: 5'
-                        say "I can also make distills! Place an extract in box next to me."
-                    else 
-                        # do nothing. 
-                        overhead 'No message defined.' 38
-                    endif
-
-                    wait 2000
-                endif
-
                 break
             else
                 wait 100
