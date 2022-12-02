@@ -120,6 +120,7 @@ if findtype 2594 ground any any 1 as lantern
     if buffsEnabled = 1 and timer buffTimer > 30000
         dclick lantern
         overhead 'Done buffing round.'
+        setvar! buffsEnabled 0
     elseif buffsEnabled = 0
         overhead 'Starting buffs...' 54
         emote 'opens spellbook'
