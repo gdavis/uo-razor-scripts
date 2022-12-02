@@ -1,6 +1,19 @@
+# NEW! Buff and Distill Bot
+#
+# Uses a lantern that, when turned on,
+# will begin the bot looking
+# for targets in the area to buff.
+# After a duration, he will
+# turn the lantern back off.
+#
+# This script will also
+# look for distillations
+# after a delay.
+# 
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
+
 @setvar! buffCooldown 300000
 @setvar! speakCooldown 30000
 
@@ -8,6 +21,16 @@
 # on a given delay
 @setvar! distillBot 1
 @setvar! runDistillScriptDelay 10000
+
+# number of miliseconds to actively
+# look for buffing targets
+# after turning on the lantern.
+@setvar! buffSessionDuration 30000
+
+if not timerexists buffTimer
+    createtimer buffTimer
+    settimer buffTimer 999999
+endif
 
 if not timerexists distillScriptTimer
     createtimer distillScriptTimer
@@ -88,6 +111,43 @@ elseif counttype 3973 self == 0
 endif
 
 
+# use a lantern to start buffs
+if findtype 2594 ground any any 1 as lantern
+    if buffsEnabled = 1 and timer buffTimer > buffSessionDuration
+        dclick lantern
+        overhead 'Done buffing round.'
+    elseif buffsEnabled = 0
+        overhead 'Starting buffs...' 54
+        emote 'opens spellbook'
+        wait 500
+        say 'Oh, hello there. Give me a second to focus on you...'
+        
+        @setvar! buffsEnabled 1
+        settimer buffTimer 0
+    else
+        overhead 'Looking for nearby player'
+    endif
+    
+elseif findtype 2597 ground any any 1 as lantern
+    if buffsEnabled = 1 
+        overhead 'buffs off' 902
+        emote 'closes spellbook'
+        @setvar! buffsEnabled 0
+        settimer buffTimer 999999
+    endif
+else 
+    overhead 'ERROR: NO LANTERN NEARBY!' 38
+    stop
+endif
+
+# check if buffs have been turned on
+# from the latnern. if not,
+# briefly pause and try again.
+if buffsEnabled = 0
+    wait 100
+    loop
+endif
+
 # find a target
 #overhead ' '
 clearsysmsg 
@@ -159,7 +219,6 @@ if insysmsg 'New target set'
                     wait 6000
                 endif
                 
-                emote 'opens spellbook'
                 cast 'Bless'
                 wft 6000
                 
@@ -194,11 +253,11 @@ if insysmsg 'New target set'
                 @setvar! shouldSpeak 0
                 # the larger the random number,
                 # the less frequent the speech
-                random 600
+                random 99
                 # needs to be the length of
                 # the number of digits from
                 # the random
-                if insysmsg 'Random: 111'
+                if insysmsg 'Random: 11'
                     @setvar! shouldSpeak 1
                     clearsysmsg 
                 endif
