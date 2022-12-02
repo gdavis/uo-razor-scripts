@@ -127,7 +127,7 @@ if findtype 2594 ground any any 1 as lantern
         wait 500
         
         clearsysmsg 
-        random 6
+        random 7
         
         if insysmsg 'Random: 1'
             say 'Oh, hello. One second while I focus...'
@@ -140,7 +140,9 @@ if findtype 2594 ground any any 1 as lantern
         elseif insysmsg 'Random: 5'
             say 'Ah, excellent! My talents were wasting away there...'
         elseif insysmsg 'Random: 6'
-            say 'We all need a little boost once in a while...'
+            say 'Mmm yes, touch the demon inside me...'
+        elseif insysmsg 'Random: 7'
+            say 'Adventure awaits! Let me help you along...'
         endif
         
         setvar! buffsEnabled 1
