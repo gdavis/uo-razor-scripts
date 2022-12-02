@@ -124,25 +124,25 @@ if findtype 2594 ground any any 1 as lantern
     elseif buffsEnabled = 0
         overhead 'Starting buffs...' 54
         emote 'opens spellbook'
-        wait 500
+        wait 750
         
         clearsysmsg 
         random 7
         
         if insysmsg 'Random: 1'
-            say 'Oh, hello. One second while I focus...'
+            say 'Hello there, friend. One moment while I focus...'
         elseif insysmsg 'Random: 2'
             say 'Well met! I shall put a mighty blessing upon you!'
         elseif insysmsg 'Random: 3'
-            say 'KAMEHAMEHA!'
+            say 'A new sacrifi... er, a mighty warrior needs a blessing for battle!'
         elseif insysmsg 'Random: 4'
-            say 'Oh, is that mistletoe above us? *wink*'
+            say 'Wha..what? Oh right. Blessings. Hold on please...'
         elseif insysmsg 'Random: 5'
             say 'Ah, excellent! My talents were wasting away there...'
         elseif insysmsg 'Random: 6'
-            say 'Mmm yes, touch the demon inside me...'
+            say 'Another round of blessings, coming up...!'
         elseif insysmsg 'Random: 7'
-            say 'Adventure awaits! Let me help you along...'
+            say 'I have a feeling about this run...'
         endif
         
         setvar! buffsEnabled 1
