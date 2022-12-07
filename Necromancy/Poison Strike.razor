@@ -1,8 +1,18 @@
 clearsysmsg 
 say '[PoisonStrike'
+
+while not targetexists 
+endwhile
+
+while targetexists 
+endwhile
 wait 100
 
-if insysmsg 'You must wait'
+if insysmsg 'Target cannot be seen'
+    overhead 'CANNOT SEE!' 38
+elseif insysmsg 'That is not accessible' or insysmsg 'That is not a valid target'
+    overhead 'Invalid Target' 38
+elseif insysmsg 'You must wait'
     overhead 'Not ready!' 38
 elseif insysmsg 'You do not have enough unholy'
     overhead 'No symbols!' 44

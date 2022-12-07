@@ -4,12 +4,20 @@ if targetexists
     hotkey 'Cancel Current Target'
 endif
 
+cooldown 'Spell Precast' 0
 clearsysmsg 
 cast 'Energy Bolt'
 
 while not targetexists 
 endwhile
 
+cooldown 'Spell Precast' 35000
+
 while targetexists 
 endwhile
-overhead 'E-Bolt Out!' 43
+
+if cooldown 'Spell Precast' <= 0
+    overhead 'Cast timed out!' 38
+else
+    cooldown 'Spell Precast' 0
+endif
