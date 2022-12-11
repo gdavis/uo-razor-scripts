@@ -1,3 +1,13 @@
+if not timerexists doorMan
+    createtimer doorMan
+    settimer doorMan 999999
+endif
+
+if timer doorMan > 10000
+    overhead 'Doorman running...' 54
+    settimer doorMan 0
+endif
+
 # Doorman script for NEW! GH
 # check for the 3 tiles behind the door
 if position 4300 822 or position 4301 822 or position 4302 822 
@@ -11,7 +21,7 @@ if position 4300 822 or position 4301 822 or position 4302 822
         wait 69
         loop
     elseif findtype '1653' ground -1 -1 2 
-        overhead 'Door closed.'
+        #overhead 'Door closed.'
         wait 100
         loop
     else
