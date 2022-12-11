@@ -2,10 +2,12 @@
 # check for the 3 tiles behind the door
 if position 4300 822 or position 4301 822 or position 4302 822 
     # check for the opened door. closed = 1653, open = 1654
-    if findtype '1654' ground -1 -1 2 as door
+    if findtype '1654' ground -1 -1 2
         overhead 'Shutting door...' 44
         wait 500
-        dclick door
+        if findtype '1654' ground -1 -1 2 as door
+            dclick door
+        endif
         wait 69
         loop
     elseif findtype '1653' ground -1 -1 2 
