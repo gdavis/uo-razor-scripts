@@ -1,3 +1,5 @@
+# set this to 0 if you do not want greetings
+@setvar! useGreetings 1
 @setvar! greetingTimeout 60000
 
 if not timerexists doorMan
@@ -21,7 +23,7 @@ if position 4300 822 or position 4301 822 or position 4302 822
     # check for the opened door. closed = 1653, open = 1654
     if findtype '1654' ground -1 -1 2
         
-        if timer greetingTimer >= greetingTimeout
+        if useGreetings = 1 and timer greetingTimer >= greetingTimeout
             clearsysmsg 
             random 4
             settimer greetingTimer 0
