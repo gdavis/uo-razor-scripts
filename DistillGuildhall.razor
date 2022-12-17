@@ -23,6 +23,8 @@
 # Created on:       September 4, 2022
 # Last updated:     November 20, 2022
     
+clearsysmsg
+
 # gump vars
 @setvar! alchGumpID 949095101
 @setvar! aspectPageID 108
@@ -98,8 +100,13 @@ endif
 
 # check for an extract in the drop bag
 @setvar! foundExtract 0
-@setvar! shouldSpeak 1
+@setvar! shouldSpeak 1 
 while findtype 'bottle' distDrop as extract
+    if insysmsg 'The world will save in 15'
+        say 'One moment while I wait for the world save...'
+        wait 15000
+    endif
+
     @setvar! foundExtract 1
     overhead 'Found an extract! Creating a new distill...'
     getlabel extract extractName
