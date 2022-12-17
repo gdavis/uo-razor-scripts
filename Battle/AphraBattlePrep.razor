@@ -1,4 +1,5 @@
 overhead '+Aphra Battle Prep+' 1001
+clearsysmsg 
 
 # Start tracking
 # NOTE: findbuff 'Tracking' does not yet work
@@ -83,6 +84,7 @@ if not findbuff 'Reactive Armor'
     cast 'Reactive Armor'
     while not findbuff 'Reactive Armor'
     endwhile 
+    wait 250
 else
     overhead 'Reactive Armor: On' 89
 endif
@@ -92,7 +94,12 @@ if not findbuff 'Magic Reflection'
     overhead 'Need Reflect' 48
     cast 'Magic Reflection'
     while not findbuff 'Magic Reflection'
+        if insysmsg 'That spell will not adhere'
+            overhead 'Cannot apply reflect!' 38
+            break
+        endif
     endwhile
+    wait 250
 else
     overhead 'Magic Resist: On' 89
 endif
