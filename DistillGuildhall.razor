@@ -105,6 +105,9 @@ while findtype 'bottle' distDrop as extract
     if insysmsg 'The world will save in 15'
         say 'One moment while I wait for the world save...'
         wait 15000
+        clearsysmsg 
+    elseif insysmsg 'The world is saving'
+        wait 6000
     endif
 
     @setvar! foundExtract 1
