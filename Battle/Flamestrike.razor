@@ -1,9 +1,8 @@
-hotkey 'Clear Target Queue'
-
 if targetexists 
-    hotkey 'Cancel Current Target'
+    overhead 'Already casting!' 54
 endif
 
+hotkey 'Clear Target Queue'
 cooldown 'Spell Precast' 0
 clearsysmsg 
 cast 'Flamestrike'
