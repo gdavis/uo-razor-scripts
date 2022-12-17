@@ -1,9 +1,9 @@
-hotkey 'Clear Target Queue'
-
 if targetexists 
-    hotkey 'Cancel Current Target'
+    overhead 'Already casting!' 54
+    stop
 endif
 
+hotkey 'Clear Target Queue'
 cooldown 'Spell Precast' 0
 clearsysmsg 
 cast 'Energy Bolt'
