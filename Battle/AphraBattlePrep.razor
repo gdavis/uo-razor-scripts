@@ -1,4 +1,4 @@
-overhead 'Preparing Aphra for Battle' 48
+overhead '+Aphra Battle Prep+' 1001
 
 # Start tracking
 # NOTE: findbuff 'Tracking' does not yet work
@@ -20,7 +20,7 @@ if skill 'Tracking' > 50
             gumpresponse 6
             wait 3000
         else
-            overhead 'Already Hunting' 55
+            overhead 'Already Hunting' 89
         endif
         
         gumpclose tracking_gump_id
@@ -49,7 +49,7 @@ if skill 'camping' >= 20
             endif
         endif
     else 
-        overhead 'Already camped' 55
+        overhead 'Already camped' 89
     endif
 endif
 
@@ -74,17 +74,27 @@ if not findbuff 'Food Satisfaction'
         overhead 'HUNGRY! Need Food!' 38
     endif
 else 
-    overhead 'Not hungry.'
+    overhead 'Not hungry.' 89
 endif
 
 # Reactive Armor
-overhead 'Setup Reactive Armor' 48
-cast 'Reactive Armor'
-wait 2000
+if not findbuff 'Reactive Armor'
+    overhead 'Need Reactive Armor' 48
+    cast 'Reactive Armor'
+    while not findbuff 'Reactive Armor'
+    endwhile 
+else
+    overhead 'Reactive Armor: On' 89
+endif
 
 # Reflect
-overhead 'Setup Reflect' 48
-cast 'Magic Reflection'
-wait 2000
+if not findbuff 'Magic Reflection'
+    overhead 'Need Reflect' 48
+    cast 'Magic Reflection'
+    while not findbuff 'Magic Reflection'
+    endwhile
+else
+    overhead 'Magic Resist: On' 89
+endif
 
 overhead 'Ready for battle'
