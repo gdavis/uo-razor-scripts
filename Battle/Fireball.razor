@@ -3,6 +3,11 @@ if targetexists
     stop
 endif
 
+if not timerexists fireballTimer
+    createtimer fireballTimer
+    settimer fireballTimer 99999
+endif
+
 hotkey 'Clear Target Queue'
 cooldown 'Spell Precast' 0
 clearsysmsg 
@@ -20,5 +25,11 @@ if cooldown 'Spell Precast' <= 0
     overhead 'Cast timed out!' 38
 else
     cooldown 'Spell Precast' 0
-    cooldown 'Wizardry Fireball' 20000
+    
+    if timer fireballTimer > 20000
+        cooldown 'Wizardry Fireball' 20000
+        settimer fireballTimer 0
+    else
+        overhead 'Wizardry Fireball on Cooldown!'
+    endif
 endif
