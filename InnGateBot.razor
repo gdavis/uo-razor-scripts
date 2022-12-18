@@ -11,6 +11,12 @@ if not position 244 455
     loop
 endif
 
+# running overhead timer
+if not timerexists gateRunning
+    createtimer gateRunning
+    settimer gateRunning 99999
+endif
+
 # timer to open gates every 30s
 @setvar! gateCooldown 32500
 if not timerexists gateTimer
@@ -35,6 +41,12 @@ endif
 @setvar! townsLoc 1
 @setvar! dungeonLoc 2
 @setvar! shrinesLoc 3
+
+# running
+if timer gateRunning > 8000
+    overhead 'Waiting to gate...' 920
+    settimer gateRunning 0
+endif
 
 @setvar! lanternOn 2594
 @setvar! lanternOff 2597
