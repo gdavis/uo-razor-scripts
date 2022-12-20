@@ -11,7 +11,7 @@ clearsysmsg
 
 if not varexist lockedChest
     overhead 'Unlock what chest?' 44
-    @setvar! lockedChest
+    setvar lockedChest
 endif
 
 getlabel lockedChest chestName
@@ -20,7 +20,7 @@ overhead chestName 1001
 
 if '(sealed)' in chestName 
 else
-    @unsetvar! lockedChest
+    unsetvar lockedChest
     overhead 'That chest is not sealed.'
     stop
 endif
