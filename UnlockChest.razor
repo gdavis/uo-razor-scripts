@@ -9,9 +9,9 @@ endif
 
 clearsysmsg
 
-if not varexist lockedChest
+if not varexist lockedChest or not find lockedChest backpack
     overhead 'Unlock what chest?' 44
-    setvar lockedChest
+    @setvar! lockedChest
 endif
 
 getlabel lockedChest chestName
