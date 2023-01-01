@@ -1,0 +1,14 @@
+
+while findtype 'Black Potion' backpack as potion 
+    dclick potion 
+    wait 500
+endwhile
+
+# resist keg
+while findtype 6464 backpack 1109 as keg
+    dclick keg
+
+    if counttype 'Black Potion' >= 25
+        loop
+    endif
+endwhile
