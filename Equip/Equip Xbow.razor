@@ -1,0 +1,44 @@
+if not varexist dressBag
+    overhead 'Select a bag to use for dressing:'
+    unsetvar dressBag
+    setvar dressBag
+endif
+
+if findtype 'crossbow' lefthand
+    overhead 'Already Equipped!' 54
+    stop
+endif
+
+if not lhandempty
+    lift lefthand
+    drop dressBag -1 -1 -1
+    while not lhandempty
+    endwhile
+elseif not rhandempty
+    lift righthand
+    drop dressBag -1 -1 -1
+    while not rhandempty
+    endwhile
+endif
+
+# 2599 == void aspect
+if findtype 'crossbow' self 2599 as bow 
+    dclick bow
+    while rhandempty
+    endwhile
+    overhead 'Void Xbow Equipped' 14
+# 2504 == war aspect
+elseif findtype 'crossbow' self 2503 as bow 
+    dclick bow
+    while rhandempty
+    endwhile
+    overhead 'War Xbow Equipped' 36
+# normal
+elseif findtype 'crossbow' self as bow
+    dclick bow
+    while rhandempty
+    endwhile
+    overhead 'Xbow Equipped' 920
+else
+    overhead 'Xbow not found!' 38
+endif

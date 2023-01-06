@@ -1,64 +1,72 @@
-overhead 'Preparing Aphra for Battle' 48
+overhead '+Aphra Battle Prep+' 1001
+clearsysmsg 
 
 # Start tracking
 # NOTE: findbuff 'Tracking' does not yet work
-#overhead 'Setup tracking...' 48
-#if not varexist tracking_gump_id
-#    setvar tracking_gump_id 4267467659
-#endif
-#
-#while not gumpexists tracking_gump_id
-#    sysmsg 'Opening tracking gump...' 53
-#    skill 'tracking'
-#    waitforgump tracking_gump_id 600
-#endwhile
-#
-#if gumpexists tracking_gump_id
-#    if not ingump 'Stop Hunting' 4267467659
-#        overhead 'Started Hunting PKs' 65
-#        gumpresponse 6
-#        wait 3000
-#    else
-#        overhead 'Already Hunting' 55
-#    endif
-#    
-#    gumpclose tracking_gump_id
-#endif
+if skill 'Tracking' > 50 
+    overhead 'Setup tracking...' 48
+    if not varexist tracking_gump_id
+        setvar tracking_gump_id 4267467659
+    endif
 
-# Camp
-overhead 'Setup camping buff' 48
-if not findbuff 'campfire visit'
-    overhead 'Need to camp'
-    
-    if not findtype "kindling" backpack
-        overhead "Need more kindling" 34
-        wait 5000
-        replay
-    endif
-    
-    if not findtype "campfire" ground 0 1 1
-        dclicktype "kindling" backpack
-        wait 500
-    
-        if insysmsg 'You fail to ignite'
-            wait 3500
-            loop
+    while not gumpexists tracking_gump_id
+        sysmsg 'Opening tracking gump...' 53
+        skill 'tracking'
+        waitforgump tracking_gump_id 600
+    endwhile
+
+    if gumpexists tracking_gump_id
+        if not ingump 'Stop Hunting' 4267467659
+            overhead 'Started Hunting PKs' 65
+            gumpresponse 6
+            wait 3000
+        else
+            overhead 'Already Hunting' 89
         endif
+        
+        gumpclose tracking_gump_id
     endif
-else 
-    overhead 'Already camped' 55
 endif
 
+# Camp
+if skill 'camping' >= 20
+    overhead 'Setup camping buff' 48
+    if not findbuff 'campfire visit'
+        overhead 'Need to camp'
+        
+        if not findtype "kindling" backpack
+            overhead "Need more kindling" 34
+            wait 5000
+            replay
+        endif
+        
+        if not findtype "campfire" ground 0 1 1
+            dclicktype "kindling" backpack
+            wait 500
+        
+            if insysmsg 'You fail to ignite'
+                wait 3500
+                loop
+            endif
+        endif
+    else 
+        overhead 'Already camped' 89
+    endif
+endif
+
+
 # Taste ID
-while not findbuff 'Herbal Poultice'
-    overhead 'Setup taste buff' 48
-    skill 'tasteidentification'
-    waitfortarget 1000
-    targetrelloc 0 0
-    wait 500
-endwhile
+if skill 'taste identification' > 50
+    while not findbuff 'Herbal Poultice'
+        overhead 'Setup taste buff' 48
+        skill 'tasteidentification'
+        waitfortarget 1000
+        targetrelloc 0 0
+        wait 500
+    endwhile
+endif
 
-
+# Food
 if not findbuff 'Food Satisfaction'
     if findtype 'tray' backpack as food 
         dclick food
@@ -67,17 +75,33 @@ if not findbuff 'Food Satisfaction'
         overhead 'HUNGRY! Need Food!' 38
     endif
 else 
-    overhead 'Not hungry.'
+    overhead 'Not hungry.' 89
 endif
 
 # Reactive Armor
-overhead 'Setup Reactive Armor' 48
-cast 'Reactive Armor'
-wait 2000
+if not findbuff 'Reactive Armor'
+    overhead 'Need Reactive Armor' 48
+    cast 'Reactive Armor'
+    while not findbuff 'Reactive Armor'
+    endwhile 
+    wait 250
+else
+    overhead 'Reactive Armor: On' 89
+endif
 
 # Reflect
-overhead 'Setup Reflect' 48
-cast 'Magic Reflection'
-wait 2000
+if not findbuff 'Magic Reflection'
+    overhead 'Need Reflect' 48
+    cast 'Magic Reflection'
+    while not findbuff 'Magic Reflection'
+        if insysmsg 'That spell will not adhere'
+            overhead 'Cannot apply reflect!' 38
+            break
+        endif
+    endwhile
+    wait 250
+else
+    overhead 'Magic Resist: On' 89
+endif
 
 overhead 'Ready for battle'

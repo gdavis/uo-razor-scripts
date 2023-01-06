@@ -1,0 +1,13 @@
+@clearignore 
+
+overhead 'Opening all corpses...' 54
+
+while findtype 'corpse' ground any any 2 as asdf
+    getlabel asdf aCorpse
+    overhead 'Opening {{aCorpse}}' 89
+    dclick asdf
+    wait 500
+    @ignore asdf
+endwhile
+
+overhead 'Done opening corpses.'

@@ -1,0 +1,42 @@
+# Recall out using a set target 
+# when found in tracking.
+## Recall Escape --------------
+
+# Ask user to provide the recall rune
+if skill 'magery' >= 60 and not varexist 'recallTarget'
+    overhead 'Target the recall runebook or rune to use:'
+    setvar 'recallTarget'
+endif
+
+# Check if the stored rune 
+# is actually reachable
+if not find 'recallTarget' backpack 
+    overhead 'Stored recall target not found!' 38
+    overhead 'Target a new recall runebook or rune to use:'
+    
+    unsetvar 'recallTarget'
+    setvar 'recallTarget'
+endif
+
+if not find 'recallTarget' backpack 
+    overhead 'WARNING! Recall target is not reachable and PK escape will fail!' 38
+    sysmsg 'WARNING! Recall target is not reachable and PK escape will fail!' 38
+endif
+
+# PK check
+if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
+    overhead 'PK WARNING - ESCAPE'
+    
+    dclick 'recallTarget'
+    waitforgump 1551740969
+    gumpresponse 2
+    sysmsg 'Escaped PK!' 44
+    @setvar! isActive 0
+    stop
+endif
+
+loop
+
+
+
+

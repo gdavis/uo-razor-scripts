@@ -20,11 +20,6 @@ if not varexist lootBag
     setvar lootBag
 endif
 
-if not find lootBag
-    overhead 'Could not find loot bag. Retarget:'
-    setvar lootBag
-endif
-
 if not varexist magicItemBag 
     overhead 'Select the bag for unidentified magic items:'
     setvar magicItemBag
@@ -101,6 +96,7 @@ pushlist basicItems 'leather skirt'
 pushlist basicItems 'leather leggings'
 pushlist basicItems 'leather armor'
 pushlist basicItems 'leather bustier'
+pushlist basicItems 'leather tunic'
 # shields
 pushlist basicItems 'kite shield'
 pushlist basicItems 'wooden shield'
@@ -163,8 +159,9 @@ pushlist basicItems 'war axe'
 pushlist basicItems "executioner's axe"
 pushlist basicItems 'axe'
 pushlist basicItems 'cutlass'
-pushlist basicItems "shepherd's crook"
+pushlist basicItems 'scimitar'
 # maces
+pushlist basicItems "shepherd's crook"
 pushlist basicItems 'war mace'
 pushlist basicItems 'mace'
 pushlist basicItems 'maul'

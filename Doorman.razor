@@ -1,0 +1,70 @@
+# set this to 0 if you do not want greetings
+@setvar! useGreetings 1
+@setvar! greetingTimeout 60000
+
+if not timerexists doorMan
+    createtimer doorMan
+    settimer doorMan 999999
+endif
+
+if timer doorMan > 10000
+    overhead 'Doorman running...' 54
+    settimer doorMan 0
+endif
+
+if not timerexists greetingTimer
+    createtimer greetingTimer
+    settimer greetingTimer greetingTimeout
+endif
+
+# Doorman script for NEW! GH
+# check for the 3 tiles behind the door
+if position 4300 822 or position 4301 822 or position 4302 822 
+    # check for the opened door. closed = 1653, open = 1654
+    if findtype '1654' ground -1 -1 2
+        
+        if useGreetings = 1 and timer greetingTimer >= greetingTimeout
+            clearsysmsg 
+            random 8
+            settimer greetingTimer 0
+            
+            if insysmsg 'Random: 1'
+                say 'Welcome to NEW!'
+            elseif insysmsg 'Random: 2'
+                say 'Well met, guildmate!'
+            elseif insysmsg 'Random: 3'
+                say 'Welcome back!'
+            elseif insysmsg 'Random: 4'
+                say 'Hullo there, friend.'
+            elseif insysmsg 'Random: 5'
+                say 'Let me get that door for you.'
+            elseif insysmsg 'Random: 6'
+                say 'Greetings!'
+            elseif insysmsg 'Random: 7'
+                say 'Please wipe your shoes.'
+            elseif insysmsg 'Random: 8'
+                say 'Remember to repair your gear!'
+            endif
+        endif
+    
+        overhead 'Shutting door...' 44
+        wait 500
+        if findtype '1654' ground -1 -1 2 as door
+            dclick door
+        endif
+        wait 69
+        loop
+    elseif findtype '1653' ground -1 -1 2 
+        #overhead 'Door closed.'
+        wait 100
+        loop
+    else
+        overhead 'Door not found!' 38
+        sysmsg 'You do not appear to be in the NEW! GH.'
+        stop
+    endif
+else 
+    overhead 'Waiting to get into position...' 908
+    wait 250
+    loop
+endif

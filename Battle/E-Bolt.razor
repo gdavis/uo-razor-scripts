@@ -1,0 +1,23 @@
+if targetexists 
+    overhead 'Already casting!' 54
+    stop
+endif
+
+hotkey 'Clear Target Queue'
+cooldown 'Spell Precast' 0
+clearsysmsg 
+cast 'Energy Bolt'
+
+while not targetexists 
+endwhile
+
+cooldown 'Spell Precast' 35000
+
+while targetexists 
+endwhile
+
+if cooldown 'Spell Precast' <= 0
+    overhead 'Cast timed out!' 38
+else
+    cooldown 'Spell Precast' 0
+endif

@@ -1,0 +1,146 @@
+# Script for Chiv bot in my inn.
+# Opens a gate to town, dungeons, or shrines
+# when a lantern, torch, or candle is lit.
+# Will walk forward out of a chair when
+# opening so you can walk right in.
+
+# check for starting location
+if not position 244 455
+    overhead 'Not in correct position!' 38
+    wait 2500
+    loop
+endif
+
+# running overhead timer
+if not timerexists gateRunning
+    createtimer gateRunning
+    settimer gateRunning 99999
+endif
+
+# timer to open gates every 30s
+@setvar! gateCooldown 32500
+if not timerexists gateTimer
+    createtimer gateTimer
+    settimer gateTimer 99999
+endif
+
+# timer to only announce waiting
+@setvar gateChatterDelay 10000
+if not timerexists gateChatTimer
+    createtimer gateChatTimer
+    settimer gateChatTimer 99999
+endif
+
+# state properties
+@setvar! destination 0
+@setvar! itemOn 0
+@setvar! itemOff 0
+
+# locations that match chiv gate
+# gump button ids
+@setvar! townsLoc 1
+@setvar! dungeonLoc 2
+@setvar! shrinesLoc 3
+
+# running
+if timer gateRunning > 15000
+    overhead 'Waiting to gate...' 1067
+    settimer gateRunning 0
+endif
+
+@setvar! lanternOn 2594
+@setvar! lanternOff 2597
+if findtype lanternOn ground any any 2 as lantern
+    @setvar! destination townsLoc
+    @setvar! itemOn lanternOn
+    @setvar! itemOff lanternOff
+    overhead 'Town Gate' 54
+    say 'Town portal, coming up!'
+endif
+
+@setvar! torchOn 2578
+@setvar! torchOff 3947
+if findtype torchOn ground any any 2 as torch
+    @setvar! destination dungeonLoc
+    @setvar! itemOn torchOn
+    @setvar! itemOff torchOff
+    overhead 'Dungeon Gate' 54
+    say 'Dungeon gate, right away.'
+endif
+
+@setvar! candleOn 2575
+@setvar! candleOff 2600
+if findtype candleOn ground any any 2 as candle
+    @setvar! destination shrinesLoc
+    @setvar! itemOn candleOn
+    @setvar! itemOff candleOff
+    overhead 'Shrine Gate'
+    say 'Shrine gate, on it!'
+endif
+
+if destination = 0 
+    wait 100
+    loop
+endif
+
+# wait for cooldown if needed
+while timer gateTimer < gateCooldown
+    # announce the delay
+    if timer gateChatTimer > gateChatterDelay
+        if destination == townsLoc 
+            say 'Towns queued...'
+        elseif destination == dungeonLoc
+            say 'Dungeons queued...'
+        elseif destination == shrinesLoc
+            say 'Shrines queued...'
+        endif
+        
+        settimer gateChatTimer 0
+    endif
+    
+    # check for the item being turned off
+    # and abort the gate.
+    if findtype itemOff ground any any 2 as item
+        say 'Okay, nevermind the portal.'
+        loop
+    endif
+    wait 1000
+endwhile
+
+# move to gate spot
+while position 244 455
+    walk 'South'
+    wait 667
+endwhile
+
+# Give a taste ID buff
+if skill 'taste identification' >= 50
+    say "take a taste buff with you!"
+    skill 'tasteidentification'
+    waitfortarget
+    targetrelloc 0 0
+    wait 667
+endif
+
+# gate to destination
+say '[SacredJourney'
+waitforgump 1482653814 6000
+gumpresponse destination
+settimer gateTimer 0
+
+# walk back to chair.
+while position 244 456
+    walk 'North'
+    wait 667
+endwhile
+
+say 'Safe travels!'
+
+# turn off item
+if itemOn != 0 and findtype itemOn ground any any 2 as item
+    overhead 'Turning off item.' 920
+    dclick item
+    wait 1000
+endif
+
+loop

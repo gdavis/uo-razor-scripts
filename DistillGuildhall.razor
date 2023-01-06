@@ -1,3 +1,4 @@
+# Copy of Distillobot for NEW! GH.
 # Distillo-bot 3000
 #
 # Automatically creates new distillations when 
@@ -21,11 +22,28 @@
 # Written by:       Aphlux (aka Aphra)
 # Created on:       September 4, 2022
 # Last updated:     November 20, 2022
+    
+clearsysmsg
 
 # gump vars
 @setvar! alchGumpID 949095101
 @setvar! aspectPageID 108
 @setvar! nextPageResponse 11
+
+if not varexist distillRetunToBuff
+    @setvar distillRetunToBuff 1
+elseif distillRetunToBuff = 1
+    overhead 'Returning to Buffing' 54
+    @setvar distillRetunToBuff 0
+    script 'BuffBot'
+else
+    overhead 'Performing distill check...' 44
+    @setvar distillRetunToBuff 1
+endif
+
+# set to 1 to also run a buff-bot script.
+@setvar! buffScript 1
+@setvar! distillFinished 0
 
 # select the drop bag where people will place extracts
 if not varexist distDrop
@@ -38,12 +56,12 @@ if not varexist distDrop
         unsetvar distDrop
         loop
     endif
-    overhead 'Distillo-bot 3000 Initialized.'
-else 
+    overhead 'NEW! Distillbot Initialized.'
+else
     dclick distDrop
 endif
 
-overhead 'Waiting for extract drop...' 920
+overhead 'Checking for extract drop...' 920
 wait 250
 
 # pickup bottles on the floor
@@ -82,8 +100,16 @@ endif
 
 # check for an extract in the drop bag
 @setvar! foundExtract 0
-@setvar! shouldSpeak 1
+@setvar! shouldSpeak 1 
 while findtype 'bottle' distDrop as extract
+    if insysmsg 'The world will save in 15'
+        say 'One moment while I wait for the world save...'
+        wait 15000
+        clearsysmsg 
+    elseif insysmsg 'The world is saving'
+        wait 6000
+    endif
+
     @setvar! foundExtract 1
     overhead 'Found an extract! Creating a new distill...'
     getlabel extract extractName
@@ -138,9 +164,9 @@ while findtype 'bottle' distDrop as extract
 
     // page 3/4
     elseif 'Blood' in extractName
-        overhead 'Blood' 38  
+        overhead 'Blood' 38        
         gumpresponse nextPageResponse
-        waitforgump alchGumpID    
+        waitforgump alchGumpID
         gumpresponse 200
         
     elseif 'Command' in extractName
@@ -242,13 +268,26 @@ endwhile
 
 # move the new distillations back into the drop bag
 while findtype 'flask' self as distillation
+    getlabel distillation distillName
+    overhead 'moving {{distillName}} to drop box'
     lift distillation 99
     drop distDrop -1 -1 -1
     wait 1500
 endwhile
 
 if foundExtract == 1
-    say 'There you go! Thank you for using Distillo-bot 3000 and have a nice day.'
+    gumpclose alchGumpID
+    clearsysmsg 
+    random 4
+    if insysmsg 'Random: 1'
+        say 'There you go! Only a few small animals were harmed in the making of this distillation.'
+    elseif insysmsg 'Random: 2'
+        say 'Wow, its about time you leveled your aspect. You, really, I mean really, needed this. Thank you, come again!'
+    elseif insysmsg 'Random: 3'
+        say 'This distillation is brought to you free of charge by NEW!. Well, aside from those boss taxes. Yeah.'
+    elseif insysmsg 'Random: 4'
+        say 'Please enjoy your new distillation! No guarantees all extracts will be returned. Tips are appreciated. Goodbye!'
+    endif    
 endif
 
 loop

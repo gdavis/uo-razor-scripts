@@ -1,0 +1,24 @@
+# Targets an enemy if they are there
+# if no target, target murderer
+# if no target, target grey
+clearsysmsg 
+
+hotkey 'Next Enemy Player Target'
+if insysmsg 'New target set'
+    stop
+elseif insysmsg 'No one matching that was found' 
+endif
+
+hotkey 'Next Murderer Player Target'
+if insysmsg 'New target set'
+    stop
+elseif insysmsg 'No one matching that was found' 
+endif
+
+hotkey 'Next Criminal Player Target'
+if insysmsg 'New target set'
+    stop
+elseif insysmsg 'No one matching that was found' 
+endif
+
+overhead 'No Players' 38

@@ -1,0 +1,148 @@
+# Script for leveling Aphra`s poisoning
+if not varexist poisonTrainingWeapon or not find poisonTrainingWeapon backpack
+    overhead 'Select the weapon to poison:'
+    setvar poisonTrainingWeapon
+endif
+
+while poisoned and not dead
+    if targetexists 
+        hotkey 'Cancel Current Target'
+    endif
+    
+    clearsysmsg 
+    cast 'Cure'
+    overhead '[Cure Self]' 24
+    waitfortarget 1000
+    
+    if insysmsg 'You are already casting a spell'
+        overhead '[Cancel Last Spell]' 38
+        wait 100
+        
+    elseif insysmsg 'You have not yet recovered'
+        overhead '[Not Recovered]' 38
+        wait 100
+    else
+        target self
+        wait 500
+    endif
+endwhile
+
+while not dead and hp < 80
+    clearsysmsg 
+    cast 'Greater Heal'
+    overhead '[G-Heal Self]' 24
+    wait 250
+    
+    if insysmsg 'You are already casting a spell'
+        overhead '[Cancel Last Spell]' 38
+        waitfortarget 
+        hotkey 'Cancel Current Target' 38
+    elseif insysmsg 'You have not yet recovered'
+        overhead '[Not Recovered]' 38
+        wait 100
+    else
+        waitfortarget 
+        target self
+        break
+    endif
+endwhile
+
+if skill 'poisoning' < 50 
+    overhead 'Need to train to 50.'
+    stop
+elseif skill 'poisoning' < 55
+    # fill poison potions from a keg from 50-55
+    if counttype 'green potion' backpack == 0
+        while counttype 'Green Potion' self < 25
+            if findtype 'keg' backpack 363 as keg
+               overhead 'Refilling pots from kegs...'
+                
+               if findtype 'empty bottle%s%' self
+                    dclick keg
+                    wait 333
+                else
+                    overhead 'Out of bottles!' 38
+                    break
+                endif
+            else
+                overhead 'No keg!' 38
+                stop
+            endif
+        endwhile
+    endif
+
+    if findtype 'green potion' as potion
+        overhead '50-55 Regular'
+        skill 'poisoning'
+        
+        waitfortarget 6000
+        target potion
+        
+        waitfortarget 6000
+        target poisonTrainingWeapon
+        wait 5000
+    else
+        overhead 'No regular poisons found!' 38
+        stop
+    endif
+else
+    # restock from shelf
+    if findtype 'storage shelf' ground -1 -1 2 as shelf
+        menu shelf 1
+    endif
+    
+    # find the potion in the bags after restocking
+    # for the current skill level
+    @setvar! potionTarget 0
+    @clearignore 
+    while findtype 'green potion' backpack 0 as potion
+        getlabel potion potName
+    
+        if skill 'poisoning' < 80
+            overhead '55-80 Greater'
+            if 'greater poison' in potName 
+                @setvar! potionTarget potion
+                break
+            else
+                @ignore potion
+            endif
+        elseif skill 'poisoning' < 100
+            overhead '80-100 Deadly'
+            if 'deadly poison' in potName 
+                @setvar! potionTarget potion
+                break
+            else
+                @ignore potion
+            endif
+        elseif skill 'poisoning' < 120
+            overhead '100-120 Lethal'
+            if 'lethal poison' in potName 
+                @setvar! potionTarget potion
+                break
+            else
+                @ignore potion
+            endif
+        else 
+            overhead 'Cannot skill up further' 38
+            stop
+        endif
+    endwhile
+    
+    if potionTarget = 0
+        overhead 'Could not find required poison potion!' 38
+        stop
+    else
+        skill 'poisoning'
+        
+        waitfortarget 6000
+        target potionTarget
+        
+        waitfortarget 6000
+        target poisonTrainingWeapon
+        wait 5000
+    endif
+endif
+
+hotkey 'Cancel Current Target'
+
+loop

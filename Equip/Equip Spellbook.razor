@@ -1,0 +1,50 @@
+# equips a spellbook with void
+# aspect in the backpack
+if not varexist dressBag
+    overhead 'Select a bag to use for dressing:'
+    unsetvar dressBag
+    setvar dressBag
+endif
+
+if findtype 'spellbook' lefthand
+    overhead 'Spellbook equipped!' 54
+    stop
+endif
+
+if not lhandempty
+    lift lefthand
+    drop dressBag
+    while not lhandempty
+    endwhile
+elseif not rhandempty
+    lift righthand
+    drop dressBag
+    while not rhandempty
+    endwhile
+endif
+
+if findtype 'spellbook' self 0 as book
+    getlabel book bookName
+    if '[blessed]' in bookName
+        ignore book
+    endif
+endif
+
+if findtype 'spellbook' self 2599 as book
+    dclick book
+    while not lhandempty
+    endwhile
+    overhead 'Void Spellbook Equipped' 14
+elseif findtype 'spellbook' self 2503 as book
+    dclick book
+    while not lhandempty
+    endwhile
+    overhead 'War Spellbook Equipped' 36
+elseif findtype 'spellbook' self as book
+    dclick book
+    while not lhandempty
+    endwhile
+    overhead 'Spellbook Equipped' 920
+else
+    overhead 'Aspect spellbook not found!' 38
+endif

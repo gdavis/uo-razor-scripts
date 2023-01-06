@@ -9,7 +9,7 @@ endif
 
 clearsysmsg
 
-if not varexist lockedChest
+if not varexist lockedChest or not find lockedChest backpack
     overhead 'Unlock what chest?' 44
     @setvar! lockedChest
 endif
@@ -20,7 +20,7 @@ overhead chestName 1001
 
 if '(sealed)' in chestName 
 else
-    @unsetvar! lockedChest
+    unsetvar lockedChest
     overhead 'That chest is not sealed.'
     stop
 endif
