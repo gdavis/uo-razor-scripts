@@ -113,6 +113,15 @@ while position 244 455
     wait 667
 endwhile
 
+# Give a taste ID buff
+if skill 'taste identification' >= 50
+    say "take a taste buff with you!"
+    skill 'tasteidentification'
+    waitfortarget
+    targetrelloc 0 0
+    wait 667
+endif
+
 # gate to destination
 say '[SacredJourney'
 waitforgump 1482653814 6000

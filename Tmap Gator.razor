@@ -1,0 +1,247 @@
+# Uses a rune and candle to
+# open a moongate to a numeric
+# location in the NEW! guildhouse.
+@setvar! runeTomeGumpID 167090027
+
+if not varexist tmapRune
+    overhead 'Select the rune players will rename to select a location.'
+    setvar tmapRune
+endif
+
+# 1-22
+@setvar! tomeOne 0x482479AC
+removelist tomeOne
+createlist tomeOne
+pushlist tomeOne "1"
+pushlist tomeOne "2"
+pushlist tomeOne "3"
+pushlist tomeOne "4"
+pushlist tomeOne "4a"
+pushlist tomeOne "5"
+pushlist tomeOne "6"
+pushlist tomeOne "7"
+pushlist tomeOne "8"
+pushlist tomeOne "9"
+pushlist tomeOne "10"
+pushlist tomeOne "11"
+pushlist tomeOne "12"
+pushlist tomeOne "13"
+pushlist tomeOne "14"
+pushlist tomeOne "15"
+pushlist tomeOne "16"
+pushlist tomeOne "17"
+pushlist tomeOne "18"
+pushlist tomeOne "19"
+pushlist tomeOne "20"
+pushlist tomeOne "21"
+pushlist tomeOne "22"
+pushlist tomeOne "22a"
+
+# 23-47
+@setvar! tomeTwo 0x48248379
+removelist tomeTwo
+createlist tomeTwo
+pushlist tomeTwo "23"
+pushlist tomeTwo "24"
+pushlist tomeTwo "25"
+pushlist tomeTwo "26"
+pushlist tomeTwo "27"
+pushlist tomeTwo "28"
+pushlist tomeTwo "29"
+pushlist tomeTwo "30"
+pushlist tomeTwo "31"
+pushlist tomeTwo "32"
+pushlist tomeTwo "33"
+pushlist tomeTwo "34"
+pushlist tomeTwo "35"
+pushlist tomeTwo "36"
+pushlist tomeTwo "37"
+pushlist tomeTwo "38"
+pushlist tomeTwo "39"
+pushlist tomeTwo "40"
+pushlist tomeTwo "41"
+pushlist tomeTwo "42"
+pushlist tomeTwo "43"
+pushlist tomeTwo "44"
+pushlist tomeTwo "44a"
+pushlist tomeTwo "45"
+pushlist tomeTwo "46"
+pushlist tomeTwo "47"
+
+# get the text entered on the rune
+getlabel tmapRune destination
+@setvar destinationID destination
+overhead '{{destinationID}} {{destination}}' 54
+
+if atlist tomeOne 23 as thing
+    overhead 'confirm position: {{thing}}' 85
+else
+    overhead 'nothing at index'
+endif
+stop
+
+if findtype 'candle%s%' ground any any 2 as candle
+    overhead 'Waiting for a light...' 908
+    wait 2000
+elseif findtype 2575 ground any any 2 as litCandle
+    overhead 'Opening gate to: {{destination}}'
+
+#    if varexist previousDestination and previousDestination = destination
+#        overhead 'same destination!'
+#        loop
+#    endif
+
+    if inlist tomeOne destination
+        overhead 'Tome One!'
+        @setvar! selectedTome tomeOne
+    elseif inlist tomeTwo destination
+        overhead 'Tome two!'
+        @setvar! selectedTome tomeTwo
+    else
+        overhead 'Rune not found in tome lists.'
+        say 'I do not recognize that rune.'
+    endif
+    
+    dclick selectedTome
+    waitforgump runeTomeGumpID
+    
+    if atlist selectedTome 23 as rune20
+        overhead 'rune 20 = {{rune20}}'
+        stop
+    endif
+    
+    if atlist selectedTome 0 as rune and rune = destination 
+        @setvar! response1 200
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 1 as rune and rune = destination
+        @setvar! response1 201
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 2 as rune and rune = destination
+        @setvar! response1 202
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 3 as rune and rune = destination
+        @setvar! response1 203
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 4 as rune and rune = destination
+        @setvar! response1 204
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 5 as rune and rune = destination
+        @setvar! response1 205
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 6 as rune and rune = destination
+        @setvar! response1 206
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 7 as rune and rune = destination
+        @setvar! response1 207
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 8 as rune and rune = destination
+        @setvar! response1 208
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 9 as rune and rune = destination
+        @setvar! response1 209
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 10 as rune and rune = destination
+        @setvar! response1 210
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 11 as rune and rune = destination
+        @setvar! response1 211
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 12 as rune and rune = destination
+        @setvar! response1 212
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 13 as rune and rune = destination
+        @setvar! response1 213
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 14 as rune and rune = destination
+        @setvar! response1 214
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 15 as rune and rune = destination
+        @setvar! response1 215
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 16 as rune and rune = destination
+        @setvar! response1 216
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 17 as rune and rune = destination
+        @setvar! response1 217
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 18 as rune and rune = destination
+        @setvar! response1 218
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 19 as rune and rune = destination
+        @setvar! response1 219
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 20 as rune and rune = destination
+        @setvar! response1 220
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 21 as rune and rune = destination
+        @setvar! response1 221
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 22 as rune and rune = destination
+        @setvar! response1 222
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 23 as rune and rune = destinationID
+        @setvar! response1 223
+        @setvar! response2 right
+        
+    elseif atlist selectedTome 24 as rune and rune = destination
+        @setvar! response1 224
+        @setvar! response2 left
+        
+    elseif atlist selectedTome 25 as rune and rune = destination
+        @setvar! response1 225
+        @setvar! response2 right
+        
+    else
+        overhead 'Invalid rune' 38
+        say 'That is not a rune I recognize.'
+        dclick litCandle
+        loop
+    endif
+    
+    overhead 'gumpResponse: {{response1}}' 42
+    gumpresponse response1
+    waitforgump runeTomeGumpID 
+    
+    if response2 == left
+        overhead 'left page' 42
+        wait 2000                   # remove after testing
+        gumpresponse 12
+    else
+        overhead 'right page' 42
+        wait 2000                   # remove after testing
+        gumpresponse 22
+    endif
+   
+    
+    @setvar! previousDestination destination
+    dclick litCandle
+    
+    wait 5000
+else
+    overhead 'No candles around!'
+endif
+
+loop
