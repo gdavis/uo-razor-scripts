@@ -1,0 +1,140 @@
+# Dance moves
+# 1 - CW circle starting from north
+# 2 - CCW circle starting from north
+# 3 - CW half circle from east to west
+# 4 - CW half circle from west to east
+# 5 - CCW half circle from east to west
+# 6 - CCW half circle from west to east 
+# 7 - East to West
+# 8 - West to East
+# 9 - North to South
+# 10 - South to North
+# 11 - Up to Down
+# 12 - Down to Up
+# 13 - Left to Right
+# 14 - Right to Left
+# 15 - Warmode On/Off
+@setvar! circleNCW 1
+@setvar! circleNCCW 2
+@setvar! eastWest 7
+@setvar! westEast 8
+@setvar! northSouth 9
+@setvar! southNorth 10
+@setvar! upDown 11
+@setvar! downUp 12
+@setvar! leftRight 13
+@setvar! rightLeft 14
+@setvar! warmode 15
+
+# dance setup
+removelist danceMoves
+createlist danceMoves
+
+# dance routine
+pushlist danceMoves 3 back
+pushlist danceMoves 9 back
+pushlist danceMoves 15 back
+pushlist danceMoves 4 back
+pushlist danceMoves 9 back
+pushlist danceMoves 15 back
+pushlist danceMoves 12 back
+pushlist danceMoves 15 back
+pushlist danceMoves 7 back
+pushlist danceMoves 9 back
+pushlist danceMoves 15 back
+pushlist danceMoves 7 back
+pushlist danceMoves 9 back
+pushlist danceMoves 15 back
+
+for 14
+    if poplist danceMoves front as move
+        if move = 1
+            overhead '1 cw circle'
+            walk North
+            walk Right
+            walk East
+            walk Down
+            walk South
+            walk Left
+            walk West
+            walk Up
+        elseif move = 2
+            overhead '2 ccw circle'
+            walk North
+            walk Up
+            walk West
+            walk Left
+            walk South
+            walk Down
+            walk East
+            walk Right
+        elseif move = 3
+            overhead '3 cw half'
+            walk East
+            walk Down
+            walk South
+            walk Left
+            walk West
+        elseif move = 4
+            overhead '4 cw half'
+            walk West
+            walk Left
+            walk South
+            walk Down
+            walk East
+        elseif move = 5
+            overhead '5 ccw half'
+            walk East
+            walk Right
+            walk North
+            walk Up
+            walk West
+        elseif move = 6
+            overhead '6 ccw half'
+            walk West
+            walk Left
+            walk South
+            walk Down
+            walk East
+        elseif move = 7
+            overhead '7 e > w'
+            walk East
+            walk West
+        elseif move = 8
+            overhead '8 w > e'
+            walk West
+            walk East
+        elseif move = 9
+            overhead '9 n > s'
+            walk North
+            walk South
+        elseif move = 10
+            overhead '10 s > n'
+            walk South
+            walk North
+        elseif move = 11
+            overhead '11 Up > Down'
+            walk Up
+            walk Down
+        elseif move = 12
+            overhead '12 Down > Up'
+            walk Down
+            walk Up
+        elseif move = 13
+            overhead '13 Left > Right'
+            walk Left
+            walk Right
+        elseif move = 14
+            overhead '14 Right > Left'
+            walk Right
+            walk Left
+        elseif move = 15
+            overhead 'warmode'
+            warmode 'on'
+            wait 250
+            warmode 'off'
+        endif
+    endif
+endfor
+
+loop
