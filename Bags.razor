@@ -16,7 +16,8 @@ wait actionDelay
 # 3505 = pouch
 # 3702 = bag
 # 3701 = backpack
-while findtype 3705|3702|3701 backpack 0 any any as bag
+# 24246 = adventurers satchel
+while findtype 3705|3702|3701|24246 backpack 0 any any as bag
     clearsysmsg 
     getlabel bag bagName
     #overhead '{{bag}}:' 908
