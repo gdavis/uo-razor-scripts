@@ -1,0 +1,90 @@
+# NOTE: The runebook should have all slots filled.
+
+@setvar! runebookGumpID 1551740969
+setvar! isBuyingReagents 1
+
+if not varexist activeRunebook
+    overhead 'Choose the runebook of reagent vendors:'
+    setvar! activeRunebook
+endif
+
+if not varexist runebookIndex
+    setvar! runebookIndex 0
+endif
+
+overhead 'Starting recall cycle from runebook!'
+
+if find activeRunebook backpack as book
+    dclick book
+    waitforgump runebookGumpID
+    overhead 'Recalling to rune #{{runebookIndex}}'
+    
+    if runebookIndex = 0
+        gumpresponse 5
+        setvar! runebookIndex 1
+    elseif runebookIndex = 1
+        gumpresponse 11
+        setvar! runebookIndex 2
+    elseif runebookIndex = 2
+        gumpresponse 17
+        setvar! runebookIndex 3
+    elseif runebookIndex = 3
+        gumpresponse 23
+        setvar! runebookIndex 4
+    elseif runebookIndex = 4
+        gumpresponse 29
+        setvar! runebookIndex 5
+    elseif runebookIndex = 5
+        gumpresponse 35
+        setvar! runebookIndex 6
+    elseif runebookIndex = 6
+        gumpresponse 41
+        setvar! runebookIndex 7
+    elseif runebookIndex = 7
+        gumpresponse 47
+        setvar! runebookIndex 8
+    elseif runebookIndex = 8
+        gumpresponse 53
+        setvar! runebookIndex 9
+    elseif runebookIndex = 9
+        gumpresponse 59
+        setvar! runebookIndex 10
+    elseif runebookIndex = 10
+        gumpresponse 65
+        setvar! runebookIndex 11
+    elseif runebookIndex = 11
+        gumpresponse 71
+        setvar! runebookIndex 12
+    elseif runebookIndex = 12
+        gumpresponse 77
+        setvar! runebookIndex 13
+    elseif runebookIndex = 13
+        gumpresponse 83
+        setvar! runebookIndex 14
+    elseif runebookIndex = 14
+        gumpresponse 89
+        setvar! runebookIndex 15
+    elseif runebookIndex = 15
+        gumpresponse 95
+        setvar! runebookIndex 0
+        setvar! isBuyingReagents 0
+    else
+        overhead 'Invalid runebook index!' 38
+        setvar! runebookIndex 0
+        stop
+    endif
+    
+    # go to the vendor buy script if running
+    if isBuyingReagents = 1
+        wait 3000
+        script 'Reagent Buyer Vendors'
+    else
+        overhead 'Reagent Restock Complete!' 54
+    endif
+    
+#    wait 5000
+#    loop
+else
+    overhead 'Cannot find the runebook!' 38
+    stop
+endif

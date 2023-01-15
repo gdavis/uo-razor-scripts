@@ -1,0 +1,72 @@
+# Recalls through a series of runes
+# in a runebook or tome and purchases
+# a grocery list of reagents.
+# Supports a packie.
+@setvar! firstTarget 0
+
+while 1 = 1
+    clearsysmsg 
+    hotkey 'Next Target'
+    
+    if insysmsg 'New target set'
+        @setvar! targetID lasttarget 
+        getlabel lasttarget targetName
+        overhead '{{targetName}}'
+   
+    
+        if insysmsg 'getlabel - Skipped'
+            overhead 'Skipping player'
+            continue
+        endif  
+        
+        if 'the mage' in targetName or 'the alchemist' in targetName
+            overhead 'Found a vendor!' 54
+        
+            # buy what we can
+            menu targetID 1
+            
+            # move purchased reagents
+            while findtype 'a pack llama' ground any any 2 as packie
+                if noto packie = friend
+                    overhead 'Looking for reagents to move the packie...'
+
+                    # move all reagents to the packie
+                    while findtype 3976|3981|3980|3973|3974|3962|3972|3963 as regs
+                            getlabel regs regsName
+
+                            if findtype 'reagent satchel' self as satchel
+                                if find regs satchel
+                                    overhead 'Ignoring {{regsName}} in satchel' 908
+                                    @ignore regs
+                                    continue
+                                endif
+                            endif
+                            
+                            overhead 'Moving {{regsName}}' 54
+                            lift regs 60000
+                            drop packie -1 -1 -1
+                    endwhile
+
+                    overhead 'Finished moving reagents.'
+                    break
+                else 
+                    @ignore packie
+                endif
+            endwhile
+        
+            if firstTarget == 0
+                @setvar! firstTarget targetID 
+                overhead 'FIRST TARGET = {{firstTarget}}'
+            elseif firstTarget == targetID 
+                overhead 'ALL DONE!?' 38
+            
+                if isBuyingReagents = 1
+                    overhead 'Recalling to next location...'
+                    script 'Reagent Buyer Recall'
+                else 
+                    break
+                endif
+            endif  
+        endif
+    endif
+endwhile
