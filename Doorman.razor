@@ -1,6 +1,6 @@
 # set this to 0 if you do not want greetings
 @setvar! useGreetings 1
-@setvar! greetingTimeout 60000
+@setvar! greetingTimeout 30000
 
 if not timerexists doorMan
     createtimer doorMan
@@ -24,26 +24,39 @@ if position 4300 822 or position 4301 822 or position 4302 822
     if findtype '1654' ground -1 -1 2
         
         if useGreetings = 1 and timer greetingTimer >= greetingTimeout
-            clearsysmsg 
-            random 8
+            clearsysmsg
             settimer greetingTimer 0
-            
-            if insysmsg 'Random: 1'
-                say 'Welcome to NEW!'
-            elseif insysmsg 'Random: 2'
-                say 'Well met, guildmate!'
-            elseif insysmsg 'Random: 3'
-                say 'Welcome back!'
-            elseif insysmsg 'Random: 4'
-                say 'Hullo there, friend.'
-            elseif insysmsg 'Random: 5'
-                say 'Let me get that door for you.'
-            elseif insysmsg 'Random: 6'
-                say 'Greetings!'
-            elseif insysmsg 'Random: 7'
-                say 'Please wipe your shoes.'
-            elseif insysmsg 'Random: 8'
-                say 'Remember to repair your gear!'
+        
+            @setvar! aphraID 0x1A2B97
+            @setvar! charID self
+            if charID == aphraID
+                random 2
+                if insysmsg 'Random: 1'
+                    say 'Ugh, let me know when the bot wakes up.'
+                elseif insysmsg 'Random: 2'
+                    say 'Hello, yeah, I got the doors today...'
+                    wait 500
+                    emote 'sighs'
+                endif
+            else
+                random 8
+                if insysmsg 'Random: 1'
+                    say 'Welcome to NEW!'
+                elseif insysmsg 'Random: 2'
+                    say 'Well met, guildmate!'
+                elseif insysmsg 'Random: 3'
+                    say 'Welcome back!'
+                elseif insysmsg 'Random: 4'
+                    say 'Hullo there, friend.'
+                elseif insysmsg 'Random: 5'
+                    say 'Let me get that door for you.'
+                elseif insysmsg 'Random: 6'
+                    say 'Greetings!'
+                elseif insysmsg 'Random: 7'
+                    say 'Please wipe your shoes.'
+                elseif insysmsg 'Random: 8'
+                    say 'Remember to repair your gear!'
+                endif
             endif
         endif
     
