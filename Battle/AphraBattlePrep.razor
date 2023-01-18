@@ -1,4 +1,4 @@
-overhead '+Aphra Battle Prep+' 1001
+overhead '+Battle Prep+' 1001
 clearsysmsg 
 
 # Start tracking
@@ -54,7 +54,6 @@ if skill 'camping' >= 20
     endif
 endif
 
-
 # Taste ID
 if skill 'taste identification' > 50
     while not findbuff 'Herbal Poultice'
@@ -78,30 +77,33 @@ else
     overhead 'Not hungry.' 89
 endif
 
-# Reactive Armor
-if not findbuff 'Reactive Armor'
-    overhead 'Need Reactive Armor' 48
-    cast 'Reactive Armor'
-    while not findbuff 'Reactive Armor'
-    endwhile 
-    wait 250
-else
-    overhead 'Reactive Armor: On' 89
-endif
+# Spell buffs
+if skill 'Magery' > 50
+    # Reactive Armor
+    if not findbuff 'Reactive Armor'
+        overhead 'Need Reactive Armor' 48
+        cast 'Reactive Armor'
+        while not findbuff 'Reactive Armor'
+        endwhile 
+        wait 250
+    else
+        overhead 'Reactive Armor: On' 89
+    endif
 
-# Reflect
-if not findbuff 'Magic Reflection'
-    overhead 'Need Reflect' 48
-    cast 'Magic Reflection'
-    while not findbuff 'Magic Reflection'
-        if insysmsg 'That spell will not adhere'
-            overhead 'Cannot apply reflect!' 38
-            break
-        endif
-    endwhile
-    wait 250
-else
-    overhead 'Magic Resist: On' 89
+    # Reflect
+    if not findbuff 'Magic Reflection'
+        overhead 'Need Reflect' 48
+        cast 'Magic Reflection'
+        while not findbuff 'Magic Reflection'
+            if insysmsg 'That spell will not adhere'
+                overhead 'Cannot apply reflect!' 38
+                break
+            endif
+        endwhile
+        wait 250
+    else
+        overhead 'Magic Resist: On' 89
+    endif
 endif
 
 overhead 'Ready for battle'
