@@ -17,7 +17,7 @@ overhead 'Starting recall cycle from runebook!'
 if find activeRunebook backpack as book
     dclick book
     waitforgump runebookGumpID
-    overhead 'Recalling to rune #{{runebookIndex}}'
+    overhead 'Recalling to index #{{runebookIndex}}'
     
     if runebookIndex = 0
         gumpresponse 5
