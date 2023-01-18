@@ -1,0 +1,14 @@
+# finds all items within 2 spaces
+# and releases it, and places it
+# in the backpack.
+
+# 3530 = fishing net
+while findtype 3530 ground any any 2 as item
+    say 'I wish to release this'
+    wft
+    target item
+    
+    lift item 60000
+    drop backpack -1 -1 -1
+    wait 500
+endwhile
