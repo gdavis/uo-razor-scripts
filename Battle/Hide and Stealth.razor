@@ -22,6 +22,8 @@ if skill 'Stealth' > 50
         wait 100
     endwhile
     
-    skill 'Stealth'
-    stop
+    while not insysmsg 'You begin to move quietly'
+        skill 'Stealth'
+        wait 100
+    endwhile
 endif
