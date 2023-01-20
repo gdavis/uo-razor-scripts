@@ -20,11 +20,37 @@
 # edit below here. Probably.
 #----------------------------
 @setvar! shipGump 2890020940
+@setvar! boardGump 2881168634
 
+# if the boarding gump is up, 
+# wait for user to target ship to board
+# then we will continue
+if gumpexists boardGump
+    if not targetexists
+        # wait for boarding target
+        waitfortarget  
+    endif
+    # wait for target
+    while targetexists 
+    endwhile
+endif
+
+while gumpexists boardGump
+endwhile
+
+# if there is a target already up,
+# probably casting so wait until done
+while targetexists 
+endwhile
+
+clearsysmsg
+
+# reset the ship gump
 while gumpexists shipGump
     gumpclose shipGump
 endwhile
 
+# init timer
 if not timerexists lastSpyglass
     createtimer lastSpyglass
     settimer lastSpyglass 99999
@@ -37,14 +63,21 @@ if not findtype 5365 self
     loop
 endif
 
-# if there is a target already up,
-# probably casting so wait until done
-while targetexists 
-endwhile
+# try to pause when boarding
+if insysmsg 'Which ship do you wish to board?'
+    wft
+    while targetexists 
+    endwhile
+    wait 500
+    
+# wait for save to finish
+elseif insysmsg 'Saving...'
+    while not insysmsg 'World save complete'
+    endwhile
+endif
 
 # do the spy
-overhead '*scans the horizon*' 1001
-clearsysmsg 
+overhead '*scans the horizon*' 1001 
 dclicktype 5365 backpack
 waitfortarget
 target self
@@ -53,9 +86,17 @@ waitforgump shipGump 1000
 if insysmsg 'before you make another ship search'
     wait 100
     loop
+elseif insysmsg 'You must wait to perform another action'
+    wait 100
+    loop
 endif
 
 settimer lastSpyglass 0
+
+# make sure we have the right gump up, or retry
+if not ingump 'Search for Ships' 2890020940
+    loop
+endif
 
 # select search
 gumpresponse 4
