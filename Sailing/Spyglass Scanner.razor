@@ -1,4 +1,4 @@
-# Stiggr's Spyglass Search
+# Stiggr Search
 # Written by Aphlux
 # 
 # Uses the spyglass and prints an
@@ -16,7 +16,7 @@
 # after using the spyglass
 @setvar! closeGump 0
 
-# You probably don't need to 
+# You probably do not need to 
 # edit below here. Probably.
 #----------------------------
 @setvar! shipGump 2890020940
@@ -61,8 +61,10 @@ settimer lastSpyglass 0
 gumpresponse 4
 waitforgump shipGump
 
+# this is set to the ship id when found
 @setvar! foundShip 0
 
+# list of ids for different ships
 @setvar! smallShip 1
 @setvar! smallDragonship 2
 @setvar! mediumShip 3
@@ -98,6 +100,7 @@ while 1 = 1
         @setvar! foundShip galleon
         break
     elseif ingump "Next" 2890020940
+        # go to next page and keep checking
         gumpresponse 3 2890020940
         wait 350
     else
@@ -111,9 +114,7 @@ if closeGump = 1
     endwhile
 endif
 
-if foundShip = 0 
-    #overhead 'Nothing sighted.'
-else
+if foundShip != 0 
     for 5
         if foundShip = smallShip
             overhead 'SMALL SHIP SIGHTED!' 54
