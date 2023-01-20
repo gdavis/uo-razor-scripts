@@ -1,0 +1,22 @@
+@setvar! repairGump 1271619955
+
+if not gumpexists repairGump   
+    if findtype 'wall shelf' as repairkit
+        dclick repairkit
+        waitforgump repairGump
+    endif
+endif
+
+overhead '*begins hull repairs*' 1001
+clearsysmsg 
+gumpresponse 2
+
+while 1 = 1
+    if insysmsg 'Hull repaired for'
+        overhead 'Repaired hull'
+        loop
+    elseif insysmsg 'hull is already at full'
+        overhead 'Hull at maximum!'
+        stop
+    endif
+endwhile
