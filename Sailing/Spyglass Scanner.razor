@@ -1,0 +1,142 @@
+# Stiggr's Spyglass Search
+# Written by Aphlux
+# 
+# Uses the spyglass and prints an
+# alert when player ships are found.
+# Should not interfere with casting.
+
+# how often the alert text will print,
+# in miliseconds.
+@setvar! alertInterval 1000
+
+# how long to wait between spyglass uses
+@setvar! spyglassCooldown 6000
+
+# when set to 1, closes the ship gump
+# after using the spyglass
+@setvar! closeGump 0
+
+# You probably don't need to 
+# edit below here. Probably.
+#----------------------------
+@setvar! shipGump 2890020940
+
+while gumpexists shipGump
+    gumpclose shipGump
+endwhile
+
+if not timerexists lastSpyglass
+    createtimer lastSpyglass
+    settimer lastSpyglass 99999
+endif
+
+# spyglass = 5365
+if not findtype 5365 self
+    overhead 'I need a spyglass!' 38
+    wait 3000
+    loop
+endif
+
+# if there is a target already up,
+# probably casting so wait until done
+while targetexists 
+endwhile
+
+# do the spy
+overhead '*scans the horizon*' 1001
+clearsysmsg 
+dclicktype 5365 backpack
+waitfortarget
+target self
+waitforgump shipGump 1000
+
+if insysmsg 'before you make another ship search'
+    wait 100
+    loop
+endif
+
+settimer lastSpyglass 0
+
+# select search
+gumpresponse 4
+waitforgump shipGump
+
+@setvar! foundShip 0
+
+@setvar! smallShip 1
+@setvar! smallDragonship 2
+@setvar! mediumShip 3
+@setvar! mediumDragonship 4
+@setvar! largeShip 5
+@setvar! largeDragonship 6
+@setvar! carrack 7
+@setvar! galleon 8
+
+while 1 = 1
+    if ingump "a small ship" 2890020940
+        @setvar! foundShip smallShip
+        break
+    elseif ingump "a small dragonship" 2890020940
+        @setvar! foundShip smallDragonship
+        break
+    elseif ingump "a medium ship" 2890020940
+        @setvar! foundShip mediumShip
+        break
+    elseif ingump "a medium dragonship" 2890020940
+        @setvar! foundShip mediumDragonship
+        break
+    elseif ingump "a large ship" 2890020940 
+        @setvar! foundShip largeShip
+        break
+    elseif ingump "a large dragonship" 2890020940
+        @setvar! foundShip largeDragonship
+        break
+    elseif ingump "a carrack" 2890020940
+        @setvar! foundShip carrack
+        break
+    elseif ingump "a galleon" 2890020940
+        @setvar! foundShip galleon
+        break
+    elseif ingump "Next" 2890020940
+        gumpresponse 3 2890020940
+        wait 350
+    else
+        break
+    endif
+endwhile
+
+if closeGump = 1
+    while gumpexists shipGump
+        gumpclose shipGump
+    endwhile
+endif
+
+if foundShip = 0 
+    #overhead 'Nothing sighted.'
+else
+    for 5
+        if foundShip = smallShip
+            overhead 'SMALL SHIP SIGHTED!' 54
+        elseif foundShip = smallDragonship
+            overhead 'SMALL DRAGONSHIP SIGHTED!' 54
+        elseif foundShip = mediumShip
+            overhead 'SHIP SIGHTED!' 54
+        elseif foundShip = dragonship
+            overhead 'DRAGONSHIP SIGHTED!' 54
+        elseif foundShip = largeShip
+            overhead 'LARGE SHIP SIGHTED!' 54
+        elseif foundShip = largeDragonship
+            overhead 'LARGE DRAGONSHIP SIGHTED!' 54
+        elseif foundShip = carrack
+            overhead 'CARRACK SIGHTED!' 54
+        elseif foundShip = galleon
+            overhead 'GALLEON SIGHTED!' 54
+        endif
+        wait alertInterval
+    endfor
+endif
+
+while timer lastSpyglass < spyglassCooldown
+endwhile
+
+loop
