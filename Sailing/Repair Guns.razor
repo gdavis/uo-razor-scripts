@@ -13,15 +13,15 @@ else
     loop
 endif
 
-overhead '*begins repairing hull*' 1001
+overhead '*begins repairing guns*' 1001
 clearsysmsg 
-gumpresponse 2
+gumpresponse 4
 
 while 1 = 1
-    if insysmsg 'Hull repaired for'
+    if insysmsg 'Guns repaired for'
         loop
-    elseif insysmsg 'hull is already at full'
-        overhead 'Hull at maximum!'
+    elseif insysmsg 'guns are already at full'
+        overhead 'Guns at maximum!'
         stop
     endif
 endwhile

@@ -1,0 +1,66 @@
+@setvar! repairGump 1271619955
+@setvar! repairStep 0
+
+while 1 = 1
+    if findtype 'wall shelf' backpack as repairkit
+        dclick repairkit
+        waitforgump repairGump
+    else 
+        overhead 'I need a repair kit!' 38
+        wait 2500
+        loop
+    endif
+    
+    if repairStep = 0 
+        overhead '*begins repairing hull*' 1001
+        clearsysmsg 
+        gumpresponse 2
+
+        while repairStep = 0
+            if insysmsg 'Hull repaired for'
+                loop
+            elseif insysmsg 'hull is already at full'
+                overhead 'Hull at maximum!'
+                @setvar! repairStep 1
+            endif
+        endwhile
+        gumpclose repairGump
+        
+    elseif repairStep = 1
+        overhead '*begins repairing guns*' 1001
+        clearsysmsg 
+        gumpresponse 4
+
+        while repairStep = 1
+            if insysmsg 'Guns repaired for'
+                loop
+            elseif insysmsg 'guns are already at full'
+                overhead 'Guns at maximum!'
+                @setvar! repairStep 2
+            endif
+        endwhile
+        gumpclose repairGump
+    
+    elseif repairStep = 2
+        overhead '*begins repairing sails*' 1001
+        clearsysmsg 
+        gumpresponse 3
+
+        while repairStep = 2
+            if insysmsg 'Sails repaired for'
+                overhead '*makes progress*' 1001
+                loop
+            elseif insysmsg 'sails are already at full'
+                overhead 'Sails at maximum!'
+                overhead 'Ship repaired!'
+                stop
+            endif
+        endwhile
+        gumpclose repairGump
+        
+    else 
+        overhead 'ERROR: Unknown repair step!' 38
+        stop
+    endif
+    
+endwhile

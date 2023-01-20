@@ -13,15 +13,16 @@ else
     loop
 endif
 
-overhead '*begins repairing hull*' 1001
+overhead '*begins repairing sails*' 1001
 clearsysmsg 
-gumpresponse 2
+gumpresponse 3
 
 while 1 = 1
-    if insysmsg 'Hull repaired for'
+    if insysmsg 'Sails repaired for'
+        overhead '*makes progress*' 1001
         loop
-    elseif insysmsg 'hull is already at full'
-        overhead 'Hull at maximum!'
+    elseif insysmsg 'sails are already at full'
+        overhead 'Sails at maximum!'
         stop
     endif
 endwhile
