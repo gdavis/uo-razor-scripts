@@ -26,9 +26,7 @@ endif
 
 if findtype 'spellbook' backpack 0 as book
     getlabel book bookName
-overhead '{{bookName}}'
     if '[blessed' in bookName
-        overhead 'Ignoring {{bookName}}'
         ignore book
     endif
 endif
