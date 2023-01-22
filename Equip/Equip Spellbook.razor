@@ -1,9 +1,10 @@
 # equips a spellbook with void
 # aspect in the backpack
-if findtype 'pouch' backpack 0 as pouch 
-    @setvar! dressBag pouch
+if findtype 'bag' backpack 0 as bag 
+    @setvar! dressBag bag
 else
-    overhead 'NO POUCH FOUND!' 38
+    overhead 'NO BAG FOUND!' 38
+    stop
 endif
 
 if findtype 'spellbook' lefthand
@@ -23,9 +24,11 @@ elseif not rhandempty
     endwhile
 endif
 
-if findtype 'spellbook' self 0 as book
+if findtype 'spellbook' backpack 0 as book
     getlabel book bookName
-    if '[blessed]' in bookName
+overhead '{{bookName}}'
+    if '[blessed' in bookName
+        overhead 'Ignoring {{bookName}}'
         ignore book
     endif
 endif

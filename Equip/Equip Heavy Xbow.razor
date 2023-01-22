@@ -1,7 +1,8 @@
-if findtype 'pouch' backpack 0 as pouch 
-    @setvar! dressBag pouch
+if findtype 'bag' backpack 0 as bag 
+    @setvar! dressBag bag
 else
-    overhead 'NO POUCH FOUND!' 38
+    overhead 'NO BAG FOUND!' 38
+    stop
 endif
 
 if findtype 'heavy crossbow' lefthand
