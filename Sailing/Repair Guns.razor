@@ -1,0 +1,27 @@
+@setvar! repairGump 1271619955
+
+while gumpexists repairGump
+    gumpclose repairGump
+endwhile
+
+if findtype 'wall shelf' as repairkit
+    dclick repairkit
+    waitforgump repairGump
+else 
+    overhead 'I need a repair kit!' 38
+    wait 2500
+    loop
+endif
+
+overhead '*begins repairing guns*' 1001
+clearsysmsg 
+gumpresponse 4
+
+while 1 = 1
+    if insysmsg 'Guns repaired for'
+        loop
+    elseif insysmsg 'guns are already at full'
+        overhead 'Guns at maximum!'
+        stop
+    endif
+endwhile

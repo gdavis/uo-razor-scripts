@@ -1,0 +1,29 @@
+if hidden
+    overhead 'Already hidden!'
+    stop
+endif
+
+clearsysmsg 
+skill 'Hiding'
+
+while not hidden
+    if insysmsg 'You must wait a few'
+        overhead 'NOT READY!' 38
+        stop
+    endif
+endwhile
+
+overhead 'Hidden!'
+sysmsg 'Hidden!'
+
+if skill 'Stealth' > 50
+    overhead 'Waiting to stealth...' 1001    
+    while not insysmsg 'You feel comfortable enough'
+        wait 100
+    endwhile
+    
+    while not insysmsg 'You begin to move quietly'
+        skill 'Stealth'
+        wait 100
+    endwhile
+endif

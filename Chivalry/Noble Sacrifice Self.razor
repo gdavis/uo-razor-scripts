@@ -1,0 +1,13 @@
+clearsysmsg 
+say '[NobleSacrifice'
+
+while not targetexists 
+    if insysmsg 'You must wait another'
+        overhead 'Not ready!' 38
+        stop
+    endif
+endwhile
+
+target self
+sysmsg 'Noble Sacrifice'
+

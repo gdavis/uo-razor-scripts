@@ -203,6 +203,10 @@ foreach rune_to_copy in runes_to_copy_list
             cast Recall
             wait 200
         endwhile
+        if followers > 0
+            say 'all follow me'
+            wait 500
+        endif
         target currentRune
         wait 1500
         if followers > 0
