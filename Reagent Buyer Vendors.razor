@@ -24,7 +24,7 @@ while 1 = 1
         
             # buy what we can
             menu targetID 1
-            wait 200
+            wait 500
             
             # move purchased reagents
             while findtype 'a pack llama' ground any any 2 as packie
@@ -46,6 +46,7 @@ while 1 = 1
                             overhead 'Moving {{regsName}}' 54
                             lift regs 60000
                             drop packie -1 -1 -1
+                            wait 500
                     endwhile
 
                     overhead 'Finished moving reagents.'
