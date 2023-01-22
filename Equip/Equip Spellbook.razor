@@ -1,9 +1,9 @@
 # equips a spellbook with void
 # aspect in the backpack
-if not varexist dressBag
-    overhead 'Select a bag to use for dressing:'
-    unsetvar dressBag
-    setvar dressBag
+if findtype 'pouch' backpack 0 as pouch 
+    @setvar! dressBag pouch
+else
+    overhead 'NO POUCH FOUND!' 38
 endif
 
 if findtype 'spellbook' lefthand
