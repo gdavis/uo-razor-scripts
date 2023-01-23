@@ -23,7 +23,7 @@ else
 endif
 
 # try to move other stuff into bag
-if findtype 'bag' backpack 0 as bag 
+if findtype 'bag' backpack 0 as myBag 
     # move aspected xbow
     @setvar! foundXbow 0
     if findtype 'crossbow' self 2599 as aspectBow
@@ -33,10 +33,10 @@ if findtype 'bag' backpack 0 as bag
     elseif findtype 'crossbow' self 1790 as aspectBow
         @setvar! foundXbow aspectBow
     endif
-    if foundXbow > 0 and not find foundXbow bag
+    if foundXbow > 0 and not find foundXbow myBag
         lift foundXbow
-        drop bag -1 -1 -1
-        overhead 'stashing xbow'
+        drop myBag -1 -1 -1
+        #overhead 'stashing xbow'
         wait 250
     endif
     
@@ -49,10 +49,10 @@ if findtype 'bag' backpack 0 as bag
     elseif findtype 'heavy crossbow' self 1790 as aspectBow
         @setvar! foundHeavyXbow aspectBow
     endif
-    if foundHeavyXbow > 0 and not find foundHeavyXbow bag
+    if foundHeavyXbow > 0 and not find foundHeavyXbow myBag
         lift foundHeavyXbow
-        drop bag -1 -1 -1
-        overhead 'stashing heavy xbow'
+        drop myBag -1 -1 -1
+        #overhead 'stashing heavy xbow'
         wait 250
     endif
     
@@ -65,10 +65,10 @@ if findtype 'bag' backpack 0 as bag
     elseif findtype 'spellbook' self as book
         @setvar! foundBook book
     endif
-    if foundBook > 0 and not find foundBook bag
+    if foundBook > 0 and not find foundBook myBag
         lift foundBook
-        drop bag -1 -1 -1
-        overhead 'stashing spellbook'
+        drop myBag -1 -1 -1
+        #overhead 'stashing spellbook'
         wait 250
     endif
 else
