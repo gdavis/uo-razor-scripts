@@ -98,9 +98,18 @@ if counttype 'mortar and pestle' self = 0
    endif
 endif
 
-# check for an extract in the drop bag
+if not findtype 'mortar and pestle' self
+    overhead 'Need more mortal and pestles!' 38
+    say "I am out of mortar and pestles! Please drop some on the floor for me."
+    wait 3000
+    loop
+endif
+
 @setvar! foundExtract 0
 @setvar! shouldSpeak 1 
+
+# check for an extract in the drop bag and
+# move the extract from drop box
 while findtype 'bottle' distDrop as extract
     if insysmsg 'The world will save in 15'
         say 'One moment while I wait for the world save...'
@@ -110,14 +119,12 @@ while findtype 'bottle' distDrop as extract
         wait 6000
     endif
 
-    @setvar! foundExtract 1
     overhead 'Found an extract! Creating a new distill...'
-    getlabel extract extractName
     
     if shouldSpeak = 1
         @setvar! shouldSpeak 0
-        say 'Ah, an extract. Let me distill that for you...'
-        wait 250
+        say 'Ah! Let me distill that for you.'
+        wait 500
     endif
 
     # check for empty bottles
@@ -128,6 +135,14 @@ while findtype 'bottle' distDrop as extract
         loop
     endif
 
+    # move the extract once we know we can make a distill
+    lift extract 99
+    drop backpack -1 -1 -1
+    wait 650
+endwhile
+
+# make distills from what is in the backpack
+while findtype 'bottle' self as extract
     # open the alch gump, and go to page 2
     # of the aspect section where distills begin
     if findtype 'mortar and pestle' self as tool
@@ -144,12 +159,9 @@ while findtype 'bottle' distDrop as extract
         say "I am out of mortar and pestles! Please drop some on the floor for me."
         wait 3000
         loop
-    endif
+    endif    
 
-    # move the extract once we know we can make a distill
-    lift extract 1
-    drop backpack -1 -1 -1
-    wait 650
+    getlabel extract extractName
 
     # go to the page for this extract,
     # then create it
@@ -273,20 +285,23 @@ while findtype 'flask' self as distillation
     lift distillation 99
     drop distDrop -1 -1 -1
     wait 1500
+    @setvar! foundExtract 1
 endwhile
 
 if foundExtract == 1
     gumpclose alchGumpID
     clearsysmsg 
-    random 4
+    random 5
     if insysmsg 'Random: 1'
-        say 'There you go! Only a few small animals were harmed in the making of this distillation.'
+        say 'Aaannnd done. Stuffs in the thing.'
     elseif insysmsg 'Random: 2'
-        say 'Wow, its about time you leveled your aspect. You, really, I mean really, needed this. Thank you, come again!'
+        say 'Wow, I did that in record time. Was it good for you too?'
     elseif insysmsg 'Random: 3'
-        say 'This distillation is brought to you free of charge by NEW!. Well, aside from those boss taxes. Yeah.'
+        say 'All done. Are you really gonna drink that..?'
     elseif insysmsg 'Random: 4'
-        say 'Please enjoy your new distillation! No guarantees all extracts will be returned. Tips are appreciated. Goodbye!'
+        say 'Cool thanks many enjoy extract wow joe wow.!1^ beep boop beep'
+    elseif insysmsg 'Random: 5'
+        say 'Please leave a five star review if you enjoyed this service!'
     endif    
 endif
 
