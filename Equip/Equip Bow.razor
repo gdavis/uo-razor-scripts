@@ -1,27 +1,6 @@
-if findtype 'bag' backpack 0 as bag 
-    @setvar! dressBag bag
-else
-    overhead 'NO BAG FOUND!' 38
-    stop
-endif
-
 if findtype 'bow' RightHand
     overhead 'Already Equipped!' 54
     stop
-endif
-
-if not lhandempty
-    lift lefthand
-    wait 100
-    drop dressBag
-    while not lhandempty
-    endwhile
-elseif not rhandempty
-    lift righthand
-    wait 100
-    drop dressBag
-    while not rhandempty
-    endwhile    
 endif
 
 if findtype 'bow' self 2599 as aspectBow
@@ -41,4 +20,58 @@ elseif findtype 'bow' self as aspectBow
     overhead 'Bow Equipped' 920
 else
     overhead 'Bow not found!' 38
+endif
+
+# try to move other stuff into bag
+if findtype 'bag' backpack 0 as bag 
+    # move aspected xbow
+    @setvar! foundXbow 0
+    if findtype 'crossbow' self 2599 as aspectBow
+        @setvar! foundXbow aspectBow
+    elseif findtype 'crossbow' self 2503 as aspectBow
+        @setvar! foundXbow aspectBow
+    elseif findtype 'crossbow' self 1790 as aspectBow
+        @setvar! foundXbow aspectBow
+    endif
+    if foundXbow > 0 and not find foundXbow bag
+        lift foundXbow
+        drop bag -1 -1 -1
+        overhead 'stashing xbow'
+        wait 250
+    endif
+    
+    # move aspected xbow
+    @setvar! foundHeavyXbow 0
+    if findtype 'heavy crossbow' self 2599 as aspectBow
+        @setvar! foundHeavyXbow aspectBow
+    elseif findtype 'heavy crossbow' self 2503 as aspectBow
+        @setvar! foundHeavyXbow aspectBow
+    elseif findtype 'heavy crossbow' self 1790 as aspectBow
+        @setvar! foundHeavyXbow aspectBow
+    endif
+    if foundHeavyXbow > 0 and not find foundHeavyXbow bag
+        lift foundHeavyXbow
+        drop bag -1 -1 -1
+        overhead 'stashing heavy xbow'
+        wait 250
+    endif
+    
+    # move spellbook
+    @setvar! foundBook 0
+    if findtype 'spellbook' self 2599 as book
+        @setvar! foundBook book
+    elseif findtype 'spellbook' self 2503 as book
+        @setvar! foundBook book
+    elseif findtype 'spellbook' self as book
+        @setvar! foundBook book
+    endif
+    if foundBook > 0 and not find foundBook bag
+        lift foundBook
+        drop bag -1 -1 -1
+        overhead 'stashing spellbook'
+        wait 250
+    endif
+else
+    overhead 'NO BAG FOUND!' 38
+    stop
 endif

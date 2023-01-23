@@ -1,27 +1,8 @@
 # equips a spellbook with void
 # aspect in the backpack
-if findtype 'bag' backpack 0 as bag 
-    @setvar! dressBag bag
-else
-    overhead 'NO BAG FOUND!' 38
-    stop
-endif
-
 if findtype 'spellbook' lefthand
     overhead 'Spellbook equipped!' 54
     stop
-endif
-
-if not lhandempty
-    lift lefthand
-    drop dressBag
-    while not lhandempty
-    endwhile
-elseif not rhandempty
-    lift righthand
-    drop dressBag
-    while not rhandempty
-    endwhile
 endif
 
 if findtype 'spellbook' backpack 0 as book
@@ -48,4 +29,61 @@ elseif findtype 'spellbook' self as book
     overhead 'Spellbook Equipped' 920
 else
     overhead 'Aspect spellbook not found!' 38
+endif
+
+
+# try to move other stuff into bag
+if findtype 'bag' backpack 0 as bag 
+    # move aspected bow
+    @setvar! foundBow 0
+    if findtype 'bow' self 2599 as aspectBow
+        @setvar! foundBow aspectBow
+    elseif findtype 'bow' self 2503 as aspectBow
+        @setvar! foundBow aspectBow
+    elseif findtype 'bow' self 1790 as aspectBow
+        @setvar! foundBow aspectBow
+    endif
+    if foundBow > 0 and not find foundBow bag
+        lift foundBow
+        drop bag -1 -1 -1
+        overhead 'stashing bow'
+        wait 250
+    else
+        overhead 'NOT MOVING BOW!' 8
+    endif
+    
+    # move aspected xbow
+    @setvar! foundXbow 0
+    if findtype 'crossbow' self 2599 as aspectBow
+        @setvar! foundXbow aspectBow
+    elseif findtype 'crossbow' self 2503 as aspectBow
+        @setvar! foundXbow aspectBow
+    elseif findtype 'crossbow' self 1790 as aspectBow
+        @setvar! foundXbow aspectBow
+    endif
+    if foundXbow > 0 and not find foundXbow bag
+        lift foundXbow
+        drop bag -1 -1 -1
+        overhead 'stashing xbow'
+        wait 250
+    endif
+    
+    # move aspected heavy xbow
+    @setvar! foundHeavyXbow 0
+    if findtype 'heavy crossbow' self 2599 as aspectBow
+        @setvar! foundHeavyXbow aspectBow
+    elseif findtype 'heavy crossbow' self 2503 as aspectBow
+        @setvar! foundHeavyXbow aspectBow
+    elseif findtype 'heavy crossbow' self 1790 as aspectBow
+        @setvar! foundHeavyXbow aspectBow
+    endif
+    if foundHeavyXbow > 0 and not find foundHeavyXbow bag
+        lift foundHeavyXbow
+        drop bag -1 -1 -1
+        overhead 'stashing heavy xbow'
+        wait 250
+    endif
+else
+    overhead 'NO BAG FOUND!' 38
+    stop
 endif
