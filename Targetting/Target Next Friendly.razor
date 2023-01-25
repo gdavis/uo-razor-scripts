@@ -5,6 +5,7 @@ clearsysmsg
 
 hotkey 'Next Friendly Player Target'
 if insysmsg 'New target set'
+    overhead '▼FRIEND▼' 68 lasttarget 
     stop
 elseif insysmsg 'No one matching that was found' 
 endif
