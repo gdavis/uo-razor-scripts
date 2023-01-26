@@ -37,6 +37,16 @@ if findtype 'bag' backpack 0 as myBag
         @setvar! foundBow aspectBow
     elseif findtype 'bow' self 1790 as aspectBow
         @setvar! foundBow aspectBow
+    else 
+        while findtype 'bow' self as regBow
+            getlabel regBow bowName
+            if 'exceptional' in bowName
+                @setvar! foundBow regBow
+                break
+            else
+                @ignore regBow
+            endif
+        endwhile
     endif
     if foundBow > 0 and not find foundBow myBag
         lift foundBow
@@ -53,6 +63,16 @@ if findtype 'bag' backpack 0 as myBag
         @setvar! foundXbow aspectBow
     elseif findtype 'crossbow' self 1790 as aspectBow
         @setvar! foundXbow aspectBow
+    else 
+        while findtype 'crossbow' self as regBow
+            getlabel regBow bowName
+            if 'exceptional' in bowName
+                @setvar! foundXbow regBow
+                break
+            else
+                @ignore regBow
+            endif
+        endwhile
     endif
     if foundXbow > 0 and not find foundXbow myBag
         lift foundXbow
@@ -67,8 +87,23 @@ if findtype 'bag' backpack 0 as myBag
         @setvar! foundBook book
     elseif findtype 'spellbook' self 2503 as book
         @setvar! foundBook book
-    elseif findtype 'spellbook' self as book
-        @setvar! foundBook book
+    else 
+        while findtype 'spellbook' self as book
+            getlabel book bookName
+            if 'blessed' in bookName
+                @ignore book
+            elseif 'unidentified' in bookName
+                @ignore book
+            elseif 'exceptional' in bookName
+                @setvar! foundBook book
+                break
+            elseif 'magic' in bookName
+                @setvar! foundBook book
+                break
+            else
+                @ignore book
+            endif
+        endwhile
     endif
     if foundBook > 0 and not find foundBook myBag
         lift foundBook

@@ -1,16 +1,9 @@
-# equips a spellbook with void
-# aspect in the backpack
 @clearignore
-
-if findtype 'spellbook' lefthand
-    overhead 'Spellbook equipped!' 54
-    stop
-endif
 
 if findtype 'spellbook' backpack 0 as book
     getlabel book bookName
-    if '[blessed' in bookName
-        ignore book
+    if 'blessed' in bookName
+        @ignore book
     endif
 endif
 
@@ -44,6 +37,16 @@ if findtype 'bag' backpack 0 as myBag
         @setvar! foundBow aspectBow
     elseif findtype 'bow' self 1790 as aspectBow
         @setvar! foundBow aspectBow
+    else 
+        while findtype 'bow' self as regBow
+            getlabel regBow bowName
+            if 'exceptional' in bowName
+                @setvar! foundBow regBow
+                break
+            else
+                @ignore regBow
+            endif
+        endwhile
     endif
     if foundBow > 0 and not find foundBow myBag
         lift foundBow
@@ -60,6 +63,16 @@ if findtype 'bag' backpack 0 as myBag
         @setvar! foundXbow aspectBow
     elseif findtype 'crossbow' self 1790 as aspectBow
         @setvar! foundXbow aspectBow
+    else 
+        while findtype 'crossbow' self as regBow
+            getlabel regBow bowName
+            if 'exceptional' in bowName
+                @setvar! foundXbow regBow
+                break
+            else
+                @ignore regBow
+            endif
+        endwhile
     endif
     if foundXbow > 0 and not find foundXbow myBag
         lift foundXbow
@@ -76,6 +89,16 @@ if findtype 'bag' backpack 0 as myBag
         @setvar! foundHeavyXbow aspectBow
     elseif findtype 'heavy crossbow' self 1790 as aspectBow
         @setvar! foundHeavyXbow aspectBow
+    else 
+        while findtype 'heavy crossbow' self as regBow
+            getlabel regBow bowName
+            if 'exceptional' in bowName
+                @setvar! foundHeavyXbow regBow
+                break
+            else
+                @ignore regBow
+            endif
+        endwhile
     endif
     if foundHeavyXbow > 0 and not find foundHeavyXbow myBag
         lift foundHeavyXbow
