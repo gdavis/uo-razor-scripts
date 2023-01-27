@@ -4,7 +4,7 @@
 # Resupplies from the shelf
 # Creates shrooms
 # Eat food if hungry
-
+@clearignore 
 @setvar! shroomCount 24
 @setvar! delay 666
 
@@ -15,7 +15,7 @@ if not position 247 455
 endif
 
 # setup targets
-if not varexist lootBag
+if not varexist lootBag or not find lootBag self
     overhead 'Select your loot container:'
     setvar lootBag
 endif
