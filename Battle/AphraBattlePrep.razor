@@ -28,43 +28,6 @@ if skill 'Tracking' > 50
     endif
 endif
 
-# Camp
-if skill 'camping' >= 20
-    overhead 'Setup camping buff' 48
-    if not findbuff 'campfire visit'
-        overhead 'Need to camp'
-        
-        if not findtype "kindling" backpack
-            overhead "Need more kindling" 34
-            wait 5000
-            replay
-        endif
-        
-        if not findtype "campfire" ground 0 1 1
-            dclicktype "kindling" backpack
-            wait 500
-        
-            if insysmsg 'You fail to ignite'
-                wait 3500
-                loop
-            endif
-        endif
-    else 
-        overhead 'Already camped' 89
-    endif
-endif
-
-# Taste ID
-if skill 'taste identification' > 50
-    while not findbuff 'Herbal Poultice'
-        overhead 'Setup taste buff' 48
-        skill 'tasteidentification'
-        waitfortarget 1000
-        targetrelloc 0 0
-        wait 500
-    endwhile
-endif
-
 # Food
 if not findbuff 'Food Satisfaction'
     if findtype 'tray' backpack as food 
