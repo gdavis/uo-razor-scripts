@@ -1,5 +1,6 @@
 # Restocks the vendor
-# with commodities in the backpack.
+# with reagent commodities
+# in the backpack.
 @setvar! price 20000
 @setvar! vendorID 0x6F9D5
 @setvar! vendorBackpackID 0x41DD748E
@@ -65,9 +66,7 @@ if find vendorID ground any any 2 as vendor
         
         while not insysmsg 'Type in a price'
         endwhile
-        
-#        wait 500
-#        waitforprompt any 7000
+       
         promptresponse price
         wait 500
 
@@ -76,8 +75,7 @@ if find vendorID ground any any 2 as vendor
     endwhile
     @clearignore 
     
+    overhead 'Vendor restocked.'
+else
+    overhead 'Vendor is not nearby!' 38
 endif
-
-#lift 0x40DE214E 1
-#drop 0x41DD748E 50 64 0
-#waitforprompt 5224
