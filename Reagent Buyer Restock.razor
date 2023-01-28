@@ -1,0 +1,83 @@
+# Restocks the vendor
+# with commodities in the backpack.
+@setvar! price 20000
+@setvar! vendorID 0x6F9D5
+@setvar! vendorBackpackID 0x41DD748E
+
+if find vendorID ground any any 2 as vendor
+    @setvar! vendorGumpID 1957446601
+
+    if not timerexists vendorTimeout
+        createtimer vendorTimeout
+    endif
+    
+    settimer vendorTimeout 0
+    dclick vendor
+    
+    while not gumpexists 1957446601
+        waitforgump vendorGumpID 3000
+    
+        if timer vendorTimeout > 10000
+            overhead 'Failed to interact with vendor!' 38
+            stop
+        endif
+    endwhile
+    
+    # open 'View Goods'
+    gumpresponse 5
+    waitforgump vendorGumpID
+    
+    # bloodmoss = 19246
+    # black pearl = 19247
+    # garlic = 19248
+    # ginseng = 19249
+    # mandrake = 19250
+    # nightshade = 19251
+    # suphurous ash = 19252
+    # spiders silk = 19253
+    @clearignore
+    while findtype 19246|19247|19248|19249|19250|19251|19252|19253 backpack as crate
+        clearsysmsg 
+        getlabel crate crateName
+        overhead 'Stocking {{crateName}}' 1001
+        lift crate
+        
+        if 'bloodmoss' in crateName
+            drop vendorBackpackID 50 64 0
+        elseif 'black pearl' in crateName
+            drop vendorBackpackID 60 64 0
+        elseif 'garlic' in crateName
+            drop vendorBackpackID 70 64 0
+        elseif 'ginseng' in crateName
+            drop vendorBackpackID 80 64 0
+        elseif 'mandrake' in crateName
+            drop vendorBackpackID 90 64 0
+        elseif 'nightshade' in crateName
+            drop vendorBackpackID 100 64 0
+        elseif 'ash' in crateName
+            drop vendorBackpackID 110 64 0
+        elseif 'spiders' in crateName
+            drop vendorBackpackID 120 64 0
+        else
+            overhead 'WARNING!: Unknown item drop location' 54
+            drop vendorBackpackID -1 -1 -1
+        endif
+        
+        while not insysmsg 'Type in a price'
+        endwhile
+        
+#        wait 500
+#        waitforprompt any 7000
+        promptresponse price
+        wait 500
+
+        #stop
+        @ignore crate
+    endwhile
+    @clearignore 
+    
+endif
+
+#lift 0x40DE214E 1
+#drop 0x41DD748E 50 64 0
+#waitforprompt 5224
