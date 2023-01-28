@@ -40,6 +40,11 @@ elseif ingump 'Enter Your Room'
     
     overhead 'Welcome home.'
     
+    if isBuyingReagents = 1 and shouldReturnHome = 1
+        setvar! shouldReturnHome 0
+        script 'Reagent Buyer Recall'
+    endif
+    
 elseif ingump 'Rent This Room'
     gumpresponse 5
     waitforgump rentalGumpID 3000
@@ -57,6 +62,12 @@ elseif ingump 'Rent This Room'
         endwhile
         
         overhead 'Welcome home.'
+        
+        if isBuyingReagents = 1 and shouldReturnHome = 1
+            setvar! shouldReturnHome 0
+            overhead 'Returning to purchases'
+            script 'Reagent Buyer Recall'
+        endif
     else
         overhead 'No access to any rooms!' 38
     endif

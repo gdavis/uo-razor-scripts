@@ -1,8 +1,35 @@
 # Recalls through a series of runes
 # in a runebook or tome and purchases
 # a grocery list of reagents.
-# Supports a packie.
+# Supports using packies, and best used
+# when you have 2 packies. When the first
+# packie is overloaded, the overloaded
+# resources are placed into the second,
+# and the script will then return home
+# to unload the purchases. 
+
+@clearignore 
+
+# when set to 1 and currently buying reagents,
+# instead of going to the next vendor, will
+# return home and unload the purchases.
+setvar! shouldReturnHome 0
 @setvar! firstTarget 0
+
+# when any puchased item exceeds this amount
+# in either packie, set return to home
+@setvar! maxItemCount 5000
+
+if diffweight < 50
+    setvar! shouldReturnHome 1
+
+    overhead 'Carrying too much!' 38
+    sysmsg 'Carrying too much weight, puchases stopped.'
+    
+    overhead 'Returning to home...'
+    script 'RecallInn'                        
+    stop
+endif
 
 while 1 = 1
     clearsysmsg 
@@ -13,7 +40,6 @@ while 1 = 1
         getlabel lasttarget targetName
         overhead '{{targetName}}'
    
-    
         if insysmsg 'getlabel - Skipped'
             overhead 'Skipping player'
             continue
@@ -26,36 +52,65 @@ while 1 = 1
             menu targetID 1
             wait 500
             
-            # move purchased reagents
-            while findtype 'a pack llama' ground any any 2 as packie
-                if noto packie = friend
-                    overhead 'Looking for reagents to move the packie...'
+            # move purchased items to the packie
+            # 3976|3981|3980|3973|3974|3962|3972|3963 = regs
+            # 3854 = empty bottles
+            # 3827 = scrolls
+            overhead 'Looking for reagents to move the packie...'
+            
+            removelist foundItems
+            createlist foundItems
+            while findtype 3976|3981|3980|3973|3974|3962|3972|3963|3854|3827 as item
+                getlabel item itemName
+                pushlist foundItems item back
 
-                    # move all reagents to the packie
-                    while findtype 3976|3981|3980|3973|3974|3962|3972|3963 as regs
-                            getlabel regs regsName
-
-                            if findtype 'reagent satchel' self as satchel
-                                if find regs satchel
-                                    overhead 'Ignoring {{regsName}} in satchel' 908
-                                    @ignore regs
-                                    continue
-                                endif
-                            endif
-                            
-                            overhead 'Moving {{regsName}}' 54
-                            lift regs 60000
+                # do not move reagents from satchel
+                if findtype 'reagent satchel' self as satchel
+                    if find item satchel
+                        overhead 'Ignoring {{itemName}} in satchel' 908
+                        @ignore item
+                        continue
+                    endif
+                endif
+                
+                # move purchased items to packie
+                if followers > 0
+                    while findtype 'a pack llama' ground any any 2 as packie
+                        if noto packie = friend
+                            overhead 'Moving {{itemName}}' 54
+                            clearsysmsg 
+                            lift item 60000
                             drop packie -1 -1 -1
                             wait 500
+                            
+                            if counttype item packie > 0
+                                overhead 'we have some item!'
+                            endif
+                            
+                            if insysmsg 'You are overloaded.'
+                                overhead 'Packie is full!' 38
+                                @setvar! shouldReturnHome 1
+                                @ignore packie
+                            else
+                                overhead 'Finished moving items.'
+                                break
+                            endif
+                        else 
+                            @ignore packie
+                        endif
                     endwhile
-
-                    overhead 'Finished moving reagents.'
-                    break
-                else 
-                    @ignore packie
                 endif
             endwhile
-        
+            
+            # TODO: Need to figure out when packies are full...
+#            foreach item in foundItems
+#                overhead 'checking count of {{item}}'
+#                if counttype item > 0
+#                    overhead 'has item' 54
+#                endif
+#            endfor
+
+            # set the intial target if needed
             if firstTarget == 0
                 @setvar! firstTarget targetID 
                 overhead 'FIRST TARGET = {{firstTarget}}'
@@ -63,8 +118,13 @@ while 1 = 1
                 overhead 'ALL DONE!?' 38
             
                 if isBuyingReagents = 1
-                    overhead 'Recalling to next location...'
-                    script 'Reagent Buyer Recall'
+                    if shouldReturnHome = 1
+                        overhead 'Returning to home...'
+                        script 'RecallInn'
+                    else
+                        overhead 'Recalling to next location...'
+                        script 'Reagent Buyer Recall'
+                    endif
                 else 
                     break
                 endif
@@ -72,3 +132,4 @@ while 1 = 1
         endif
     endif
 endwhile
+@clearignore 

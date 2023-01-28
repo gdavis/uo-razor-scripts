@@ -1,0 +1,40 @@
+# move purchased items to packie
+@clearignore 
+
+if findtype 'resource container' ground any any 2 as pile
+    if followers > 0
+        while findtype 'a pack llama' ground any any 2 as packie
+            if noto packie = friend
+                # use resource pile on packie to restock
+                getlabel packie packieName
+                overhead 'Unloading {{packieName}}' 54
+                
+                while 1 = 1
+                    if targetexists 
+                        hotkey 'Cancel Current Target'
+                    endif
+
+                    if '[0/2000 stones]' in packieName
+                        overhead 'Packie Unloaded' 89
+                        @ignore packie
+                        break
+                    else
+                        clearsysmsg 
+                        menu pile 0
+                        wft 7000
+                        target packie    
+                        break
+                    endif
+                endwhile
+            endif
+        endwhile
+    endif
+else
+    overhead 'Could not find resource pile!' 38
+endif
+
+# return to other script
+#if isBuyingReagents = 1
+#    overhead 'Recalling to next location...'
+#    script 'Reagent Buyer Recall'
+#endif
