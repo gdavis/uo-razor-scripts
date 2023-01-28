@@ -260,13 +260,21 @@ while findtype 'bottle' self as extract
         waitforgump alchGumpID
         gumpresponse 202
 
+    elseif 'War' in extractName
+        overhead 'War' 44
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse nextPageResponse
+        waitforgump alchGumpID
+        gumpresponse 203        
+        
     elseif 'Water' in extractName
         overhead 'Water' 8
         gumpresponse nextPageResponse
         waitforgump alchGumpID
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 203
+        gumpresponse 204
 
     else 
         overhead 'Unknown extract type! {{extractName}}' 38
