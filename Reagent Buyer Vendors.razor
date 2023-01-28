@@ -7,6 +7,20 @@
 # resources are placed into the second,
 # and the script will then return home
 # to unload the purchases. 
+overhead '-Buyer Vendors-' 24
+
+# Purchase limits before returning home
+@setvar! blackPearlLimit 5000
+@setvar! mandrakeLimit 5000
+@setvar! bloodmossLimit 5000
+@setvar! garlicLimit 5000
+@setvar! ginsengLimit 5000
+@setvar! sulphurousAshLimit 5000
+@setvar! nightshadeLimit 5000
+@setvar! spidersSilkLimit 5000
+
+@setvar! bottleLimit 5000
+@setvar! scrollLimit 5000
 
 @clearignore 
 
@@ -102,13 +116,55 @@ while 1 = 1
                 endif
             endwhile
             
-            # TODO: Need to figure out when packies are full...
-#            foreach item in foundItems
-#                overhead 'checking count of {{item}}'
-#                if counttype item > 0
-#                    overhead 'has item' 54
-#                endif
-#            endfor
+            # Reagent Limits
+            @setvar! reachedLimit 0
+            if blackPearlLimit > 0 and counttype 3962 packie > blackPearlLimit
+                overhead 'Reached Black Pearl limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if mandrakeLimit > 0 and counttype 3974 packie > mandrakeLimit
+                overhead 'Reached Mandrake limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if bloodmossLimit > 0 and counttype 3963 packie > bloodmossLimit
+                overhead 'Reached Bloodmoss limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if garlicLimit > 0 and counttype 3972 packie > garlicLimit
+                overhead 'Reached Garlic limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if ginsengLimit > 0 and counttype 3973 packie > ginsengLimit
+                overhead 'Reached Ginseng limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if sulphurousAshLimit > 0 and counttype 3980 packie > sulphurousAshLimit
+                overhead 'Reached Sulphuous Ash limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if nightshadeLimit > 0 and counttype 3976 packie > nightshadeLimit
+                overhead 'Reached Night Shade limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if spidersSilkLimit > 0 and counttype 3981 packie > spidersSilkLimit
+                overhead 'Reached Spider Silk limit' 54
+                @setvar! reachedLimit 1
+            endif
+            
+            # Misc Limits
+            if bottleLimit > 0 and counttype 3854 packie > bottleLimit
+                overhead 'Reached Empty Bottle limit' 54
+                @setvar! reachedLimit 1
+            endif
+            if scrollLimit > 0 and counttype 3827 packie > scrollLimit
+                overhead 'Reached Blank Scroll limit' 54
+                @setvar! reachedLimit 1
+            endif
+            
+            if reachedLimit = 1
+                setvar! shouldReturnHome 1
+            endif
+            
 
             # set the intial target if needed
             if firstTarget == 0
@@ -120,7 +176,7 @@ while 1 = 1
                 if isBuyingReagents = 1
                     if shouldReturnHome = 1
                         overhead 'Returning to home...'
-                        script 'RecallInn'
+                        script 'Reagent Buyer Return Home'
                     else
                         overhead 'Recalling to next location...'
                         script 'Reagent Buyer Recall'

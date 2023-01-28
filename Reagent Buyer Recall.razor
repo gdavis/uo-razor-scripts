@@ -2,7 +2,7 @@
 # vendor reagent buyer
 # routine
 # NOTE: The runebook should have all slots filled.
-
+overhead '-Buyer Recall-' 24
 @setvar! runebookGumpID 1551740969
 setvar! isBuyingReagents 1
 
@@ -70,23 +70,23 @@ if find activeRunebook backpack as book
     elseif runebookIndex = 15
         gumpresponse 95
         setvar! runebookIndex 0
-        setvar! isBuyingReagents 0
+        setvar! shouldReturnHome 1
+        #setvar! isBuyingReagents 0
     else
         overhead 'Invalid runebook index!' 38
         setvar! runebookIndex 0
         stop
     endif
     
+    wait 3000
+    
     # go to the vendor buy script if running
-    if isBuyingReagents = 1
-        wait 3000
+    if shouldReturnHome = 0
         script 'Reagent Buyer Vendors'
     else
-        overhead 'Reagent Restock Complete!' 54
+        overhead 'Returning home for unload!' 54
+        script 'Reagent Buyer Return Home'
     endif
-    
-#    wait 5000
-#    loop
 else
     overhead 'Cannot find the runebook!' 38
     stop
