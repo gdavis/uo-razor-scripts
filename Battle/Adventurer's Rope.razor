@@ -1,11 +1,11 @@
 # Finds a rope in the bag and use it
-if targetexists 
-    hotkey 'Cancel Current Target'
-endif
+#if targetexists 
+#    hotkey 'Cancel Current Target'
+#endif
 
 if findtype 'rope' backpack as rope
-    while not targetexists 
+    #while not targetexists 
         dclick rope
         wait 100
-    endwhile
+        #endwhile
 endif
