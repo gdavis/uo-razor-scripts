@@ -1,0 +1,24 @@
+# cast time is 1 second
+if not varexist teleportCast
+    createtimer teleportCast
+endif
+cast 'Teleport'
+settimer teleportCast 0
+
+if findtype 'rope' backpack as rope
+    clearsysmsg 
+    dclick rope
+    wait 125
+    if insysmsg 'You must wait a few moments before you may use this item again'
+        overhead 'ROPE NOT READY!' 38
+    else
+        overhead 'ROPE!' 54
+    endif
+else 
+    overhead 'MISSING ROPE!' 38
+endif
+
+while timer teleportCast < 1000
+endwhile
+
+overhead 'TELEPORT!' 89
