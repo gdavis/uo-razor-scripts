@@ -1,8 +1,7 @@
 # IDs items in both item recycles
 # in the NEW! Guildhouse.
-
-overhead '--ITEM ID--' 24
-overhead 'Checking for items to ID...' 89
+#overhead '--ITEM ID--' 24
+#overhead 'Checking for items to ID...' 89
 @setvar! northItemChest 0x58C5A5A6
 @setvar! southItemChest 0x4125AB3E
 getlabel northItemChest nName
@@ -29,9 +28,9 @@ if timer idItemsTimer < abilityDelay
 endif
 
 if '(0 items' in nName
-    overhead 'north chest empty'
+    overhead 'N. chest empty' 920
 elseif timer northChestTimer > chestIDDelay
-    overhead 'IDing north chest'
+    overhead 'IDing N. chest' 54
     skill 'itemidentification'
     waitfortarget
     target northItemChest
@@ -40,9 +39,9 @@ elseif timer northChestTimer > chestIDDelay
 endif
 
 if '(0 items' in sName
-    overhead 'south chest empty'
+    overhead 'S. chest empty' 920
 elseif timer southChestTimer > chestIDDelay
-    overhead 'IDing south chest'
+    overhead 'IDing S. chest' 54
     skill 'itemidentification'
     waitfortarget
     target southItemChest

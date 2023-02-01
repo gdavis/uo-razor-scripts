@@ -22,7 +22,7 @@
 # Written by:       Aphlux (aka Aphra)
 # Created on:       September 4, 2022
 # Last updated:     January 22, 2023
-overhead '--DISTILLATIONS--' 24
+#overhead '--DISTILLATIONS--' 24
 clearsysmsg
 
 # gump vars
@@ -37,7 +37,7 @@ elseif distillRetunToBuff = 1
     @setvar distillRetunToBuff 0
     script 'NEW BuffBot'
 else
-    overhead 'Performing distill check...' 44
+    overhead 'Checking for extracts...' 44
     @setvar distillRetunToBuff 1
 endif
 
@@ -61,7 +61,7 @@ else
     dclick distDrop
 endif
 
-overhead 'Checking for extract drop...' 920
+overhead 'Checking extract dropbox...' 920
 wait 250
 
 # pickup bottles on the floor
