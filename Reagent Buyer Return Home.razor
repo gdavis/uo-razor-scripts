@@ -84,6 +84,9 @@ elseif ingump 'Visit Other Rooms'
         overhead 'Entering co-owned room...' 903
         gumpresponse 100
     endwhile
+    
+    @setvar! didEnterRoom 1
+    overhead 'Welcome home.'
 else 
     sysmsg 'Character does not have a room or access to one!' 38
     overhead 'No room access!' 38
