@@ -1,0 +1,391 @@
+# NEW! Buff and Distill Bot
+#
+# Uses a lantern that, when turned on,
+# will begin the bot looking
+# for targets in the area to buff.
+# After a duration, he will
+# turn the lantern back off.
+#
+# This script will also
+# look for distillations
+# after a delay.
+# 
+# Inspired by NBK bot.
+# Uses inscription character to cast 
+# long buffs on players.
+overhead '--BUFF BOT--' 89
+
+@setvar! buffCooldown 120000
+@setvar! speakCooldown 30000
+
+# set to 1 to run the gate script
+@setvar! gateBot 1
+@setvar! gateBotScriptDelay 3000
+
+# set to 1 to run the item id script
+@setvar! itemIDBot 1
+@setvar! itemIDScriptDelay 5000
+
+# set to 1 to callback to check for distillations
+# on a given delay
+@setvar! distillBot 1
+@setvar! runDistillScriptDelay 10000
+
+# number of miliseconds to actively
+# look for buffing targets
+# after turning on the lantern.
+@setvar! buffSessionDuration 30000
+
+if not varexist buffsEnabled
+    setvar! buffsEnabled 0
+endif
+
+if not timerexists buffTimer
+    createtimer buffTimer
+    settimer buffTimer 999999
+endif
+
+if not timerexists gateScriptTimer
+    createtimer gateScriptTimer
+endif
+
+if not timerexists itemIDScriptTimer
+    createtimer itemIDScriptTimer
+endif
+
+if not timerexists distillScriptTimer
+    createtimer distillScriptTimer
+endif
+
+if gateBot = 1 and timer gateScriptTimer > gateBotScriptDelay
+    settimer gateScriptTimer 0
+    script 'NEW GateBot'
+endif
+
+if itemIDBot = 1 and timer itemIDScriptTimer > itemIDScriptDelay
+    settimer itemIDScriptTimer 0
+    script 'NEW Item ID'
+endif
+
+if distillBot = 1 and timer distillScriptTimer > runDistillScriptDelay
+    settimer distillScriptTimer 0
+    script 'NEW Distillations'
+endif
+
+# ignore list
+# 0x5646F aka 353391 - Dobbey
+# 2910331 - Alchemist Trav
+removelist ignoreList
+if not listexists ignoreList
+    createlist ignoreList
+    pushlist ignoreList 353391 back
+    pushlist ignoreList 2910331 back
+    pushlist ignoreList 2460069 back
+    pushlist ignoreList 1492384 back
+    pushlist ignoreList 1248535 back
+endif
+
+# scratchpad for saving player IDs
+if not varexist scratchpad
+    overhead 'Select a marked rune that can be used as a scratchpad:'
+    setvar scratchpad
+endif
+
+# buff lantern
+if not varexist buffLantern
+    overhead 'Select the lantern to turn on buffs:'
+    setvar buffLantern
+endif
+
+# timer for announcing service
+if not timerexists speakTimer
+    createtimer speakTimer
+endif
+
+# timeout for someone moving out of range
+@setvar! rangeTimeout 6000
+if not timerexists rangeTimer
+    createtimer rangeTimer
+endif
+
+if mana < 30
+    say "Gah, I cannot concentrate! Shut up and let me think a moment..."
+    wait 5000
+    loop
+endif
+
+# check for reagents
+@setvar! needRegsDelay 15000
+
+while findtype 3972|3974|3980|3973 ground any any 2 as regs
+    say 'Oh ho! Just what I needed. Thanks pal.'
+    lift regs 60000
+    
+    if findtype 'reagent satchel' self as satchel
+        drop satchel -1 -1 -1
+    else 
+        drop backpack -1 -1 -1
+    endif
+    wait 500
+endwhile
+
+if counttype 3972 self == 0
+    say "I am out of garlic! Please drop some on the ground for me."
+    wait needRegsDelay
+    replay
+elseif counttype 3974 self == 0
+    say "I am out of mandrake root! Please drop some on the ground for me."
+    wait needRegsDelay
+    replay
+elseif counttype 3980 self == 0
+    say "I am out of sulphurous ash! Please drop some on the ground for me."
+    wait needRegsDelay
+    replay
+elseif counttype 3973 self == 0
+    say "I am out of ginseng! Please drop some on the ground for me."
+    wait needRegsDelay
+    replay
+endif
+
+
+# use a lantern to start buffs
+if findtype 2594 ground 1779 any 1 as lantern
+    @setvar! lantern buffLantern
+    if buffsEnabled = 1 and timer buffTimer > 30000
+        dclick lantern
+        overhead 'Buff round complete.'
+        setvar! buffsEnabled 0
+    elseif buffsEnabled = 0
+        overhead 'Starting buffs...' 54
+        emote 'opens spellbook'
+        wait 750
+        
+        clearsysmsg 
+        random 7
+        
+        if insysmsg 'Random: 1'
+            say 'Hello there, friend. One moment while I focus...'
+        elseif insysmsg 'Random: 2'
+            say 'Well met! I shall put a mighty blessing upon you!'
+        elseif insysmsg 'Random: 3'
+            say 'A new sacrifi... er, strong warrior needs a holy blessing for battle!'
+        elseif insysmsg 'Random: 4'
+            say 'Wha..what? Oh right. Blessings. Hold on please...'
+        elseif insysmsg 'Random: 5'
+            say 'Ah, excellent! My talents were wasting away there...'
+        elseif insysmsg 'Random: 6'
+            say 'Another round of blessings, coming up...!'
+        elseif insysmsg 'Random: 7'
+            say 'Boy, do I have a feeling about this run...'
+        endif
+        
+        setvar! buffsEnabled 1
+        settimer buffTimer 0
+    else
+        overhead 'Looking for nearby player' 1001
+    endif
+    
+elseif findtype 2597 ground 1779 any 1 as lantern
+    if buffsEnabled = 1 
+        overhead 'Stopping buffs...' 54
+
+        clearsysmsg 
+        random 3
+        
+        if insysmsg 'Random: 1'
+            say 'All done? Nap time it is.'
+        elseif insysmsg 'Random: 2'
+            say 'Hope you got what you needed!'
+        elseif insysmsg 'Random: 3'
+            say 'Good luck out there.'
+        endif
+        wait 1000
+        
+        emote 'closes spellbook'
+        setvar! buffsEnabled 0
+        settimer buffTimer 999999
+    endif
+else 
+    overhead 'ERROR: NO LANTERN NEARBY!' 38
+    stop
+endif
+
+if not timerexists waitingTimer
+    createtimer waitingTimer
+    settimer waitingTimer 99999
+endif
+
+# check if buffs have been turned on
+# from the latnern. if not,
+# briefly pause and try again.
+if buffsEnabled = 0
+    
+    if timer waitingTimer > 5000
+        overhead 'Waiting for a light...' 902
+        settimer waitingTimer 0
+    endif
+    
+    wait 500
+    
+    if timer speakTimer > speakCooldown
+        settimer speakTimer 0
+    
+        # randomize if something should be announced
+        @setvar! shouldSpeak 0
+        # the larger the random number,
+        # the less frequent the speech
+        random 50
+        # needs to be the length of
+        # the number of digits from
+        # the random
+        if insysmsg 'Random: 34'
+            @setvar! shouldSpeak 1
+        endif
+
+        # announce randomly and when enough time has elapsed.
+        if shouldSpeak = 1
+            # random what should be said
+            clearsysmsg 
+            random 6
+            
+            if insysmsg 'Random: 1'
+                say "I provide free buffs! Come light my lantern."
+            elseif insysmsg 'Random: 2'
+                say "Nice day for a blessin', ain't it?"
+            elseif insysmsg 'Random: 3'
+                emote 'looks bored'
+            elseif insysmsg 'Random: 4'
+                say "Headed out? Grab a blessing before you go."
+            elseif insysmsg 'Random: 5'
+                say "I also make distillations! Place an extract in the box and I will distill it."
+            elseif insysmsg 'Random: 6'
+                say "Sometimes the best of us need 11 more hp."
+            else 
+                # do nothing. 
+                overhead 'No message defined.' 38
+            endif
+
+            wait 500
+        endif
+    endif
+    
+    loop
+endif
+
+# find a target
+#overhead ' '
+clearsysmsg 
+
+if targetexists 
+    hotkey "Clear Target Queue"
+    hotkey "Cancel Current Target"
+endif
+
+hotkey "Next Friendly Player Target"
+
+if insysmsg 'New target set' 
+    @setvar! player lasttarget
+    sysmsg 'ID: {{player}}' 472
+
+    if not varexist lastPlayerID
+        @setvar! lastPlayerID player
+    elseif lastPlayerID = player
+        sysmsg 'Waiting for new target...' 908
+        wait 2500
+    else 
+        @setvar! lastPlayerID player
+    endif
+    
+
+    if inlist ignoreList player
+        sysmsg 'Ignoring player.' 138
+        loop
+    endif
+    
+    if findtype 3999 backpack as scissors
+        settimer rangeTimer 0
+        dclick scissors
+        wft 6000
+        target player 
+        wait 666
+        
+        while 1 = 1
+            if timer rangeTimer > rangeTimeout
+                hotkey 'Cancel Current Target'
+                overhead 'Player moved away?' 44
+                break
+                
+            elseif insysmsg 'cannot be used on that'
+                #overhead 'in range'
+                
+                # store the player ID as the name of the rune,
+                # so we can then get that player ID and use for
+                # storing a timer for that player.
+                dclick scratchpad
+                waitforprompt 1036 1000
+                promptresponse player
+                getlabel scratchpad playerID    
+                sysmsg 'BUFFBOT: found target {{playerID}}' 48
+                
+                # check if player is on cooldown
+                if timerexists playerID
+                    if timer playerID > buffCooldown
+                        sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 84
+                        settimer playerID 0
+                    else
+                        sysmsg 'BUFFBOT: {{playerID}} has been buffed too recently.' 38
+                    say 'Come back later, you get one every two minutes.'
+                        break
+                    endif
+                endif
+                
+                if insysmsg 'The world is saving'
+                    clearsysmsg 
+                    wait 6000
+                endif
+                
+                cast 'Bless'
+                wft 6000
+                
+                target player
+                wait 1500
+                
+                if insysmsg 'existing effect of equal or greater'
+                    say "You still have an old buff on, come back later."
+                    wait 500
+                    emote 'slams spellbook closed'
+                
+                elseif targetexists 
+                    say 'Did you just walk away from me? Hrmph.'
+                else             
+                    cast 'Arch Protection'
+                    wft 6000
+                    
+                    target player
+                    wait 1000
+                    
+                    say 'Next!'
+                    
+                    createtimer playerID
+                    settimer playerID 0
+                endif
+
+                break
+                
+            elseif insysmsg 'too far away.' or insysmsg 'target is out of range' or insysmsg 'Target cannot be seen'
+                #overhead 'not in range'
+                break
+            else
+                wait 100
+            endif
+        endwhile
+    else
+        overhead 'Scissors are required for a range check' 38
+        wait 2000
+    endif
+else
+    overhead 'Target: None' 908
+    wait 250
+endif
+
+loop

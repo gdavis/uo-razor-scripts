@@ -1,0 +1,53 @@
+# IDs items in both item recycles
+# in the NEW! Guildhouse.
+
+overhead '--ITEM ID--' 24
+overhead 'Checking for items to ID...' 89
+@setvar! northItemChest 0x58C5A5A6
+@setvar! southItemChest 0x4125AB3E
+getlabel northItemChest nName
+getlabel southItemChest sName
+
+@setvar! abilityDelay 5000
+@setvar! chestIDDelay 10000
+
+if not timerexists idItemsTimer
+    createtimer idItemsTimer
+    settimer idItemsTimer 99999
+endif
+if not timerexists northChestTimer
+    createtimer northChestTimer
+    settimer northChestTimer 99999
+endif
+if not timerexists southChestTimer
+    createtimer southChestTimer
+    settimer southChestTimer 99999
+endif
+
+if timer idItemsTimer < abilityDelay
+    script 'NEW BuffBot'
+endif
+
+if '(0 items' in nName
+    overhead 'north chest empty'
+elseif timer northChestTimer > chestIDDelay
+    overhead 'IDing north chest'
+    skill 'itemidentification'
+    waitfortarget
+    target northItemChest
+    settimer northChestTimer 0
+    settimer idItemsTimer 0
+endif
+
+if '(0 items' in sName
+    overhead 'south chest empty'
+elseif timer southChestTimer > chestIDDelay
+    overhead 'IDing south chest'
+    skill 'itemidentification'
+    waitfortarget
+    target southItemChest
+    settimer southChestTimer 0
+    settimer idItemsTimer 0
+endif
+
+script 'NEW BuffBot'
