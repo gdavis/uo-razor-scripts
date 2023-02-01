@@ -13,32 +13,6 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
-
-# TEMPORARY SULLY TRAINING --------
-if not timerexists idCooldown
-    createtimer idCooldown
-    settimer idCooldown 99999
-endif
-
-if timer idCooldown > 5000
-    skill 'itemidentification'
-    waitfortarget
-    target 0x43605673    
-    settimer idCooldown 0
-    wait 250
-endif
-
-if skill 'chivalry' = 90
-    setskill 'chivalry' lock
-endif
-if skill 'tactics' = 90
-    setskill 'tactics' lock
-endif
-if skill 'meditation' = 80
-    setskill 'meditation' lock
-endif
-#----------------------------------
-
 @setvar! buffCooldown 120000
 @setvar! speakCooldown 30000
 
