@@ -1,0 +1,33 @@
+# While training tinkering with
+# a crafting queue, watches
+# your backpack to see when
+# you should return to the vendor
+# and sell the goods.
+@setvar! craftingQueueGumpID 453554062
+say '[CraftingQueue'
+waitforgump craftingQueueGumpID
+
+if ingump 'Begin Crafting'
+    gumpresponse 7
+    waitforgump craftingQueueGumpID    
+endif
+
+# open runebook
+dclick 0x4130DF4A
+waitforgump 1551740969
+
+# go to tinker-tailor
+gumpresponse 17
+
+# sell items until bag is empty
+menu 0x254F 2
+
+# return home
+hotkey 'Recall'
+waitfortarget
+target 0x4130DF4A
+say 'room'
+waitforgump 2393832411
+gumpresponse 2
+waitforgump 2393832411
+gumpresponse 100
