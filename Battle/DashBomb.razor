@@ -1,0 +1,36 @@
+# Rope > Explosion
+# Throw potion
+# E-bolt
+# cast time is 1 second
+if not varexist teleportCast
+    createtimer teleportCast
+endif
+cast 'Explosion'
+settimer explosionCast 0
+
+if findtype 'rope' backpack as rope
+    clearsysmsg 
+    dclick rope
+    wait 125
+    if insysmsg 'You must wait a few moments before you may use this item again'
+        overhead 'ROPE NOT READY!' 38
+    else
+        overhead 'ROPE!' 54
+    endif
+else 
+    overhead 'MISSING ROPE!' 38
+endif
+
+while timer explosionCast < 1750
+endwhile
+
+overhead 'EXPLODE THEM!' 54
+
+if findtype 'purple potion' self as potion
+    dclick potion
+    wft 1000
+    if targetexists 
+        target lasttarget 
+    endif
+    overhead 'GRENADE OUT!'
+endif

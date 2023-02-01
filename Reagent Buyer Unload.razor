@@ -37,8 +37,9 @@ else
     stop
 endif
 
-# return to other script
+# finish reagent run
 if isBuyingReagents = 1
+    setvar! shouldReturnHome 0
     setvar! isBuyingReagents 0
     setvar! runebookIndex 0
     overhead 'Finished reagent run.' 89
