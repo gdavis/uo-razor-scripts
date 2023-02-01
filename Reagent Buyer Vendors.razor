@@ -30,10 +30,6 @@ overhead '-Buyer Vendors-' 24
 setvar! shouldReturnHome 0
 @setvar! firstTarget 0
 
-# when any puchased item exceeds this amount
-# in either packie, set return to home
-@setvar! maxItemCount 5000
-
 if diffweight < 50
     setvar! shouldReturnHome 1
 
@@ -41,7 +37,7 @@ if diffweight < 50
     sysmsg 'Carrying too much weight, puchases stopped.'
     
     overhead 'Returning to home...'
-    script 'RecallInn'                        
+    script 'Reagent Buyer Return Home'                        
     stop
 endif
 

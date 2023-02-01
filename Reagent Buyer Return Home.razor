@@ -89,9 +89,7 @@ else
     overhead 'No room access!' 38
 endif
 
-if didEnterRoom = 1
-    if shouldReturnHome = 1
-        setvar! shouldReturnHome 0
-        script 'Reagent Buyer Unload'
-    endif
+if didEnterRoom = 1 and shouldReturnHome = 1
+    setvar! shouldReturnHome 0
+    script 'Reagent Buyer Unload'
 endif
