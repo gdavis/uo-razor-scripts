@@ -91,12 +91,6 @@ if not varexist scratchpad
     setvar scratchpad
 endif
 
-# buff lantern
-if not varexist buffLantern
-    overhead 'Select the lantern to turn on buffs:'
-    setvar buffLantern
-endif
-
 # timer for announcing service
 if not timerexists speakTimer
     createtimer speakTimer
@@ -149,6 +143,7 @@ endif
 
 
 # use a lantern to start buffs
+# 1779 = aegis hue lantern
 if findtype 2594 ground 1779 any 1 as lantern
     @setvar! lantern buffLantern
     if buffsEnabled = 1 and timer buffTimer > 30000
