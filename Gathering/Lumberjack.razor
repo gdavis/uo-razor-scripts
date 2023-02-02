@@ -187,19 +187,23 @@ if not varexist isWorldSaving
     @setvar! isWorldSaving 0
 endif
 
-if insysmsg 'The world is saving' or isWorldSaving = 1
-    @setvar! isWorldSaving 1
+if insysmsg 'The world is saving' #or isWorldSaving = 1
+    #    @setvar! isWorldSaving 1
 
-    if insysmsg 'World save complete'
-        overhead 'Save complete, continuing...' 53
-        clearsysmsg 
-        @setvar! isWorldSaving 0
-    elseif isWorldSaving = 0
-        @setvar! isWorldSaving 1    
-        @setvar! shouldHide 1
-    endif
+    while not insysmsg 'World save complete'
+    endwhile
+
+#    if insysmsg 'World save complete'
+#        overhead 'Save complete, continuing...' 53
+#        clearsysmsg 
+#        @setvar! isWorldSaving 0
+#    elseif isWorldSaving = 0
+#        @setvar! isWorldSaving 1    
+#        @setvar! shouldHide 1
+#    endif
     
     @setvar! isActive 0
+    settimer chopTime 0
     replay
 endif
 
@@ -452,6 +456,10 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
     endif
 else
     wait actionDelay
+endif
+
+if insysmsg 'the world is saving'
+    @setvar! isWorldSaving 1
 endif
 
 @setvar! isActive 0
