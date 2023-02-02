@@ -1,0 +1,457 @@
+# Lumberjack WIP
+# Features:
+# - Non-blocking wait times
+# - Enable tracking skill on start
+# - PK detection
+# - Automatic Recall Esacpe
+# - Configurable Weight
+# - Packie Support
+# - Pause and Hide during World Save
+# - Smelt ore when in range of forge
+# - Captcha Detection
+# - Auto-equip Pickaxe
+# - Prints type of ore mined
+# - Overhead feedback
+# - Hide when the node is empty
+# - Move smelted ore to container
+
+### User Settings --------------
+# Change the variables below to
+# the character doing the mining.
+
+# enter a weight that is 
+# 2 less than max to not go overweight.
+@setvar! maxWeight 488
+
+
+
+################################
+## !! DEVELOPER AREA BELOW !! ##
+## !! PROCEED WITH CAUTION !! ##
+
+## Script Init ------------------
+
+# isActive is set to true for the duration of the script,
+# and set to false whenever we reach and endpoint
+# and need to loop back to the start. this
+# gives us a mechanism to know if the script
+# was stopped during execution and needs 
+# the state variables reset to start a new run.
+if not varexist isActive
+    @setvar! isActive 0
+    clearsysmsg 
+endif
+
+# check if the previous script was interrupted
+if isActive = 1
+    clearsysmsg 
+
+    removetimer 'chopTimeout'
+    removetimer 'chopTime'
+    removetimer 'waitAlert'
+    removetimer equipTimer
+    removetimer hideTimer
+    
+    @setvar! isChopping 0
+    @setvar! hasCaptcha 0
+    @setvar! isActive 0
+    @setvar! isWorldSaving 0
+    @setvar! isEquipping 0
+    @setvar! shouldHide 0
+    
+    overhead 'Starting Lumberjack' 24
+endif
+
+# constants
+@setvar! actionDelay 250
+@setvar! chopDuration 4000
+@setvar! chopWait 6500
+@setvar! messageThrottle 3000
+@setvar! hatchetID 3908
+@setvar! hideDelay 1000
+
+# mark script as running
+@setvar! isActive 1
+
+if usePackie == 1 and not varexist packie
+    overhead 'Select or pack horse or llama:'
+    setvar packie
+endif
+
+if not timerexists 'chopTimeout'
+    createtimer 'chopTimeout'
+endif
+
+if not timerexists 'chopTime'
+    createtimer  'chopTime'
+endif
+
+if not timerexists hideTimer
+    createtimer hideTimer
+endif
+
+if not varexist isChopping
+    @setvar! isChopping 0
+endif
+
+if not varexist hasCaptcha
+    @setvar! hasCaptcha 0
+endif
+
+if not timerexists 'waitAlert'
+    createtimer 'waitAlert'
+endif
+
+
+## Start ----------------------    
+#sysmsg "Im chopping"
+
+if dead
+    overhead 'YOU DIED' 38
+    sysmsg 'YOU DIED' 38
+    sysmsg 'Stopping Miner.' 24
+    @setvar! isActive 0
+    stop
+endif
+
+
+## Enable Tracking Buff
+@setvar! tracking_gump_id 4267467659
+
+if skill 'Tracking' >= 50 and not findbuff 'Tracking'
+    overhead 'Setup tracking...' 48    
+
+    while not gumpexists tracking_gump_id
+        sysmsg 'Opening tracking gump...' 53
+        skill 'tracking'
+        waitforgump tracking_gump_id 5000
+    endwhile
+
+    if gumpexists tracking_gump_id
+        if not ingump 'Stop Hunting' 4267467659 # NOTE: using tracking_gump_id here causes a script error
+            overhead 'Started tracking' 65
+            sysmsg 'Tracking players enabled' 65
+            gumpresponse 6
+            wait actionDelay
+        else
+            overhead 'Already Hunting' 55
+            sysmsg 'Tracking already enabled' 55
+        endif
+        
+        gumpclose tracking_gump_id
+    endif
+endif
+
+
+## Recall Escape --------------
+
+# PK check
+if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
+    overhead 'PK WARNING - ESCAPE'
+
+    if skill 'magery' >= 60
+        overhead 'Time to leave!' 34
+        sysmsg 'Lumberjack -> Recall to Inn!' 44
+        @setvar! isActive 0
+        script 'RecallInn'
+    endif
+    
+    if skill 'Hiding' >= 50 
+        while not hidden and not dead
+            skill 'hiding'
+            wait actionDelay
+        endwhile
+    endif
+    
+    sysmsg 'Lumberjack stopped after Escaping PK!' 44
+    @setvar! isActive 0
+    stop
+endif
+
+
+## Hiding
+if shouldHide = 1 #and timer hideTimer > hideDelay
+    if not hidden and skill 'hiding' > 50
+        skill 'Hiding'
+        wait actionDelay
+    endif
+    
+    if hidden 
+        @setvar! shouldHide 0
+    endif
+endif
+
+
+## World Save -----------------
+if not varexist isWorldSaving
+    @setvar! isWorldSaving 0
+endif
+
+if insysmsg 'The world will save' or isWorldSaving = 1
+
+    if insysmsg 'World save complete'
+        overhead 'Save complete, continuing...' 53
+        clearsysmsg 
+        @setvar! isWorldSaving 0
+    elseif isWorldSaving = 0
+        @setvar! isWorldSaving 1    
+        @setvar! shouldHide 1
+    endif
+    
+    @setvar! isActive 0
+    replay
+endif
+
+## Check Weight ----------------
+# check if bags are full
+if weight >= maxWeight
+    
+    if timer 'waitAlert' > messageThrottle
+        settimer 'waitAlert' 0
+        overhead 'Carrying too much!' 38
+        sysmsg 'Carrying too much!' 38
+    endif
+    
+    if not hidden and skill 'hiding' > 50
+        skill 'Hiding'
+    endif
+    
+    wait actionDelay
+    @setvar! isActive 0
+    replay  
+endif
+
+
+## Axe --------------------
+#@setvar! axeEquipped 0
+#if findtype hatchetID lefthand
+#    @setvar! axeEquipped 1
+#endif
+#
+# timer started after equipping a new pickaxe.
+# used to fix an issue where immediately
+# trying to use the axe would
+# not work if it was just equipped.
+@setvar! equipDelay 3000
+if not timerexists equipTimer
+    createtimer equipTimer
+endif
+
+if isEquipping = 1 
+    if timer equipTimer < equipDelay
+        overhead 'waiting to equip' 44
+        wait actionDelay
+        replay
+    else 
+        @setvar! isEquipping 0
+    endif
+endif
+
+if lhandempty
+    if not findtype hatchetID self
+        overhead 'Out of Hatchets' 38
+        
+        if not hidden and skill 'hiding' > 50
+            skill 'Hiding'
+            wait actionDelay
+        endif
+        
+        @setvar! isActive 0
+        replay
+    else 
+        overhead 'Equipping Hatchet' 53
+        dclicktype hatchetID backpack
+        settimer equipTimer 0
+        @setvar! isEquipping 1
+        @setvar! isActive 0
+        replay
+    endif
+endif
+
+
+## Captcha --------------------
+# check if we need to stop for captcha
+if hasCaptcha = 1
+    if insysmsg 'Captcha successful'
+        overhead 'CAPTCHA PASSED'
+        @setvar! hasCaptcha 0
+        settimer 'chopTimeout' 0
+        settimer 'chopTime' 0
+    else
+        # only show an overhead every few seconds
+        if timer 'waitAlert' > messageThrottle
+            overhead 'Waiting for captcha...' 44
+            settimer 'waitAlert' 0
+        endif
+    
+        wait actionDelay
+    endif
+    
+    @setvar! isActive 0
+    replay
+endif
+
+
+## Do the chop ----------------
+# use the hatchet
+if isChopping = 0 and hasCaptcha = 0 and isEquipping = 0
+    #overhead 'new chop'
+
+    if not hidden
+        if findtype hatchetID lefthand as axe
+            overhead ' '
+            overhead '*swings hatchet*' 645
+            dclick axe
+            wft 7000
+            target self
+            
+            settimer 'chopTimeout' 0
+            settimer 'chopTime' 0
+            @setvar! isChopping 1
+            wait actionDelay
+        else
+            overhead 'No hatchets!' 38
+        endif
+    else
+        # only show an overhead every few seconds
+        if timer 'waitAlert' > messageThrottle
+            overhead 'Waiting...' 902
+            settimer 'waitAlert' 0
+        endif
+        
+        wait actionDelay
+        @setvar! isActive 0
+        replay
+    endif
+endif
+
+
+## Chop Result -----------------
+# check results after digging
+if isChopping = 1 and timer 'chopTime' > chopDuration
+    
+    if timer 'chopTimeout' > chopWait
+        overhead 'Chop timed out!' 38
+        overhead 'Captcha?' 38
+        @setvar! hasCaptcha 1
+        @setvar! shouldHide 1
+        @setvar! isActive 0
+        replay
+    endif
+
+    if insysmsg 'Harvesting is not allowed'
+        overhead 'Cannot chop here!' 38
+        removetimer 'chopTimeout'    
+        
+        @setvar! isChopping 0
+        @setvar! isActive 0
+        @setvar! shouldHide 1
+        replay
+    endif
+    
+    if insysmsg 'You do not see any harvestable resources'
+        overhead 'EMPTY' 923
+        sysmsg 'No wood here to chop.' 138
+        
+        removetimer 'chopTimeout'
+        
+        @setvar! shouldHide 1
+        @setvar! isChopping 0
+        @setvar! isActive 0
+        replay
+    endif
+    
+    # check if we fail
+    if insysmsg 'You hack'
+        overhead 'YOU FAILED' 38
+        removetimer 'chopTimeout'    
+
+        @setvar! isChopping 0
+        @setvar! isActive 0
+        replay
+    endif
+    
+    # check if we were successful
+    @setvar! chopSuccess 0
+    
+    if insysmsg 'dullwood'
+        overhead 'DULLWOOD' 805
+        @setvar! chopSuccess 1
+    elseif insysmsg 'shadowwood'
+        overhead 'SHADOWWOOD' 902
+        @setvar! chopSuccess 1
+    elseif insysmsg 'copperwood'
+        overhead 'COPPERWOOD' 144
+        @setvar! chopSuccess 1
+    elseif insysmsg 'bronzewood'
+        overhead 'BRONZEWOOD' 242
+        @setvar! chopSuccess 1
+    elseif insysmsg 'goldenwood'
+        overhead 'GOLDENWOOD' 50
+        @setvar! chopSuccess 1
+    elseif insysmsg 'rosewood'
+        overhead 'ROSEWOOD' 35
+        @setvar! chopSuccess 1
+    elseif insysmsg 'verewood'
+        overhead 'VEREWOOD' 270
+        @setvar! chopSuccess 1
+    elseif insysmsg 'valewood'
+        overhead 'VALEWOOD' 94
+        @setvar! chopSuccess 1
+    elseif insysmsg 'avarwood'
+        overhead 'AVARWOOD' 209
+        @setvar! chopSuccess 1
+        elseif insysmsg 'You chop some logs'
+            overhead 'WOOD' 640
+        @setvar! chopSuccess 1
+    else 
+        setvar! 'success' 0
+    endif
+    
+    if chopSuccess = 1
+        removetimer 'chopTimeout'
+        organizer 10
+        wait 250
+
+        @setvar! shouldHide 0
+        @setvar! isChopping 0
+        @setvar! isActive 0
+        replay
+    endif
+    
+    # recent travel
+    if insysmsg 'You have recently traveled'
+        overhead 'Travel Cooldown...' 24
+        removetimer 'chopTimeout'    
+
+        @setvar! shouldHide 1
+        @setvar! isChopping 0
+        @setvar! isActive 0
+        replay
+    endif
+
+    if insysmsg 'That is too far away'
+        overhead 'Moving...' 24
+        removetimer 'chopTimeout'   
+
+        @setvar! shouldHide 0
+        @setvar! isChopping 0 
+        @setvar! isActive 0
+        replay
+    endif
+
+    if insysmsg 'You must wait'
+        overhead 'Too fast?' 44
+
+        @setvar! isActive 0
+        replay
+    endif
+else
+    wait actionDelay
+endif
+
+if insysmsg 'world will save'
+endif
+
+@setvar! isActive 0
+replay
