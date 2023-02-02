@@ -170,7 +170,7 @@ endif
 
 
 ## Hiding
-if shouldHide = 1 #and timer hideTimer > hideDelay
+if shouldHide = 1 and isChopping = 0
     if not hidden and skill 'hiding' > 50
         skill 'Hiding'
         wait actionDelay
@@ -187,7 +187,8 @@ if not varexist isWorldSaving
     @setvar! isWorldSaving 0
 endif
 
-if insysmsg 'The world will save' or isWorldSaving = 1
+if insysmsg 'The world is saving' or isWorldSaving = 1
+    @setvar! isWorldSaving 1
 
     if insysmsg 'World save complete'
         overhead 'Save complete, continuing...' 53
@@ -282,6 +283,7 @@ if hasCaptcha = 1
         if timer 'waitAlert' > messageThrottle
             overhead 'Waiting for captcha...' 44
             settimer 'waitAlert' 0
+            @setvar! shouldHide 1
         endif
     
         wait actionDelay
@@ -328,17 +330,8 @@ endif
 
 ## Chop Result -----------------
 # check results after digging
-if isChopping = 1 and timer 'chopTime' > chopDuration
-    
-    if timer 'chopTimeout' > chopWait
-        overhead 'Chop timed out!' 38
-        overhead 'Captcha?' 38
-        @setvar! hasCaptcha 1
-        @setvar! shouldHide 1
-        @setvar! isActive 0
-        replay
-    endif
 
+if isChopping = 1
     if insysmsg 'Harvesting is not allowed'
         overhead 'Cannot chop here!' 38
         removetimer 'chopTimeout'    
@@ -367,6 +360,17 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
         removetimer 'chopTimeout'    
 
         @setvar! isChopping 0
+        @setvar! isActive 0
+        replay
+    endif
+endif
+
+if isChopping = 1 and timer 'chopTime' > chopDuration
+    if timer 'chopTimeout' > chopWait
+        overhead 'Chop timed out!' 38
+        overhead 'Captcha?' 38
+        @setvar! hasCaptcha 1
+        @setvar! shouldHide 1
         @setvar! isActive 0
         replay
     endif
@@ -448,9 +452,6 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
     endif
 else
     wait actionDelay
-endif
-
-if insysmsg 'world will save'
 endif
 
 @setvar! isActive 0
