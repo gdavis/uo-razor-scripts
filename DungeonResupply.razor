@@ -226,5 +226,32 @@ else
     overhead 'Not hungry.' 902
 endif
 
+# open rares lockbox
+clearsysmsg 
+if findtype 'wooden box' backpack as box and findtype 'copper key' backpack as key
+    dclick key
+    wft 6000
+    target box
+    wait actionDelay
+    
+    dclick box
+    wait actionDelay
+    
+    if insysmsg 'It appears to be locked'
+        overhead 'Locked.' 87
+        dclick key
+        wft 6000
+        target box
+        wait actionDelay 
+    else
+        overhead 'Unlocked.' 44
+    endif
+    
+    if gumpexists 736038070
+        gumpclose 
+    endif
+endif
+
+
 # DONE
 overhead 'Locked & Stocked!' 68
