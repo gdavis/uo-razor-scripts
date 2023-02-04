@@ -24,8 +24,11 @@ elseif findtype 'spellbook' self as book
     overhead 'Spellbook Equipped' 920
 else
     overhead 'Aspect spellbook not found!' 38
+    stop
 endif
 
+# let item fall into bag
+wait 100
 
 # try to move other stuff into bag
 if findtype 'bag' backpack 0 as myBag 

@@ -61,7 +61,11 @@ elseif findtype weaponID self as weapon
     overhead '+Reg Sword' 920
 else
     overhead 'Viking sword not found!' 38
+    stop
 endif
+
+# let item fall into bag
+wait 100
 
 # stash items into bag
 if findtype 'bag' backpack 0 as myBag 

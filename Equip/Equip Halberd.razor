@@ -62,7 +62,11 @@ elseif findtype weaponID self as weapon
     overhead '+Reg halberd' 920
 else
     overhead 'Halberd not found!' 38
+    stop
 endif
+
+# let item fall into bag
+wait 100
 
 # stash items into bag
 if findtype 'bag' backpack 0 as myBag 

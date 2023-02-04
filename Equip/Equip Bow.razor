@@ -1,115 +1,99 @@
-@clearignore 
+# move list of weapons into safe bag
+if listexists stashList
+    removelist stashList
+endif
+createlist stashList
+## Add item names using >info 
+## to stash other weapon types
+pushlist stashList 'kryss'
+pushlist stashList 'Long Spear'
+pushlist stashList 'war fork'
+pushlist stashList 'short spear'
+pushlist stashList 'crossbow'
+pushlist stashList 'heavy crossbow'
+pushlist stashList 'spellbook'
+pushlist stashList 'bardiche'
+pushlist stashList 'viking sword'
+pushlist stashList 'katana'
+pushlist stashList 'halberd'
 
-if findtype 'bow' RightHand
-    overhead 'Already Equipped!' 54
+# ----------------------------
+@clearignore
+
+# 5042 = bow
+@setvar weaponID 5042
+
+# check if equipped
+if findtype weaponID lefthand
+    overhead '+Bow Equipped' 54
     stop
 endif
 
-if findtype 'bow' self 2599 as aspectBow
-    dclick aspectBow
+# 2207 == verite
+if findtype weaponID self 2207 as weapon 
+    dclick weapon
     while lhandempty
     endwhile
-    overhead 'Void Bow Equipped' 14
-elseif findtype 'bow' self 2503 as aspectBow
-    dclick aspectBow
+    overhead '+Verite bow' 14
+# 2897 == poison aspect
+elseif findtype weaponID self 2897 as weapon 
+    dclick weapon
     while lhandempty
     endwhile
-    overhead 'War Bow Equipped' 36
-elseif findtype 'bow' self as aspectBow
-    dclick aspectBow
+    overhead '+Poison bow' 36
+# 2599 == void aspect
+elseif findtype weaponID self 2599 as weapon 
+    dclick weapon
     while lhandempty
     endwhile
-    overhead 'Bow Equipped' 920
+    overhead '+Void bow' 14
+# 2504 == war aspect
+elseif findtype weaponID self 2503 as weapon
+    dclick weapon
+    while lhandempty
+    endwhile
+    overhead '+War bow' 36
+# normal
+elseif findtype weaponID self as weapon
+    dclick weapon
+    while lhandempty
+    endwhile
+    overhead '+Reg bow' 920
 else
     overhead 'Bow not found!' 38
+    stop
 endif
 
-# try to move other stuff into bag
+# let item fall into bag
+wait 100
+
+# stash items into bag
 if findtype 'bag' backpack 0 as myBag 
-    # move aspected xbow
-    @setvar! foundXbow 0
-    if findtype 'crossbow' self 2599 as aspectBow
-        @setvar! foundXbow aspectBow
-    elseif findtype 'crossbow' self 2503 as aspectBow
-        @setvar! foundXbow aspectBow
-    elseif findtype 'crossbow' self 1790 as aspectBow
-        @setvar! foundXbow aspectBow
-    else 
-        while findtype 'crossbow' self as regBow
-            getlabel regBow bowName
-            if 'exceptional' in bowName
-                @setvar! foundXbow regBow
-                break
+    @clearignore 
+    foreach itemID in stashList
+        while findtype itemID backpack as weapon
+            getlabel weapon weaponName
+            @setvar! shouldStash 0
+            
+            if 'unidentified' in weaponName
+                sysmsg 'Ignoring magic item'
+            elseif 'blessed' in weaponName
+                sysmsg 'Ignoring blessed item'
             else
-                @ignore regBow
+                @setvar! shouldStash 1
             endif
-        endwhile
-    endif
-    if foundXbow > 0 and not find foundXbow myBag
-        lift foundXbow
-        drop myBag -1 -1 -1
-        #overhead 'stashing xbow'
-        wait 250
-    endif
-    
-    # move aspected xbow
-    @setvar! foundHeavyXbow 0
-    if findtype 'heavy crossbow' self 2599 as aspectBow
-        @setvar! foundHeavyXbow aspectBow
-    elseif findtype 'heavy crossbow' self 2503 as aspectBow
-        @setvar! foundHeavyXbow aspectBow
-    elseif findtype 'heavy crossbow' self 1790 as aspectBow
-        @setvar! foundHeavyXbow aspectBow
-    else 
-        while findtype 'heavy crossbow' self as regBow
-            getlabel regBow bowName
-            if 'exceptional' in bowName
-                @setvar! foundHeavyXbow regBow
-                break
-            else
-                @ignore regBow
+            
+            if shouldStash = 1 and not find weapon myBag
+                lift weapon
+                drop myBag -1 -1 -1
+                sysmsg 'Stashing: {{weaponName}}' 920
+                wait 250
             endif
+            
+            @ignore weapon
         endwhile
-    endif
-    if foundHeavyXbow > 0 and not find foundHeavyXbow myBag
-        lift foundHeavyXbow
-        drop myBag -1 -1 -1
-        #overhead 'stashing heavy xbow'
-        wait 250
-    endif
-    
-    # move spellbook
-    @setvar! foundBook 0
-    if findtype 'spellbook' self 2599 as book
-        @setvar! foundBook book
-    elseif findtype 'spellbook' self 2503 as book
-        @setvar! foundBook book
-    elseif findtype 'spellbook' self as book
-        @setvar! foundBook book
-    else 
-        while findtype 'spellbook' self as book
-            getlabel book bookName
-            if 'blessed' in bookName
-                @ignore book
-            elseif 'unidentified' in bookName
-                @ignore book
-            elseif 'exceptional' in bookName
-                @setvar! foundBook book
-                break
-            elseif 'magic' in bookName
-                @setvar! foundBook book
-                break
-            else
-                @ignore book
-            endif
-        endwhile
-    endif
-    if foundBook > 0 and not find foundBook myBag
-        lift foundBook
-        drop myBag -1 -1 -1
-        #overhead 'stashing spellbook'
-        wait 250
-    endif
+    endfor
+    @clearignore
 else
     overhead 'NO BAG FOUND!' 38
     stop
