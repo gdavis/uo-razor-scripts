@@ -5,7 +5,6 @@ endif
 createlist stashList
 ## Add item names using >info 
 ## to stash other weapon types
-pushlist stashList 'kryss'
 pushlist stashList 'Long Spear'
 pushlist stashList 'war fork'
 pushlist stashList 'short spear'
@@ -14,19 +13,20 @@ pushlist stashList 'crossbow'
 pushlist stashList 'heavy crossbow'
 pushlist stashList 'spellbook'
 pushlist stashList 'bardiche'
+pushlist stashList 'halberd'
 pushlist stashList 'viking sword'
 pushlist stashList 'katana'
-pushlist stashList 'halberd'
+
 
 # ----------------------------
 @clearignore
 
-# 5117 = heavy xbow
-@setvar weaponID 5117
+# 5121 = kryss
+@setvar weaponID 5121
 
 # check if equipped
-if findtype weaponID lefthand
-    overhead '+H-Xbow Equipped' 54
+if findtype weaponID righthand
+    overhead '+Kyrss Equipped' 54
     stop
 endif
 
@@ -35,33 +35,33 @@ if findtype weaponID self 2207 as weapon
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Verite H-Xbow' 14
+    overhead '+Verite kryss' 14
 # 2897 == poison aspect
 elseif findtype weaponID self 2897 as weapon 
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Poison H-Xbow' 36
+    overhead '+Poison kryss' 36
 # 2599 == void aspect
 elseif findtype weaponID self 2599 as weapon 
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Void H-Xbow' 14
+    overhead '+Void kryss' 14
 # 2504 == war aspect
 elseif findtype weaponID self 2503 as weapon
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+War H-Xbow' 36
+    overhead '+War kryss' 36
 # normal
 elseif findtype weaponID self as weapon
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Reg H-Xbow' 920
+    overhead '+Reg kryss' 920
 else
-    overhead 'H-Xbow not found!' 38
+    overhead 'Kryss not found!' 38
 endif
 
 # stash items into bag

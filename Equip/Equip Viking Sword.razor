@@ -14,19 +14,18 @@ pushlist stashList 'crossbow'
 pushlist stashList 'heavy crossbow'
 pushlist stashList 'spellbook'
 pushlist stashList 'bardiche'
-pushlist stashList 'viking sword'
-pushlist stashList 'katana'
 pushlist stashList 'halberd'
+pushlist stashList 'katana'
 
 # ----------------------------
 @clearignore
 
-# 5117 = heavy xbow
-@setvar weaponID 5117
+# 5049 = viking sword
+@setvar weaponID 5049
 
 # check if equipped
-if findtype weaponID lefthand
-    overhead '+H-Xbow Equipped' 54
+if findtype weaponID righthand
+    overhead '+Viking sword' 54
     stop
 endif
 
@@ -35,33 +34,33 @@ if findtype weaponID self 2207 as weapon
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Verite H-Xbow' 14
+    overhead '+Verite Sword' 14
 # 2897 == poison aspect
 elseif findtype weaponID self 2897 as weapon 
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Poison H-Xbow' 36
+    overhead '+Poison Sword' 36
 # 2599 == void aspect
 elseif findtype weaponID self 2599 as weapon 
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Void H-Xbow' 14
+    overhead '+Void Sword' 14
 # 2504 == war aspect
 elseif findtype weaponID self 2503 as weapon
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+War H-Xbow' 36
+    overhead '+War Sword' 36
 # normal
 elseif findtype weaponID self as weapon
     dclick weapon
     while rhandempty
     endwhile
-    overhead '+Reg H-Xbow' 920
+    overhead '+Reg Sword' 920
 else
-    overhead 'H-Xbow not found!' 38
+    overhead 'Viking sword not found!' 38
 endif
 
 # stash items into bag
