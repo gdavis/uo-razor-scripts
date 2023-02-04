@@ -1,0 +1,99 @@
+    # Creates stacks of 100 for each board type.
+# Places onto vendor and sets the price.
+
+# Prices for stacks of 100
+@setvar! dullwoodPrice 2500
+@setvar! shadowwoodPrice 5000
+@setvar! copperwoodPrice 7500
+@setvar! bronzewoodPrice 15000
+@setvar! goldenwoodPrice 22500
+@setvar! rosewoodPrice 25000
+@setvar! verewoodPrice 32500
+@setvar! valewoodPrice 65000
+@setvar! avarwoodPrice 150000
+@setvar! regularWoodPrice 1200
+
+@setvar! vendorID 0x6F9D5
+@setvar! vendorBackpackID 0x41DD748E
+@setvar! boardsID 7127
+@setvar! actionDelay 500
+
+if find vendorID ground any any 2 as vendor
+    @setvar! vendorGumpID 1957446601
+
+    if not timerexists vendorTimeout
+        createtimer vendorTimeout
+    endif
+    
+    settimer vendorTimeout 0
+    dclick vendor
+    
+    while not gumpexists 1957446601
+        waitforgump vendorGumpID 3000
+    
+        if timer vendorTimeout > 10000
+            overhead 'Failed to interact with vendor!' 38
+            stop
+        endif
+    endwhile
+    
+    while findtype boardsID backpack as boards
+        clearsysmsg 
+        getlabel boards boardsName
+    
+        # set the price for each board type
+        if 'dullwood' in boardsName 
+            overhead 'Stocking Dullwood' 805
+            @setvar! price dullwoodPrice
+            @setvar! xPosition 50
+        elseif 'shadowwood' in boardsName 
+            overhead 'Stocking Shadowwood' 902
+            @setvar! price shadowwoodPrice
+            @setvar! xPosition 60
+        elseif 'copperwood' in boardsName
+            overhead 'Stocking Copperwood' 144
+            @setvar! price copperwoodPrice
+            @setvar! xPosition 70            
+        elseif 'bronzewood' in boardsName
+            overhead 'Stocking Bronzewood' 242
+            @setvar! price bronzewoodPrice
+            @setvar! xPosition 80
+        elseif 'goldenwood' in boardsName
+            overhead 'Stocking Goldenwood' 50
+            @setvar! price goldenwoodPrice
+            @setvar! xPosition 90
+        elseif 'rosewood' in boardsName
+            overhead 'Stocking Rosewood' 35
+            @setvar! price rosewoodPrice
+            @setvar! xPosition 100
+        elseif 'verewood' in boardsName
+            overhead 'Stocking Verewood' 270
+            @setvar! price verewoodPrice
+            @setvar! xPosition 110
+        elseif 'valewood' in boardsName
+            overhead 'Stocking Valewood' 94
+            @setvar! price valewoodPrice
+            @setvar! xPosition 120
+        elseif 'avarwood' in boardsName
+            overhead 'Stocking Avarwood' 209
+            @setvar! price avarwoodPrice
+            @setvar! xPosition 130
+        else
+            @setvar! price regularWoodPrice
+            @setvar! xPosition 140
+        endif
+        
+        lift boards 100
+        drop vendorBackpackID xPosition 100 0
+        
+        while not insysmsg 'Type in a price'
+        endwhile
+        
+        promptresponse price
+        wait actionDelay
+    endwhile
+    
+    overhead 'Lumber restocked.'
+else
+    overhead 'Vendor is not nearby!' 38
+endif
