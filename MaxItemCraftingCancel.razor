@@ -1,0 +1,27 @@
+# Cancels crafting queue
+# if items over max
+
+getlabel backpack backpackName
+#overhead '{{backpackName}}'
+
+if '150/150' in backpackName
+    overhead 'At max items!' 54
+
+    if not gumpexists 453554062
+        say '[CraftingQueue'
+        waitforgump 453554062
+    endif
+
+    if ingump 'Begin Crafting' 453554062
+        overhead 'Crafting queue not started!'
+        loop
+    endif
+
+    # stop the queue
+    gumpresponse 7
+    waitforgump 453554062
+    sysmsg 'AT MAX ITEMS!' 38
+endif
+
+wait 100
+loop
