@@ -18,7 +18,7 @@
 
 # set to 1 to callback to check for distillations
 # on a given delay
-@setvar! distillBot 1
+@setvar! distillBot 0
 @setvar! runDistillScriptDelay 10000
 
 # number of miliseconds to actively
@@ -115,7 +115,7 @@ endif
 
 
 # use a lantern to start buffs
-if findtype 2594 ground any any 1 as lantern
+if findtype 2594 ground any any 2 as lantern
     if buffsEnabled = 1 and timer buffTimer > 30000
         dclick lantern
         overhead 'Buff round complete.'
@@ -150,7 +150,7 @@ if findtype 2594 ground any any 1 as lantern
         overhead 'Looking for nearby player' 1001
     endif
     
-elseif findtype 2597 ground any any 1 as lantern
+elseif findtype 2597 ground any any 2 as lantern
     if buffsEnabled = 1 
         overhead 'Stopping buffs...' 54
 
