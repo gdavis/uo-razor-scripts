@@ -41,6 +41,9 @@ if diffweight < 50
     stop
 endif
 
+
+@setvar! reachedLimit 0
+
 while 1 = 1
     clearsysmsg 
     hotkey 'Next Target'
@@ -48,10 +51,10 @@ while 1 = 1
     if insysmsg 'New target set'
         @setvar! targetID lasttarget 
         getlabel lasttarget targetName
-        overhead '{{targetName}}'
+        #overhead '{{targetName}}'
    
         if insysmsg 'getlabel - Skipped'
-            overhead 'Skipping player'
+            # Skipping player
             continue
         endif  
         
@@ -70,7 +73,7 @@ while 1 = 1
             
             removelist foundItems
             createlist foundItems
-            while findtype 3976|3981|3980|3973|3974|3962|3972|3963|3854|3827 as item
+            while findtype 3976|3981|3980|3973|3974|3962|3972|3963|3854|3827 self as item
                 getlabel item itemName
                 pushlist foundItems item back
 
@@ -92,6 +95,7 @@ while 1 = 1
                             lift item 60000
                             drop packie -1 -1 -1
                             wait 500
+                            @ignore item
                             
                             if counttype item packie > 0
                                 overhead 'we have some item!'
@@ -99,15 +103,13 @@ while 1 = 1
                             
                             if insysmsg 'You are overloaded.'
                                 overhead 'Packie is full!' 38
-                                @setvar! shouldReturnHome 1
+                                setvar! shouldReturnHome 1
                                 @ignore packie
                             else
                                 overhead 'Finished moving items.'
-                                break
                             endif
                             
                             # Reagent Limits
-                            @setvar! reachedLimit 0
                             if blackPearlLimit > 0 and counttype 3962 packie > blackPearlLimit
                                 overhead 'Reached Black Pearl limit' 54
                                 @setvar! reachedLimit 1
@@ -150,6 +152,8 @@ while 1 = 1
                                 overhead 'Reached Blank Scroll limit' 54
                                 @setvar! reachedLimit 1
                             endif
+                            
+                            break
                         else 
                             @ignore packie
                         endif
@@ -167,7 +171,7 @@ while 1 = 1
                 @setvar! firstTarget targetID 
                 overhead 'FIRST TARGET = {{firstTarget}}'
             elseif firstTarget == targetID 
-                overhead 'ALL DONE!?' 38
+                overhead 'Location complete' 89
             
                 if isBuyingReagents = 1
                     if shouldReturnHome = 1
