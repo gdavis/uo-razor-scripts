@@ -32,7 +32,7 @@ if '(0 items' in nName
 elseif timer northChestTimer > chestIDDelay
     overhead 'IDing N. chest' 54
     skill 'itemidentification'
-    waitfortarget
+    waitfortarget 1000
     target northItemChest
     settimer northChestTimer 0
     settimer idItemsTimer 0
@@ -43,7 +43,7 @@ if '(0 items' in sName
 elseif timer southChestTimer > chestIDDelay
     overhead 'IDing S. chest' 54
     skill 'itemidentification'
-    waitfortarget
+    waitfortarget 1000
     target southItemChest
     settimer southChestTimer 0
     settimer idItemsTimer 0
