@@ -232,17 +232,17 @@ if findtype 'wooden box' backpack as box and findtype 'copper key' backpack as k
     dclick key
     wft 6000
     target box
-    wait actionDelay
+    wait delay
     
     dclick box
-    wait actionDelay
+    wait delay
     
     if insysmsg 'It appears to be locked'
         overhead 'Locked.' 87
         dclick key
         wft 6000
         target box
-        wait actionDelay 
+        wait delay 
     else
         overhead 'Unlocked.' 44
     endif
