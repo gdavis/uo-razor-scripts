@@ -7,20 +7,17 @@
 getlabel northItemChest nName
 getlabel southItemChest sName
 
+@setvar! actionDelay 200
 @setvar! abilityDelay 5000
-@setvar! chestIDDelay 10000
+
+while targetexists 
+    hotkey 'Cancel Current Target'
+    wait actionDelay
+endwhile
 
 if not timerexists idItemsTimer
     createtimer idItemsTimer
     settimer idItemsTimer 99999
-endif
-if not timerexists northChestTimer
-    createtimer northChestTimer
-    settimer northChestTimer 99999
-endif
-if not timerexists southChestTimer
-    createtimer southChestTimer
-    settimer southChestTimer 99999
 endif
 
 if timer idItemsTimer < abilityDelay
@@ -29,24 +26,24 @@ endif
 
 if '(0 items' in nName
     overhead 'N. chest empty' 920
-elseif timer northChestTimer > chestIDDelay
+elseif timer idItemsTimer > abilityDelay
     overhead 'IDing N. chest' 54
     skill 'itemidentification'
     waitfortarget 1000
     target northItemChest
-    settimer northChestTimer 0
     settimer idItemsTimer 0
+    wait actionDelay
 endif
 
 if '(0 items' in sName
     overhead 'S. chest empty' 920
-elseif timer southChestTimer > chestIDDelay
+elseif timer idItemsTimer > abilityDelay
     overhead 'IDing S. chest' 54
     skill 'itemidentification'
     waitfortarget 1000
     target southItemChest
-    settimer southChestTimer 0
     settimer idItemsTimer 0
+    wait actionDelay
 endif
 
 script 'NEW BuffBot'
