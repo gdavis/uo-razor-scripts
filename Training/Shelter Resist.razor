@@ -1,5 +1,5 @@
 # cast on yourself at shelter
-while hp < 70 and not dead
+while diffhits >= 30 and not dead
     clearsysmsg 
     cast 'Greater Heal'
     overhead '[G-Heal Self]' 24
@@ -26,37 +26,55 @@ while hp < 70 and not dead
     break
 endwhile
 
+@setvar! minMana 0
+@setvar! spellID 0
 
 if skill 'resisting spells' < 60
-    if mana < 11
-        skill 'Meditation'
-        wait 500
-    
-        if findbuff 'actively meditating'
-            while mana < maxmana
-                overhead 'Meditating...'
-                wait 3500
-            endwhile
-            replay
-        else
-            overhead 'Retrying meditation...'
-            wait 5500
-            replay
-        endif
-    endif 
-    
-    overhead '50-60'
-    hotkey 'Lightning'
-    elseif skill 'resisting spells' < 70
-    overhead '60-70'
-    hotkey 'Mind Blast'
+    @setvar! minMana 15
+    @setvar! spellID 1
+elseif skill 'resisting spells' < 70
+    @setvar! minMana 25
+    @setvar! spellID 2
 elseif skill 'resisting spells' < 80
-    overhead '70-80'
-    hotkey 'Energy Bolt'
+    @setvar! minMana 30
+    @setvar! spellID 3
 else
     overhead 'unfinished' 38
+    wait 4000
+    loop
 endif
 
+if minMana > 0 and mana < minMana
+    skill 'Meditation'
+    wait 500
+
+    if findbuff 'actively meditating'
+        while mana < maxmana
+            overhead 'Meditating...'
+            wait 3500
+        endwhile
+        replay
+    else
+        overhead 'Retrying meditation...'
+        wait 5500
+        replay
+    endif
+endif 
+
+if spellID = 1 
+    overhead '50-60'
+    hotkey 'Lightning'
+elseif spellID = 2
+    overhead '60-70'
+    hotkey 'Mind Blast'
+elseif spellID = 3   
+    overhead '70-80'
+    hotkey 'Energy Bolt'
+else 
+    overhead 'Unfinished' 38
+    wait 4000
+    loop
+endif
 
 waitfortarget
 target 'self'
