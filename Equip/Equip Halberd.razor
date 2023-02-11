@@ -54,7 +54,12 @@ elseif findtype weaponID self 2503 as weapon
     while lhandempty
     endwhile
     overhead '+War halberd' 36
-# normal
+# 1790 == shadow aspect
+elseif findtype weaponID self 1790 as weapon
+    dclick weapon
+    while lhandempty
+    endwhile
+    overhead '+Shadow halberd' 902
 elseif findtype weaponID self as weapon
     dclick weapon
     while lhandempty
