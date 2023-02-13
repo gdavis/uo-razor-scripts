@@ -170,7 +170,7 @@ endif
 
 
 ## Hiding
-if shouldHide = 1 and isChopping = 0
+if shouldHide = 1
     if not hidden and skill 'hiding' > 50
         skill 'Hiding'
         wait actionDelay
@@ -287,9 +287,9 @@ if hasCaptcha = 1
         if timer 'waitAlert' > messageThrottle
             overhead 'Waiting for captcha...' 44
             settimer 'waitAlert' 0
-            @setvar! shouldHide 1
         endif
     
+        @setvar! shouldHide 1
         wait actionDelay
     endif
     
