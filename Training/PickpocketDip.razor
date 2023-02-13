@@ -1,0 +1,12 @@
+if skill 'stealing' == 100 and skill 'snooping' == 100
+    overhead 'all done'
+    wait 3000
+    loop
+endif
+
+if findtype 'pickpocket dip' ground any any 2 as dip
+    dclick dip
+    wait 80
+endif
+
+loop
