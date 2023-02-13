@@ -7,7 +7,7 @@ endif
 
 if timer 'bandageSelf' < 10000
     overhead 'Bandage: Applying...'
-elseif hp >= 100
+elseif diffhits = 0
     overhead 'Full Health'
 elseif findtype 'clean bandage%s%' backpack 
     clearsysmsg
@@ -19,7 +19,7 @@ elseif findtype 'clean bandage%s%' backpack
     if insysmsg 'You begin applying the bandages'
         settimer 'bandageSelf' 0
         wait 10250
-        if hp < 100 
+        if diffhits > 0 
             overhead 'Bandage: still hurt, reapplying...'
             replay
         endif
