@@ -4,14 +4,21 @@ if not varexist anatTarget or not find anatTarget ground any any 12
     @setvar! anatTarget lasttarget
 endif
 
+if find lasttarget ground -1 -1 8
+    overhead 'near target!'
+endif
+
 if skill 'Anatomy' < 80
     clearsysmsg 
     skill 'Anatomy'
-    waitfortarget 
+    waitfortarget 1000
     target anatTarget 
     wait 250
     
-    if insysmsg 'You must wait' or insysmsg 'Target cannot be seen' or insysmsg 'too far away'
+    if insysmsg 'You must wait'
+        wait 3050
+        loop
+    elseif insysmsg 'Target cannot be seen' or insysmsg 'too far away'
         wait 1250
         loop
     endif
