@@ -1,0 +1,22 @@
+if not varexist anatTarget or not find anatTarget ground any any 12
+    #overhead 'Select target:'
+    hotkey 'Next Innocent Player Target'
+    @setvar! anatTarget lasttarget
+endif
+
+if skill 'Anatomy' < 80
+    clearsysmsg 
+    skill 'Anatomy'
+    waitfortarget 
+    target anatTarget 
+    wait 250
+    
+    if insysmsg 'You must wait' or insysmsg 'Target cannot be seen' or insysmsg 'too far away'
+        wait 1250
+        loop
+    endif
+    
+    wait 5000
+endif
+
+loop
