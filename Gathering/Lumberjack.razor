@@ -314,6 +314,7 @@ if isChopping = 0 and hasCaptcha = 0 and isEquipping = 0
             settimer 'chopTimeout' 0
             settimer 'chopTime' 0
             @setvar! isChopping 1
+            @setvar! shouldHide 0
             wait actionDelay
         else
             overhead 'No hatchets!' 38
