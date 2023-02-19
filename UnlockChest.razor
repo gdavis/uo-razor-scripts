@@ -9,9 +9,20 @@ endif
 
 clearsysmsg
 
-if not varexist lockedChest or not find lockedChest backpack
+if not varexist lockedChest
     overhead 'Unlock what chest?' 44
     @setvar! lockedChest
+    loop
+endif
+
+if find lockedChest backpack
+elseif find lockedChest ground any any 2
+else
+    overhead 'Cannot reach locked chest!' 38
+    @unsetvar! lockedChest
+    unsetvar! lockedChest
+    unsetvar lockedChest
+    stop
 endif
 
 getlabel lockedChest chestName
@@ -19,9 +30,10 @@ overhead 'Unlocking chest:' 44
 overhead chestName 1001
 
 if '(sealed)' in chestName 
+elseif 'dungeon chest:' in chestName
 else
-    unsetvar lockedChest
-    overhead 'That chest is not sealed.'
+    @unsetvar! lockedChest
+    overhead 'That chest is not sealed or a dungeon chest.'
     stop
 endif
 
