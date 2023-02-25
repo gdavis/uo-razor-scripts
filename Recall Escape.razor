@@ -1,0 +1,57 @@
+if not varexist recallInnTarget
+    overhead 'Set recall target to the innkeeper:'
+    setvar recallInnTarget
+endif
+
+if not find recallInnTarget backpack
+    overhead 'Could not find recall target!' 38
+    overhead 'Set recall target to the innkeeper:'
+    setvar recallInnTarget
+endif
+
+# cancels current target actions
+while targetexists 
+    hotkey 'Cancel Current Target'
+    wait 50
+endwhile
+
+# recall out
+if skill 'Magery' > 50
+    if not timerexists castTimer
+        createtimer castTimer
+    endif
+
+    clearsysmsg
+    cast 'Recall'
+    settimer castTimer 0
+    @setvar! recallCastTime 2000
+    
+    # loop and read messages until the spell finishes casting
+    while timer castTimer < recallCastTime
+        if insysmsg 'You are already casting a spell'
+            # cancel any currently casting spell
+            hotkey '> Interrupt'
+            wait 300
+            loop
+        elseif insysmsg 'You have not yet recovered from casting'
+            # wait for spell cast recovery time
+            wait 100
+            loop
+        elseif insysmsg 'Your concentration is disturbed'
+            # try to recover from interruption
+            overhead 'Interrupted, attempting recall again!'
+            loop
+        endif
+    endwhile
+    
+    wft 200
+    
+    if targetexists 
+        target recallInnTarget
+    else
+        overhead 'Failed to cast!'
+        loop
+    endif
+else
+    overhead 'No magery!' 38
+endif

@@ -8,7 +8,9 @@ if not varexist recallInnTarget
     setvar recallInnTarget
 endif    
 
-hotkey 'Cancel Current Target'
+if targetexists 
+    hotkey 'Cancel Current Target'
+endif
 
 cast 'Recall'
 wft 6000
