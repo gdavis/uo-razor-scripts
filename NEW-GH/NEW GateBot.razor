@@ -83,6 +83,10 @@ if destination = 0
     script 'NEW BuffBot'
 endif
 
+if gumpexists 1482653814
+    gumpclose 1482653814
+endif
+
 # wait for cooldown if needed
 while timer gateTimer < gateCooldown
     # announce the delay
