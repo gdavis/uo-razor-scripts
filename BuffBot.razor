@@ -13,7 +13,7 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
-@setvar! buffCooldown 120000
+@setvar! buffCooldown 30000
 @setvar! speakCooldown 30000
 
 # set to 1 to callback to check for distillations
@@ -315,12 +315,7 @@ if insysmsg 'New target set'
                 target player
                 wait 1500
                 
-                if insysmsg 'existing effect of equal or greater'
-                    say "You still have an old buff on, come back later."
-                    wait 500
-                    emote 'slams spellbook closed'
-                
-                elseif targetexists 
+                if targetexists 
                     say 'Did you just walk away from me? Hrmph.'
                 else             
                     cast 'Arch Protection'
