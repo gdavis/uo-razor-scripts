@@ -1,0 +1,18 @@
+if targetexists 
+    hotkey 'Cancel Current Target'
+endif
+
+# 19739 = wall of stone
+# 14713 = field of paralysis N-S
+# 14695 = field of paralysis E-W
+# 14662 = field of energy E-W
+# 14678 = field of energy N-S
+# 14626 = field of poison N-S
+# 14613 = field of poison E-W
+# 14732 = field of fire E-W
+# 14742 = field of fire N-S
+if findtype 19739|14713|14695|14662|14678|14626|14613|14732|14742 ground any any 12 as wall
+    cast 'Dispel Field'
+    wft 5000
+    target wall
+endif
