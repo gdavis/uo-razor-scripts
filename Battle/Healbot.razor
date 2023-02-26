@@ -3,10 +3,50 @@
 # full health so the attacker can
 # practice interrupting.
 
-if poisoned or hp < maxhp
-    hotkey '> Greater Heal/Cure Self'
+@setvar! ghealCastTime 1750
+@setvar! healCastTime 500
+
+if dead 
+    overhead 'YOU DIED' 38
+    wait 3000
+    stop
+endif
+
+if not timerexists castTimer
+    createtimer castTimer
+endif
+
+if poisoned
+    hotkey '> Mini-Heal/Cure Self'
+elseif hp < maxhp
+    clearsysmsg 
+
+    if hp < 10 or diffhits < 10
+        cast 'Heal'
+        @setvar! castTime healCastTime
+    else 
+        cast 'Greater Heal'
+        @setvar! castTime ghealCastTime
+    endif
+    
+    settimer castTimer 0
+    
+    while timer castTimer < castTime
+        if insysmsg 'You are already casting a spell'
+            wait 100
+        elseif insysmsg 'Your concentration'
+            wait 200
+            loop
+        endif
+    endwhile
+    
+    wft 100
+    if targetexists 
+        target self
+        wait 200
+    endif
 elseif mana < 100
     skill 'Mediatation'
 endif
-loop
 
+loop
