@@ -33,7 +33,8 @@ elseif hp < maxhp
     
     while timer castTimer < castTime
         if insysmsg 'You are already casting a spell'
-            wait 100
+            wait 200
+            loop
         elseif insysmsg 'Your concentration'
             wait 200
             loop
