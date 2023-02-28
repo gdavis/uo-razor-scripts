@@ -44,14 +44,13 @@ if skill 'Magery' > 50
         endif
     endwhile
     
-    wft 200
-    
     if targetexists 
         target recallInnTarget
     else
-        overhead 'Failed to cast!'
-        loop
+        wft 1500
+        target recallInnTarget
     endif
+    
 else
     overhead 'No magery!' 38
 endif
