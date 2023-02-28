@@ -2,29 +2,24 @@
 # if no target, target murderer
 # if no target, target grey
 clearsysmsg 
-@setvar! targetDelay 100
 
 hotkey 'Previous Enemy Player Target'
-#wait targetDelay
-
 if insysmsg 'New target set'
+    overhead '▼ENEMY▼' 38 lasttarget
     stop
 elseif insysmsg 'No one matching that was found' 
 endif
 
-
 hotkey 'Previous Murderer Player Target'
-#wait targetDelay
-
 if insysmsg 'New target set'
+    overhead '▼MURDERER▼' 38 lasttarget
     stop
 elseif insysmsg 'No one matching that was found' 
 endif
 
 hotkey 'Previous Criminal Player Target'
-#wait targetDelay
-
 if insysmsg 'New target set'
+    overhead '▼CRIMINAL▼' 38 lasttarget
     stop
 elseif insysmsg 'No one matching that was found' 
 endif
