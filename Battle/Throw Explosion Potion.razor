@@ -1,33 +1,7 @@
-#if targetexists 
-#    while targetexists 
-#        hotkey 'Cancel Current Target'
-#        wait 50
-#    endwhile
-#endif
-
-#if varexist dressBag
-#    if not lhandempty
-#        lift lefthand
-#        wait 100
-#        drop dressBag -1 -1 -1
-#    elseif not rhandempty
-#        lift righthand
-#        wait 100
-#        drop dressBag -1 -1 -1
-#    endif
-#endif
-#
-#if findtype 'Purple Potion' as xpot
-#    overhead '-Explosion Pot-'
-#    dclick xpot
-#else
-#    overhead 'No explositon potions!' 38
-#endif
-
 if findtype 'purple potion' self as potion
     dclick potion
     wft 1000
     if targetexists 
-        target lasttarget
+        target lastharmful
     endif 
 endif
