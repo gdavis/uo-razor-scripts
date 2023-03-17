@@ -78,6 +78,9 @@ if counttype 'empty bottle%s%' self = 0
         drop backpack -1 -1 -1
         say 'Thank you for the bottles!'
         wait 1000
+    else 
+        say 'I am out of bottles! Please drop some on the ground or in the distill box'
+        loop
     endif
 endif
 
@@ -147,10 +150,13 @@ while findtype 'bottle' self as extract
     # of the aspect section where distills begin
     if findtype 'mortar and pestle' self as tool
         gumpclose alchGumpID
+
         dclick tool
         waitforgump alchGumpID
+        
         gumpresponse aspectPageID
         waitforgump alchGumpID
+        
         gumpresponse nextPageResponse
         waitforgump alchGumpID
         wait 650
