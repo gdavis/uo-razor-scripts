@@ -30,48 +30,30 @@ if findtype weaponID lefthand
     stop
 endif
 
+# Equip weapon
+dress 'Halberd'
+
 # 2207 == verite
-if findtype weaponID self 2207 as weapon 
-    dclick weapon
-    while lhandempty
-    endwhile
+if findtype weaponID lefthand 2207 as weapon 
     overhead '+Verite halberd' 14
 # 2897 == poison aspect
-elseif findtype weaponID self 2897 as weapon 
-    dclick weapon
-    while lhandempty
-    endwhile
+elseif findtype weaponID lefthand 2897 as weapon 
     overhead '+Poison halberd' 36
 # 2599 == void aspect
-elseif findtype weaponID self 2599 as weapon 
-    dclick weapon
-    while lhandempty
-    endwhile
+elseif findtype weaponID lefthand 2599 as weapon 
     overhead '+Void halberd' 14
 # 2504 == war aspect
-elseif findtype weaponID self 2503 as weapon
-    dclick weapon
-    while lhandempty
-    endwhile
+elseif findtype weaponID lefthand 2503 as weapon
     overhead '+War halberd' 36
 # 1790 == shadow aspect
-elseif findtype weaponID self 1790 as weapon
-    dclick weapon
-    while lhandempty
-    endwhile
+elseif findtype weaponID lefthand 1790 as weapon
     overhead '+Shadow halberd' 902
-elseif findtype weaponID self as weapon
-    dclick weapon
-    while lhandempty
-    endwhile
+elseif findtype weaponID lefthand as weapon
     overhead '+Reg halberd' 920
 else
     overhead 'Halberd not found!' 38
     stop
 endif
-
-# let item fall into bag
-wait 100
 
 # stash items into bag
 if findtype 'bag' backpack 0 as myBag 
