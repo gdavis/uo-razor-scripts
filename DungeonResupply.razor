@@ -200,19 +200,19 @@ endfor
 overhead 'Items unloaded.' 53
 
 # create shrooms
-if findtype 'wizards grimoire' backpack
-    while counttype 'mushroom' self < shroomCount
-        clearsysmsg 
-        cast 'Create Food'
-        wait 1500
-        
-        if not insysmsg 'You create'
-            overhead 'Restock failed!' 38
-            stop
-        endif
-    endwhile
-    overhead 'Shrooms restocked' 53
-endif
+#if findtype 'wizards grimoire' backpack
+#    while counttype 'mushroom' self < shroomCount
+#        clearsysmsg 
+#        cast 'Create Food'
+#        wait 1500
+#        
+#        if not insysmsg 'You create'
+#            overhead 'Restock failed!' 38
+#            stop
+#        endif
+#    endwhile
+#    overhead 'Shrooms restocked' 53
+#endif
 
 # eat foot if hungry
 if not findbuff 'Food Satisfaction'
