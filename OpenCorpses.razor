@@ -10,4 +10,12 @@ while findtype 'corpse' ground any any 2 as asdf
     @ignore asdf
 endwhile
 
+while findtype 'bones' ground any any 2 as asdf
+    getlabel asdf aCorpse
+    overhead 'Opening {{aCorpse}}' 89
+    dclick asdf
+    wait 500
+    @ignore asdf
+endwhile
+
 overhead 'Done opening corpses.'
