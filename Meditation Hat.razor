@@ -9,7 +9,7 @@ waitforgump 931181454
 gumpresponse 1
 wait 250
 
-while mana < maxmana
+while diffmana > 80
     while not findbuff 'actively meditating'
         skill 'Meditation'
         wait 2500

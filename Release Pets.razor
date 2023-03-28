@@ -1,0 +1,32 @@
+overhead 'Releasing pets...' 54
+@clearignore 
+while followers > 0
+    hotkey "Target Closest Friendly Monster"
+
+    if insysmsg 'New target set'
+        getlabel lasttarget petName
+        @setvar! shouldDismiss 0
+        
+        if 'an earth elemental' in petName or 'an ancient mummy' in petName
+            @setvar! shouldDismiss 1
+        elseif 'an air elemental' in petName or 'a skeletal fiend' in petName
+            @setvar! shouldDismiss 1
+        elseif 'a fire elemental' in petName or 'a lich' in petName
+            @setvar! shouldDismiss 1
+        elseif 'a water elemental' in petName or 'a rag witch' in petName
+            @setvar! shouldDismiss 1
+        elseif 'a daemon' in petName or 'a vampire thrall' in petName
+            @setvar! shouldDismiss 1
+        endif
+        
+        if shouldDismiss = 1
+            overhead 'Dismissing {{petName}}' 8
+            menu lasttarget 9
+            wait 500
+        endif
+        @ignore lasttarget 
+    else
+        overhead 'No pets near!' 38
+    endif
+endwhile
+@clearignore 

@@ -1,0 +1,46 @@
+# Looks for encoded maps,
+# and decodes them.
+
+@setvar! decodeGumpID 1520869851
+
+if not varexist tmapSpyglass or not find tmapSpyglass backpack
+    overhead 'Select your spyglass:'
+    setvar tmapSpyglass
+endif
+
+@clearignore 
+while findtype 5356 backpack as tmap
+    getlabel tmap mapName
+
+    while gumpexists decodeGumpID
+        gumpclose decodeGumpID
+        wait 150
+    endwhile
+
+    if 'undeciphered' in mapName
+        overhead 'Deciphering {{mapName}}...'
+        dclick tmapSpyglass
+        wft
+        target tmap
+        waitforgump decodeGumpID
+        gumpresponse 4 decodeGumpID
+        waitforgump decodeGumpID
+        wait 3000
+        
+    else
+        dclick tmapSpyglass
+        wft
+        target tmap
+        waitforgump decodeGumpID
+        
+        if ingump 'Improve Map Accuracy' 1520869851
+            overhead 'Improving accuracy...'    
+            gumpresponse 4 decodeGumpID
+            waitforgump decodeGumpID
+            wait 3000
+        else
+            sysmsg 'Map at maximum accuracy.' 54
+            @ignore tmap
+        endif
+    endif
+endwhile
