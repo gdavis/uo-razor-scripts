@@ -32,31 +32,43 @@ endif
 # clear previous item moves
 hotkey 'Clear Drag/Drop Queue'
 
-# Equip the weapon
-dress 'Bow'
-
 # 2207 == verite
-if findtype weaponID lefthand 2207 as weapon 
+if findtype weaponID backpack 2207 as weapon 
     overhead '+Verite bow' 14
+    lift weapon
+    drop self lefthand
 # 2897 == poison aspect
-elseif findtype weaponID lefthand 2897 as weapon 
+elseif findtype weaponID backpack 2897 as weapon 
     overhead '+Poison bow' 36
+    lift weapon
+    drop self lefthand
 # 2599 == void aspect
-elseif findtype weaponID lefthand 2599 as weapon 
+elseif findtype weaponID backpack 2599 as weapon 
     overhead '+Void bow' 14
+    lift weapon
+    drop self lefthand
 # 2504 == war aspect
-elseif findtype weaponID lefthand 2503 as weapon
+elseif findtype weaponID backpack 2503 as weapon
     overhead '+War bow' 36
+    lift weapon
+    drop self lefthand
 # 1790 == shadow aspect
-elseif findtype weaponID lefthand 1790 as weapon
+elseif findtype weaponID backpack 1790 as weapon
     overhead '+Shadow bow' 902
+    lift weapon
+    drop self lefthand
 # normal
-elseif findtype weaponID lefthand as weapon
+elseif findtype weaponID backpack as weapon
     overhead '+Reg bow' 920
+    lift weapon
+    drop self lefthand
 else
     overhead 'Bow not found!' 38
     stop
 endif
+
+attack lastharmful
+warmode on
 
 # stash items into bag
 if findtype 'bag' backpack 0 as myBag 
