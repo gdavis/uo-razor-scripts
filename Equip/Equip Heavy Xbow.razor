@@ -30,8 +30,9 @@ hotkey 'Clear Drag/Drop Queue'
 @setvar! weaponSerial 0
     
 
-if findtype weaponID lefthand as weapon
+if findtype weaponID lefthand
     overhead 'H-XBow Already Equipped!' 54
+    @setvar! weaponSerial -1
 elseif findtype weaponID backpack 2207 as weapon 
     overhead '+Verite H-Xbow' 
     @setvar! weaponSerial weapon
@@ -55,17 +56,28 @@ elseif findtype weaponID backpack 1790 as weapon
 elseif findtype weaponID backpack as weapon
     overhead '+Reg H-Xbow' 920
     @setvar! weaponSerial weapon
-else
-    overhead 'H-Xbow not found!' 38
-    stop
 endif
 
-if weaponSerial != 0
-    if targetexists and find weaponSerial backpack
+if weaponSerial != 0 and find weaponSerial backpack
+    if targetexists
+        # this seems to fix the bug where wearing
+        # a spellbook and trying to equip a xbow
+        # will give you a message about 
+        # holding something in both hands that 
+        # prevents the xbow from equipping
+        # by unequipping the spellbook first.
+        if findtype 'spellbook' righthand as book
+            overhead 'removing spellbook'
+            lift book 1
+            drop backpack -1 -1 -1
+        endif
+
+        overhead 'PRECASTED--' 54
         cast 'magic arrow'
         lift weaponSerial 1
         drop self lefthand
     else
+        overhead 'CLICKING WEAPON'
         dclick weaponSerial
     endif
 endif
@@ -85,7 +97,7 @@ if findtype 'bag' backpack 0 as myBag
                 sysmsg 'Ignoring magic item'
             elseif 'blessed' in weaponName
                 sysmsg 'Ignoring blessed item'
-            elseif not find weapon myBag
+            elseif not find weapon myBag and weaponSerial != weapon
                 @setvar! shouldStash 1
             endif
             
