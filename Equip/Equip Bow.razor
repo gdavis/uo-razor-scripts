@@ -23,48 +23,44 @@ pushlist stashList 'halberd'
 # 5042 = bow
 @setvar weaponID 5042
 
-# check if equipped
-if findtype weaponID lefthand
-    overhead '+Bow Equipped' 54
-    stop
-endif
-
 # clear previous item moves
 hotkey 'Clear Drag/Drop Queue'
 
-# 2207 == verite
-if findtype weaponID backpack 2207 as weapon 
+@setvar! weaponSerial 0
+
+# check if equipped
+if findtype weaponID lefthand
+    overhead '+Bow Equipped' 54
+    @setvar! weaponSerial -1
+# 2207 == verite    
+elseif findtype weaponID backpack 2207 as weapon 
     overhead '+Verite bow' 14
-    lift weapon
-    drop self lefthand
+    @setvar! weaponSerial weapon
 # 2897 == poison aspect
 elseif findtype weaponID backpack 2897 as weapon 
     overhead '+Poison bow' 36
-    lift weapon
-    drop self lefthand
+    @setvar! weaponSerial weapon
 # 2599 == void aspect
 elseif findtype weaponID backpack 2599 as weapon 
     overhead '+Void bow' 14
-    lift weapon
-    drop self lefthand
+    @setvar! weaponSerial weapon
 # 2504 == war aspect
 elseif findtype weaponID backpack 2503 as weapon
     overhead '+War bow' 36
-    lift weapon
-    drop self lefthand
+    @setvar! weaponSerial weapon
 # 1790 == shadow aspect
 elseif findtype weaponID backpack 1790 as weapon
     overhead '+Shadow bow' 902
-    lift weapon
-    drop self lefthand
+    @setvar! weaponSerial weapon
 # normal
 elseif findtype weaponID backpack as weapon
     overhead '+Reg bow' 920
-    lift weapon
-    drop self lefthand
-else
-    overhead 'Bow not found!' 38
-    stop
+    @setvar! weaponSerial weapon
+endif
+
+if weaponSerial != 0 and find weaponSerial backpack
+    overhead 'CLICKING BOW'
+    dclick weaponSerial
 endif
 
 attack lastharmful

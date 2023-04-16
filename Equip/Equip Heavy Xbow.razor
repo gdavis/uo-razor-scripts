@@ -68,12 +68,17 @@ if weaponSerial != 0 and find weaponSerial backpack
         # by unequipping the spellbook first.
         if findtype 'spellbook' righthand as book
             overhead 'removing spellbook'
-            lift book 1
-            drop backpack -1 -1 -1
+            undress righthand
+            #lift book 1
+            #drop backpack -1 -1 -1
         endif
 
-        overhead 'PRECASTED--' 54
+        getlabel weaponSerial weaponName
+        overhead 'equipping {{weaponName}}'
+        
+        #overhead '--PRECASTED--' 54
         cast 'magic arrow'
+        
         lift weaponSerial 1
         drop self lefthand
     else
@@ -82,8 +87,12 @@ if weaponSerial != 0 and find weaponSerial backpack
     endif
 endif
 
-warmode on
-attack lastharmful
+@setvar! harmfulTarget lastharmful
+if harmfulTarget != 0 
+    warmode on
+    attack lastharmful
+endif
+
 
 # stash items into bag
 if findtype 'bag' backpack 0 as myBag 
