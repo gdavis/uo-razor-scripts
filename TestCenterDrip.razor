@@ -1,0 +1,13 @@
+while not gumpexists 431030585
+    if not find 0x400E8DF1 ground any any 12
+        overhead 'Not near dress statue!' 38
+        stop
+    endif
+    dclick 0x400E8DF1
+    waitforgump 431030585
+endwhile
+
+while not ingump 'SlimTrousers' 431030585
+    gumpresponse 19 431030585
+    waitforgump 431030585
+endwhile

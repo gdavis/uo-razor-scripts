@@ -1,0 +1,57 @@
+# Trainig for:
+# Necromancy
+# Meditation
+# Taste ID
+
+# put shrooms in shelf
+
+
+if skill 'necromancy' < 120
+    cast 'Create Food'
+    wait 1500
+    
+    if findtype 'reagent satchel' self as satchel
+        if counttype 'Garlic' satchel < 10 or counttype 'Ginseng' satchel < 10 or counttype 'Mandrake Root%s%' satchel < 10
+            overhead 'low on regs!'
+    
+            if findtype 'storage shelf' ground -1 -1 2 as shelf
+                overhead 'Resupplying...'
+                menu shelf 1
+                wait 1000
+            endif
+        endif
+    endif
+endif
+
+if not timerexists tasteTimer
+    createtimer tasteTimer
+    settimer tasteTimer 9999
+endif
+
+if skill 'tasteidentification' = 120
+    sysmsg 'At Taste ID Max' 54
+elseif timer tasteTimer > 5000
+    skill 'tasteidentification'
+    waitfortarget 7000
+    target 0x45752A50
+    waitforgump 328249178
+    gumpclose 328249178
+    settimer tasteTimer 0
+endif
+
+# put on hat for meditation
+if diffmana = 0 
+    dclick 0x413FF59E
+    wait 650    
+    dclick 0x441ADE27
+    wait 650
+endif
+
+# place shrooms in shelf
+if diffweight < 10 and findtype 'mushroom' backpack as shroom
+    lift shroom 60000
+    drop 0x670A7BA8 -1 -1 0
+    wait 650
+endif
+
+loop

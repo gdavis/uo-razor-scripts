@@ -286,10 +286,11 @@ if insysmsg 'New target set'
                 # store the player ID as the name of the rune,
                 # so we can then get that player ID and use for
                 # storing a timer for that player.
-                dclick scratchpad
-                waitforprompt 1036 1000
-                promptresponse player
-                getlabel scratchpad playerID    
+                @setvar! playerID player
+#                dclick scratchpad
+#                waitforprompt 1036 1000
+#                promptresponse player
+#                getlabel scratchpad playerID    
                 sysmsg 'BUFFBOT: found target {{playerID}}' 48
                 
                 # check if player is on cooldown
@@ -299,7 +300,7 @@ if insysmsg 'New target set'
                         settimer playerID 0
                     else
                         sysmsg 'BUFFBOT: {{playerID}} has been buffed too recently.' 38
-                    say 'Come back later, you get one every two minutes.'
+                        say 'Come back later, you get one every two minutes.'
                         break
                     endif
                 endif
