@@ -5,6 +5,12 @@
 # opening so you can walk right in.
 #overhead '--GATE BOT--' 920
 
+# walk back to chair.
+while position 4296 802
+    walk 'South'
+    wait 667
+endwhile
+
 # check for starting location
 if not position 4296 803
     overhead 'Not in correct position!' 38
