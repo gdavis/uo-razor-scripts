@@ -16,6 +16,10 @@
 @setvar! buffCooldown 30000
 @setvar! speakCooldown 30000
 
+# choose whether to periodically
+# make random announcements
+@setvar! announcementsEnabled 0
+
 # set to 1 to callback to check for distillations
 # on a given delay
 @setvar! distillBot 0
@@ -208,7 +212,7 @@ if buffsEnabled = 0
         endif
 
         # announce randomly and when enough time has elapsed.
-        if shouldSpeak = 1
+        if shouldSpeak = 1 and announcementsEnabled = 1
             # random what should be said
             clearsysmsg 
             random 6
