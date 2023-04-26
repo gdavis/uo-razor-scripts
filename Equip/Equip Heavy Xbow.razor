@@ -68,9 +68,7 @@ if weaponSerial != 0 and find weaponSerial backpack
         # by unequipping the spellbook first.
         if findtype 'spellbook' righthand as book
             overhead 'removing spellbook'
-            undress righthand
-            #lift book 1
-            #drop backpack -1 -1 -1
+            clearhands right
         endif
 
         getlabel weaponSerial weaponName

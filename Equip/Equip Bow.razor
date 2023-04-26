@@ -59,12 +59,42 @@ elseif findtype weaponID backpack as weapon
 endif
 
 if weaponSerial != 0 and find weaponSerial backpack
-    overhead 'CLICKING BOW'
-    dclick weaponSerial
+    if targetexists
+        # this seems to fix the bug where wearing
+        # a spellbook and trying to equip a xbow
+        # will give you a message about 
+        # holding something in both hands that 
+        # prevents the xbow from equipping
+        # by unequipping the spellbook first.
+        if findtype 'spellbook' righthand as book
+            overhead 'removing spellbook'
+            clearhands right
+        endif
+
+        getlabel weaponSerial weaponName
+        overhead 'equipping {{weaponName}}'
+        
+        #overhead '--PRECASTED--' 54
+        cast 'magic arrow'
+        
+        lift weaponSerial 1
+        drop self lefthand
+    else
+        overhead 'CLICKING BOW'
+        dclick weaponSerial
+    endif
 endif
 
-attack lastharmful
-warmode on
+#if weaponSerial != 0 and find weaponSerial backpack
+#    overhead 'CLICKING BOW'
+#    dclick weaponSerial
+#endif
+
+@setvar! harmfulTarget lastharmful
+if harmfulTarget != 0 
+    warmode on
+    attack lastharmful
+endif
 
 # stash items into bag
 if findtype 'bag' backpack 0 as myBag 
