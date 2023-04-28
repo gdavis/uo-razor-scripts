@@ -1,0 +1,16 @@
+
+if not varexist currentHat or not find currentHat self
+    overhead 'Select your headwear:' 54
+    setvar currentHat
+endif
+
+if diffstam = 0 and findtype "wizard's hat" backpack as hat
+    dclick hat
+    wait 650
+    
+    if find currentHat backpack as prevHat
+        dclick prevHat
+    endif
+endif
+
+loop
