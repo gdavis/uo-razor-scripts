@@ -1,21 +1,26 @@
-
-while mana >= 50 
-    hotkey 'Water Elemental'
-    wait 3000
+if skill 'wrestling' == 80
+    setskill 'wrestling' lock
+    setskill 'meditation' lock
+    stop
 endif
 
-say 'all release'
-waitforgump 931181454
-gumpresponse 1
-wait 250
+if not varexist currentHat or not find currentHat self
+    overhead 'Select your headwear:' 54
+    setvar currentHat
+endif
 
-while diffmana > 80
-    while not findbuff 'actively meditating'
-        skill 'Meditation'
-        wait 2500
-    endwhile
-    
-    wait 1000
-endwhile
+if diffmana = 0
+    if findtype "wizard's hat" backpack as hat
+        dclick hat
+        wait 650
+        
+        while diffmana > 0
+            skill 'meditation'
+        endwhile
+        
+        dclick currentHat
+        wait 650
+    endif
+endif
 
 loop
