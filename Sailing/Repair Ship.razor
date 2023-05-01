@@ -2,7 +2,7 @@
 @setvar! repairStep 0
 
 while 1 = 1
-    if findtype 'wall shelf' backpack as repairkit
+    if findtype 'ship repair kit' backpack as repairkit
         dclick repairkit
         waitforgump repairGump
     else 
