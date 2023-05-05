@@ -1,0 +1,9 @@
+# Brings up a target cursor
+# to board a nearby boat.
+if findtype 5370 as boardingRope
+    dclick boardingRope
+    waitforgump 2881168634 1500
+    gumpresponse 5 2881168634
+else
+    overhead 'No boarding rope!' 35
+endif
