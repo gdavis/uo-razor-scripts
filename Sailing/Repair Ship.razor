@@ -4,11 +4,16 @@
 while 1 = 1
     if findtype 'ship repair kit' backpack as repairkit
         dclick repairkit
-        waitforgump repairGump
+        waitforgump repairGump 500
     else 
         overhead 'I need a repair kit!' 38
         wait 2500
         loop
+    endif
+    
+    if not gumpexists repairGump
+        # failed to open for some reason, try again.
+        continue
     endif
     
     if repairStep = 0 
@@ -45,6 +50,7 @@ while 1 = 1
         overhead '*begins repairing sails*' 1001
         clearsysmsg 
         gumpresponse 3
+        wait 150
 
         while repairStep = 2
             if insysmsg 'Sails repaired for'
