@@ -17,6 +17,8 @@ while followers > 0
             @setvar! shouldDismiss 1
         elseif 'a daemon' in petName or 'a vampire thrall' in petName
             @setvar! shouldDismiss 1
+        elseif 'a mummy' in petName or 'a rotting flesh' in petName or 'a skeleton' in petName
+            @setvar! shouldDismiss 1
         endif
         
         if shouldDismiss = 1
