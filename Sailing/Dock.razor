@@ -1,0 +1,56 @@
+# Finds a dockmaster and 
+# docks the ship. 
+while 1 = 1
+    clearsysmsg 
+    hotkey 'Next Target'
+    
+    if gumpexists 3287496917
+        gumpclose 3287496917
+    endif
+    
+    if insysmsg 'New target set'
+        @setvar! targetID lasttarget 
+        getlabel lasttarget targetName
+        #overhead '{{targetName}}'
+   
+        if insysmsg 'getlabel - Skipped'
+            # Skipping player
+            continue
+        endif  
+        
+        if 'the dockmaster' in targetName
+            overhead 'Found the dockmaster!' 54
+            menu targetID 1
+            waitforgump 3287496917 2000
+            
+            if not gumpexists 3287496917
+                continue
+            endif
+            
+            if ingump 'Shipping Crate'
+                overhead 'Stashing hold into crate...'
+                gumpresponse 8 3287496917
+                waitforgump 3287496917 2000
+                
+                if insysmsg 'You must own a house'
+                    overhead 'Cannot use a shipping crate!' 38
+                    sysmsg 'You cannot use this script to dock unless you own a house or inn! Otherwise all the items would fall on the floor!' 38
+                    stop
+                endif
+            endif
+            
+            if not gumpexists 3287496917
+                continue
+            endif
+            
+            if ingump 'Dock Ship'
+                overhead 'Docking ship...'
+                gumpresponse 7 3287496917
+            else
+                overhead 'No ship to dock!' 38
+            endif
+            
+            stop
+        endif
+    endif
+endwhile
