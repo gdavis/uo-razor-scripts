@@ -1,29 +1,50 @@
-# GTFO by @FewUnderstandThis
-# Try to use gate, enter/exit rental room, else recall
-
-clearsysmsg
+# GTFO V3
+# Fixed by Aphlux
 overhead 'GTFO' 1150
 
 # Player gate, moongate, dungeon gate
-if findtype 3948 'ground' 'any' 1 2 as 'gate'
+if findtype 3948 ground any any 2 as 'gate'
     dclick 'gate'
+
     # Player gate
     if hue 'gate' = 0
         waitforgump 3899019871 800
-        gumpresponse 2
+    
+        if gumpexists 3899019871
+            gumpresponse 2
+        else
+            overhead 'EXIT FAILED' 38
+            loop
+        endif
+
     # Moongate, dungeon gate
     else
         waitforgump 3773199800 800
+        if not gumpexists 3773199800
+            overhead 'EXIT FAILED'
+            loop
+        endif
+        
         # Select Andaria
-        gumpresponse 11
+        gumpresponse 11 3773199800
         waitforgump 3773199800 800
-        gumpresponse 2
+        
+        if not gumpexists 3773199800
+            overhead 'EXIT FAILED'
+            loop
+        endif
+        gumpresponse 2 3773199800
     endif
 
 # Chiv gate
-elseif findtype 30528 'ground' 'any' 1 2 as 'gate'
+elseif findtype 30528 'ground' any any 2 as 'gate'
     dclick 'gate'
     waitforgump 3899019871 800
-    gumpresponse 2
-
+    
+    if gumpexists 3899019871
+        gumpresponse 2 3899019871
+    else
+        overhead 'EXIT FAILED' 38
+        loop
+    endif
 endif
