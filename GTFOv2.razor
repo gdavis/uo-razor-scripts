@@ -1,29 +1,57 @@
 # GTFO by @FewUnderstandThis
 # Try to use gate, enter/exit rental room, else recall
-
+# Updated by Aphlux
 clearsysmsg
-overhead 'GTFO' 1150
+overhead 'GTFO' 54
 
-# Player gate, moongate, dungeon gate
-if findtype 3948 'ground' 'any' 1 2 as 'gate'
-    dclick 'gate'
-    # Player gate
-    if hue 'gate' = 0
+if not timerexists gtfoTimer
+    createtimer gtfoTimer
+endif
+settimer gtfoTimer 0
+
+while 1 = 1
+    clearsysmsg 
+
+    # Player gate, moongate, dungeon gate
+    if findtype 3948 'ground' 'any' 1 2 as 'gate'
+        dclick 'gate'
+        # Player gate
+        if hue 'gate' = 0
+            waitforgump 3899019871 800
+            gumpresponse 2
+            wait 200
+            
+            if insysmsg 'too far away'
+                continue
+            endif
+            
+            stop
+        # Moongate, dungeon gate
+        else
+            waitforgump 3773199800 800
+            # Select Andaria
+            gumpresponse 11
+            waitforgump 3773199800 800
+            gumpresponse 2            
+            wait 200
+            
+            if insysmsg 'too far away'
+                continue
+            endif
+            
+            stop
+        endif
+
+    # Chiv gate
+    elseif findtype 30528 'ground' 'any' 1 2 as 'gate'
+        dclick 'gate'
         waitforgump 3899019871 800
         gumpresponse 2
-    # Moongate, dungeon gate
-    else
-        waitforgump 3773199800 800
-        # Select Andaria
-        gumpresponse 11
-        waitforgump 3773199800 800
-        gumpresponse 2
+        stop
     endif
-
-# Chiv gate
-elseif findtype 30528 'ground' 'any' 1 2 as 'gate'
-    dclick 'gate'
-    waitforgump 3899019871 800
-    gumpresponse 2
-
-endif
+    
+    if timer gtfoTimer > 3000
+        overhead 'Failed to GTFO!' 38
+        stop
+    endif
+endwhile
