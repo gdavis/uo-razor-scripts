@@ -18,7 +18,7 @@ while 1 = 1
         # Player gate
         if hue 'gate' = 0
             waitforgump 3899019871 800
-            gumpresponse 2
+            gumpresponse 2 3899019871
             wait 200
             
             if insysmsg 'too far away'
@@ -32,7 +32,7 @@ while 1 = 1
             # Select Andaria
             gumpresponse 11
             waitforgump 3773199800 800
-            gumpresponse 2            
+            gumpresponse 2 3773199800            
             wait 200
             
             if insysmsg 'too far away'
@@ -46,7 +46,7 @@ while 1 = 1
     elseif findtype 30528 'ground' 'any' 1 2 as 'gate'
         dclick 'gate'
         waitforgump 3899019871 800
-        gumpresponse 2
+        gumpresponse 2 3899019871
         stop
     endif
     
@@ -55,3 +55,4 @@ while 1 = 1
         stop
     endif
 endwhile
+
