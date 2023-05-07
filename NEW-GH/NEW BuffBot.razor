@@ -13,7 +13,7 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
-overhead '--BUFF BOT--' 89
+#overhead '--BUFF BOT--' 89
 
 @setvar! buffCooldown 120000
 @setvar! speakCooldown 30000
@@ -31,6 +31,7 @@ overhead '--BUFF BOT--' 89
 @setvar! distillBot 1
 @setvar! runDistillScriptDelay 10000
 
+# ban bot vars
 @setvar! banBotEnabled 1
 @setvar! banBotScriptDelay 2500
 
@@ -79,8 +80,8 @@ if distillBot = 1 and timer distillScriptTimer > runDistillScriptDelay
     script 'NEW Distillations'
 endif
 
-if banBotEnabled = 1 and timer distillScriptTimer > banBotScriptDelay
-    settimer distillScriptTimer 0
+if banBotEnabled = 1 and timer banBotScriptTimer > banBotScriptDelay
+    settimer banBotScriptTimer 0
     script 'NEW BanBot'
 endif
 
