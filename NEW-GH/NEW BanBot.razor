@@ -1,0 +1,36 @@
+# Bans unwanted players from the GH.
+# When one is found will keep looping
+# until there is no on left to ban.
+clearsysmsg 
+
+# ban murderers
+hotkey 'Next Murderer Player Target'
+if insysmsg 'New target set'
+    say 'I ban thee'
+    wft 2000
+    target lasttarget
+    wait 600
+    loop
+endif
+
+# ban criminals
+hotkey 'Next Criminal Player Target'
+if insysmsg 'New target set'
+    say 'I ban thee'
+    wft 2000
+    target lasttarget
+    wait 600
+    loop
+endif
+
+# ban greys (blues grey from entering)
+hotkey 'Next Grey Player Target'
+if insysmsg 'New target set'
+    say 'I ban thee'
+    wft 2000
+    target lasttarget
+    wait 600
+    loop
+endif
+
+script 'NEW BuffBot'

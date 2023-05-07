@@ -2,6 +2,43 @@
 @setvar! useGreetings 1
 @setvar! greetingTimeout 30000
 
+
+clearsysmsg 
+
+# Ban Bot ----
+# ban murderers
+hotkey 'Next Murderer Player Target'
+if insysmsg 'New target set'
+    say 'I ban thee'
+    wft 2000
+    target lasttarget
+    wait 600
+    loop
+endif
+
+# ban criminals
+hotkey 'Next Criminal Player Target'
+if insysmsg 'New target set'
+    say 'I ban thee'
+    wft 2000
+    target lasttarget
+    wait 600
+    loop
+endif
+
+# ban greys (blues grey from entering)
+hotkey 'Next Grey Player Target'
+if insysmsg 'New target set'
+    say 'I ban thee'
+    wft 2000
+    target lasttarget
+    wait 600
+    loop
+endif
+
+
+# Timers -----
+
 if not timerexists doorMan
     createtimer doorMan
     settimer doorMan 999999

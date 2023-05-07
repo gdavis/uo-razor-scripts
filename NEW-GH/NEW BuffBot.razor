@@ -13,7 +13,7 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
-#overhead '--BUFF BOT--' 89
+overhead '--BUFF BOT--' 89
 
 @setvar! buffCooldown 120000
 @setvar! speakCooldown 30000
@@ -30,6 +30,9 @@
 # on a given delay
 @setvar! distillBot 1
 @setvar! runDistillScriptDelay 10000
+
+@setvar! banBotEnabled 1
+@setvar! banBotScriptDelay 2500
 
 # number of miliseconds to actively
 # look for buffing targets
@@ -57,6 +60,10 @@ if not timerexists distillScriptTimer
     createtimer distillScriptTimer
 endif
 
+if not timerexists banBotScriptTimer
+    createtimer banBotScriptTimer
+endif
+
 if gateBot = 1 and timer gateScriptTimer > gateBotScriptDelay
     settimer gateScriptTimer 0
     script 'NEW GateBot'
@@ -70,6 +77,11 @@ endif
 if distillBot = 1 and timer distillScriptTimer > runDistillScriptDelay
     settimer distillScriptTimer 0
     script 'NEW Distillations'
+endif
+
+if banBotEnabled = 1 and timer distillScriptTimer > banBotScriptDelay
+    settimer distillScriptTimer 0
+    script 'NEW BanBot'
 endif
 
 # ignore list
