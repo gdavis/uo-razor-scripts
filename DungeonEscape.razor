@@ -1,6 +1,7 @@
-# GTFO by @FewUnderstandThis
-# Try to use gate, enter/exit rental room, else recall
-# Updated by Aphlux
+# Dungeon Escape by Aphlux
+# Searches for a dungeon or player
+# gate for 5 seconds and uses it.
+# Defaults to Andaria for towns.
 clearsysmsg
 overhead 'GTFO' 54
 
@@ -8,15 +9,16 @@ if not timerexists gtfoTimer
     createtimer gtfoTimer
 endif
 settimer gtfoTimer 0
+@setvar! gtfoTimeout 5000
 
 while 1 = 1
     clearsysmsg 
 
     # Player gate, moongate, dungeon gate
-    if findtype 3948 'ground' 'any' 1 2 as 'gate'
-        dclick 'gate'
+    if findtype 3948 'ground' any 1 2 as gate
+        dclick gate
         # Player gate
-        if hue 'gate' = 0
+        if hue gate = 0
             waitforgump 3899019871 800
             gumpresponse 2 3899019871
             wait 200
@@ -41,18 +43,10 @@ while 1 = 1
             
             stop
         endif
-
-    # Chiv gate
-    elseif findtype 30528 'ground' 'any' 1 2 as 'gate'
-        dclick 'gate'
-        waitforgump 3899019871 800
-        gumpresponse 2 3899019871
-        stop
     endif
     
-    if timer gtfoTimer > 3000
+    if timer gtfoTimer > gtfoTimeout
         overhead 'Failed to GTFO!' 38
         stop
     endif
 endwhile
-
