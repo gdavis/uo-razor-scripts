@@ -78,7 +78,7 @@ endfor
 if poplist parentPouches2 front as topLeftPouch
     overhead 'moving top left pouch'
     lift topLeftPouch
-    drop backpack 44 64 0
+    drop backpack 0 0 0
     wait actionDelay
 endif
 
@@ -86,7 +86,7 @@ endif
 if poplist parentPouches2 front as btmLeftPouch
     overhead 'moving lower bottom left pouch'
     lift btmLeftPouch
-    drop backpack 44 133 0
+    drop backpack 0 0 0
     wait actionDelay
 endif
 
@@ -110,16 +110,17 @@ if findtype 'pouch' backpack 0 as pouch
         wait actionDelay
     endif
 
+    overhead 'moving content pouch to top left'
     lift pouch
-    drop backpack 44 133 0
+    drop backpack 0 0 0
     wait actionDelay
 endif
 
 # trapped pouch on top of content bag
-if poplist parentPouches2 front as btmLeftPouch
-    overhead 'moving lower left top pouch'
-    lift btmLeftPouch
-    drop backpack 44 133 0
+if poplist parentPouches2 front as btmRightPouch
+    overhead 'moving trapped top left pouch'
+    lift btmRightPouch
+    drop backpack 0 0 0
     wait actionDelay
 endif
 
