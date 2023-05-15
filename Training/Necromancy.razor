@@ -11,7 +11,7 @@ if skill 'camping' == 20
     setskill 'spirit speak' down
 endif
 
-if skill 'necromancy' < 75    
+if skill 'necromancy' < 80
     if hp < 50
         cast 'Greater Heal'
         wft 6000
@@ -25,7 +25,7 @@ if skill 'necromancy' < 75
         target 'self'
         wait 2500
     endif
-elseif skill 'necromancy' < 100
+elseif skill 'necromancy' < 120
     cast 'Create Food'
     wait 1500
     
@@ -37,6 +37,12 @@ elseif skill 'necromancy' < 100
                 overhead 'Resupplying...'
                 menu shelf 1
                 wait 1000
+                
+                if diffweight < 20 and findtype 29012 backpack as shroom
+                    lift shroom 60000
+                    drop shelf
+                    wait 1000
+                endif
             endif
         endif
     endif
