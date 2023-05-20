@@ -158,9 +158,16 @@ while findtype 'bottle' self as extract
         dclick tool
         waitforgump alchGumpID
         
+        # goto 'Aspect Items'
         gumpresponse aspectPageID alchGumpID
         waitforgump alchGumpID
         
+        # goto page 2
+        gumpresponse nextPageResponse alchGumpID
+        waitforgump alchGumpID
+        wait 650
+        
+        # goto page 3
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
         wait 650
@@ -175,84 +182,95 @@ while findtype 'bottle' self as extract
 
     # go to the page for this extract,
     # then create it
-    // page 2/4
+    // page 3
     if 'Air' in extractName
         overhead 'Air' 1001
-        gumpresponse 208 alchGumpID
+        gumpresponse 200 alchGumpID
 
     elseif 'Artisan' in extractName
         overhead 'Artisan' 544
-        gumpresponse 209 alchGumpID
+        gumpresponse 201 alchGumpID
 
-    // page 3/4
     elseif 'Blood' in extractName
         overhead 'Blood' 38        
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 200 alchGumpID
+        gumpresponse 202 alchGumpID
         
     elseif 'Command' in extractName
         overhead 'Command' 68
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 201 alchGumpID
+        gumpresponse 203 alchGumpID
 
     elseif 'Death' in extractName
         overhead 'Death' 923
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 202 alchGumpID
+        gumpresponse 204 alchGumpID
 
     elseif 'Discipline' in extractName
         overhead 'Discipline' 442
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 203 alchGumpID
+        gumpresponse 205 alchGumpID
 
     elseif 'Earth' in extractName
         overhead 'Earth' 544
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 204 alchGumpID
+        gumpresponse 206 alchGumpID
 
     elseif 'Eldritch' in extractName
         overhead 'Eldritch' 24
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 205 alchGumpID
+        gumpresponse 207 alchGumpID
 
     elseif 'Fire' in extractName
         overhead 'Fire' 38
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 206 alchGumpID
+        gumpresponse 208 alchGumpID
 
     elseif 'Fortune' in extractName
         overhead 'Fortune' 53
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 207 alchGumpID
+        gumpresponse 209 alchGumpID
+    
+    // page 4
+    elseif 'Gadget' in extractName
+        overhead 'Gadget' 53
+        gumpresponse nextPageResponse alchGumpID
+        waitforgump alchGumpID
+        gumpresponse 200 alchGumpID
+        
+    elseif 'Harvest' in extractName
+        overhead 'Harvest' 53
+        gumpresponse nextPageResponse alchGumpID
+        waitforgump alchGumpID
+        gumpresponse 201 alchGumpID
 
     elseif 'Holy' in extractName
         overhead 'Holy' 53
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 208 alchGumpID
+        gumpresponse 202 alchGumpID
 
     elseif 'Lyric' in extractName
         overhead 'Lyric' 38
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 209 alchGumpID
+        gumpresponse 203 alchGumpID
 
-    // page 4/4
     elseif 'Poison' in extractName
         overhead 'Poison' 68
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 200 alchGumpID
+        gumpresponse 204 alchGumpID
 
     elseif 'Shadow' in extractName
         overhead 'Shadow' 923
@@ -260,7 +278,7 @@ while findtype 'bottle' self as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 201 alchGumpID
+        gumpresponse 205 alchGumpID
 
     elseif 'Void' in extractName
         overhead 'Void' 14
@@ -268,7 +286,7 @@ while findtype 'bottle' self as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 202 alchGumpID
+        gumpresponse 206 alchGumpID
 
     elseif 'War' in extractName
         overhead 'War' 44
@@ -276,7 +294,7 @@ while findtype 'bottle' self as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 203 alchGumpID
+        gumpresponse 207 alchGumpID
         
     elseif 'Water' in extractName
         overhead 'Water' 8
@@ -284,7 +302,7 @@ while findtype 'bottle' self as extract
         waitforgump alchGumpID
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 204 alchGumpID
+        gumpresponse 208 alchGumpID
 
     else 
         overhead 'Unknown extract type! {{extractName}}' 38
