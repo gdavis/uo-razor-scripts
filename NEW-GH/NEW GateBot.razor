@@ -5,12 +5,6 @@
 # opening so you can walk right in.
 #overhead '--GATE BOT--' 920
 
-# walk back to chair.
-while position 4296 802
-    walk 'South'
-    wait 667
-endwhile
-
 # check for starting location
 if not position 4296 803
     overhead 'Not in correct position!' 38
@@ -117,23 +111,11 @@ while timer gateTimer < gateCooldown
     wait 1000
 endwhile
 
-# move to gate spot
-while position 4296 803
-    walk 'North'
-    wait 667
-endwhile
 # gate to destination
 say '[SacredJourney'
 waitforgump 1482653814 6000
 gumpresponse destination
 settimer gateTimer 0
-
-# walk back to chair.
-while position 4296 802
-    walk 'South'
-    wait 667
-endwhile
-
 say 'Safe travels!'
 
 # turn off item
