@@ -13,10 +13,14 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
+
 #overhead '--BUFF BOT--' 89
 
-@setvar! buffCooldown 120000
+@setvar! buffCooldown 30000
 @setvar! speakCooldown 30000
+
+# set to 1 for sysmsgs with targetted player ids
+@setvar! printPlayerIDs 0
 
 # set to 1 to run the gate script
 @setvar! gateBot 1
@@ -96,12 +100,6 @@ if not listexists ignoreList
     pushlist ignoreList 2460069 back
     pushlist ignoreList 1492384 back
     pushlist ignoreList 1248535 back
-endif
-
-# scratchpad for saving player IDs
-if not varexist scratchpad
-    overhead 'Select a marked rune that can be used as a scratchpad:'
-    setvar scratchpad
 endif
 
 # timer for announcing service
@@ -285,56 +283,64 @@ endif
 clearsysmsg 
 
 if targetexists 
-    hotkey "Clear Target Queue"
-    hotkey "Cancel Current Target"
+    #hotkey "Clear Target Queue"
+    #hotkey "Cancel Current Target"
+    hotkey 'Interrupt'
 endif
 
-hotkey "Next Friendly Player Target"
-
-if insysmsg 'New target set' 
-    @setvar! player lasttarget
-    sysmsg 'ID: {{player}}' 472
-
-    if not varexist lastPlayerID
-        @setvar! lastPlayerID player
-    elseif lastPlayerID = player
-        sysmsg 'Waiting for new target...' 908
-        wait 2500
-    else 
-        @setvar! lastPlayerID player
-    endif
+if findtype 3999 backpack as scissorsID
+    @setvar! scissors scissorsID
+else
+    overhead 'Scissors required!'
+    sysmsg 'Buffbot failed: Scissors are required to be in the backpack'
+    stop
+endif
     
+while timer buffTimer < 30000
+    hotkey "Next Friendly Player Target"
 
-    if inlist ignoreList player
-        sysmsg 'Ignoring player.' 138
-        loop
-    endif
+    if insysmsg 'New target set' 
+        @setvar! player lasttarget
     
-    if findtype 3999 backpack as scissors
+        if printPlayerIDs = 1
+            sysmsg 'ID: {{player}}' 472
+        endif
+
+        if not varexist lastPlayerID
+            @setvar! lastPlayerID player
+        elseif lastPlayerID = player
+            sysmsg 'Waiting for new target...' 908
+            wait 2500
+            loop
+        else 
+            @setvar! lastPlayerID player
+        endif
+
+        if inlist ignoreList player
+            sysmsg 'Ignoring player.' 138
+            continue
+        endif
+        
         settimer rangeTimer 0
         dclick scissors
         wft 6000
-        target player 
-        wait 666
+        target player
+        wait 350
         
-        while 1 = 1
+        @setvar! waitingForRange 1
+        while waitingForRange = 1
             if timer rangeTimer > rangeTimeout
                 hotkey 'Cancel Current Target'
                 overhead 'Player moved away?' 44
-                break
+                @setvar! waitingForRange 0
                 
             elseif insysmsg 'cannot be used on that'
                 #overhead 'in range'
-                @setvar! playerID player
+                @setvar! playerID player  
                 
-                # store the player ID as the name of the rune,
-                # so we can then get that player ID and use for
-                # storing a timer for that player.
-#                dclick scratchpad
-#                waitforprompt 1036 1000
-#                promptresponse player
-#                getlabel scratchpad playerID    
-                sysmsg 'BUFFBOT: found target {{playerID}}' 48
+                if printPlayerIDs = 1
+                    sysmsg 'BUFFBOT: found target {{playerID}}' 48
+                endif
                 
                 # check if player is on cooldown
                 if timerexists playerID
@@ -343,8 +349,8 @@ if insysmsg 'New target set'
                         settimer playerID 0
                     else
                         sysmsg 'BUFFBOT: {{playerID}} has been buffed too recently.' 38
-                    say 'Come back later, you get one every two minutes.'
-                        break
+                        say 'Come back later, you get one every two minutes.'
+                        @setvar! waitingForRange 0
                     endif
                 endif
                 
@@ -379,22 +385,18 @@ if insysmsg 'New target set'
                     settimer playerID 0
                 endif
 
-                break
+                @setvar! waitingForRange 0
                 
             elseif insysmsg 'too far away.' or insysmsg 'target is out of range' or insysmsg 'Target cannot be seen'
                 #overhead 'not in range'
-                break
-            else
-                wait 100
+                @setvar! waitingForRange 0
             endif
         endwhile
     else
-        overhead 'Scissors are required for a range check' 38
-        wait 2000
+        overhead 'Target: None' 908
+        wait 250
+        break
     endif
-else
-    overhead 'Target: None' 908
-    wait 250
-endif
+endwhile 
 
 loop
