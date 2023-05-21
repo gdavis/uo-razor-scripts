@@ -108,7 +108,7 @@ if not timerexists speakTimer
 endif
 
 # timeout for someone moving out of range
-@setvar! rangeTimeout 6000
+@setvar! rangeTimeout 2000
 if not timerexists rangeTimer
     createtimer rangeTimer
 endif
@@ -325,7 +325,7 @@ while timer buffTimer < 30000
         dclick scissors
         wft 6000
         target player
-        wait 350
+        wait 600
         
         @setvar! waitingForRange 1
         while waitingForRange = 1
