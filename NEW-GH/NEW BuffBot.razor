@@ -297,8 +297,27 @@ else
 endif
     
 while timer buffTimer < 30000
-    hotkey "Next Friendly Player Target"
+    # check if lantern has been turned off
+    if buffsEnabled = 1 and findtype 2597 ground 1779 any 1 as lantern
+        overhead 'Stopping buffs...' 54
+        clearsysmsg
+        random 3
+        
+        if insysmsg 'Random: 1'
+            say 'Blessed and ready to conquer the world.'
+        elseif insysmsg 'Random: 2'
+            say "Enjoy the buff while it lasts!"
+        elseif insysmsg 'Random: 3'
+            say 'Feels like a cozy blanket of magical defense.'
+        endif
+        wait 1000
+        
+        emote 'closes spellbook'
+        setvar! buffsEnabled 0
+        settimer buffTimer 999999
+    endif
 
+    hotkey "Next Friendly Player Target"
     if insysmsg 'New target set' 
         @setvar! player lasttarget
     
