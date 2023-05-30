@@ -13,6 +13,17 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
+
+
+# TEMPORARY TRAINING CODE----------
+if skill 'itemidentification' < 120
+    skill 'itemidentification'
+    waitfortarget
+    targettype 'scissors' backpack
+    wait 5000
+endif
+#----------------------------------
+
 @setvar! buffCooldown 30000
 @setvar! speakCooldown 30000
 
@@ -82,6 +93,20 @@ if mana < 30
     say "Gah, I cannot concentrate! Shut up and let me think a moment..."
     wait 5000
     loop
+endif
+
+# identify the items in the recycler
+@setvar! itemIDTimeout 10000
+
+if not timerexists itemIDTimer
+    createtimer itemIDTimer
+endif
+
+if skill 'itemidentification' = 120 and findtype 'ornate elven chest' as itemBox and timer itemIDTimer > itemIDTimeout
+    skill 'itemidentification'
+    wft 3000
+    target itemBox
+    settimer itemIDTimer 0
 endif
 
 # check for reagents
