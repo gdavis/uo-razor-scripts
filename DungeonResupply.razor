@@ -199,6 +199,36 @@ endfor
 @clearignore 
 overhead 'Items unloaded.' 53
 
+# add treasure maps to tome
+if findtype 'book' ground 2990 any any 2 as tome
+    menu tome 0
+endif
+
+# add lumber maps to tome
+if findtype 'book' ground 2799 any any 2 as tome
+    menu tome 0
+endif
+
+# add skinning maps to tome
+if findtype 'book' ground 2651 any any 2 as tome
+    menu tome 0
+endif
+
+# add ore maps to tome
+if findtype 'book' ground 2796 any any 2 as tome
+    menu tome 0
+endif
+
+# add fishing maps to tome
+if findtype 'book' ground 2722 any any 2 as tome
+    menu tome 0
+endif
+
+# add rare cloth to tome
+if findtype 'book' ground 1495 any any 2 as tome
+    menu tome 0
+endif
+
 # create shrooms
 #if findtype 'wizards grimoire' backpack
 #    while counttype 'mushroom' self < shroomCount
