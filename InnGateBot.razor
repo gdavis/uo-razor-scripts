@@ -107,23 +107,11 @@ while timer gateTimer < gateCooldown
     wait 1000
 endwhile
 
-# move to gate spot
-while position 244 455
-    walk 'South'
-    wait 667
-endwhile
-
 # gate to destination
 say '[SacredJourney'
 waitforgump 1482653814 6000
 gumpresponse destination
 settimer gateTimer 0
-
-# walk back to chair.
-while position 244 456
-    walk 'North'
-    wait 667
-endwhile
 
 say 'Safe travels!'
 
