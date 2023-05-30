@@ -175,6 +175,13 @@ pushlist basicItems 'club'
 pushlist basicItems 'quarter staff'
 # pushlist basicItems ''
 
+# dump magic items into recycler
+if findtype 'ornate elven chest' ground any any 2 as itemBox
+    overhead 'Unloading unidentified items...' 53
+    menu itemBox 1
+endif
+
+# unload listed items not dumped into recylcer
 clearsysmsg 
 @clearignore 
 overhead 'Unloading items...' 53
@@ -196,53 +203,43 @@ foreach itemID in basicItems
         @ignore item
     endwhile
 endfor
-@clearignore 
-overhead 'Items unloaded.' 53
+@clearignore
 
 # add treasure maps to tome
 if findtype 'book' ground 2990 any any 2 as tome
+    overhead 'Unloading treasure maps...' 53
     menu tome 0
 endif
 
 # add lumber maps to tome
-if findtype 'book' ground 2799 any any 2 as tome
+if findtype 'book' ground 2799 any any 2 as tome and findtype 'map' backpack 2799
+    overhead 'Unloading lumber maps...' 53
     menu tome 0
 endif
 
 # add skinning maps to tome
-if findtype 'book' ground 2651 any any 2 as tome
+if findtype 'book' ground 2651 any any 2 as tome and findtype 'map' backpack 2651
+    overhead 'Unloading skinning maps...' 53
     menu tome 0
 endif
 
 # add ore maps to tome
-if findtype 'book' ground 2796 any any 2 as tome
+if findtype 'book' ground 2796 any any 2 as tome and findtype 'map' backpack 2796
+    overhead 'Unloading ore maps...' 53
     menu tome 0
 endif
 
 # add fishing maps to tome
-if findtype 'book' ground 2722 any any 2 as tome
+if findtype 'book' ground 2722 any any 2 as tome and findtype 'map' backpack 2722
+    overhead 'Unloading fishing maps...' 53
     menu tome 0
 endif
 
 # add rare cloth to tome
-if findtype 'book' ground 1495 any any 2 as tome
+if findtype 'book' ground 1495 any any 2 as tome and findtype 'folded cloth' backpack
+    overhead 'Unloading rare cloth...' 53
     menu tome 0
 endif
-
-# create shrooms
-#if findtype 'wizards grimoire' backpack
-#    while counttype 'mushroom' self < shroomCount
-#        clearsysmsg 
-#        cast 'Create Food'
-#        wait 1500
-#        
-#        if not insysmsg 'You create'
-#            overhead 'Restock failed!' 38
-#            stop
-#        endif
-#    endwhile
-#    overhead 'Shrooms restocked' 53
-#endif
 
 # eat foot if hungry
 if not findbuff 'Food Satisfaction'
