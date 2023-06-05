@@ -3,7 +3,8 @@
 # into a nearby resource pile.
 while findtype 'log%s' backpack as logs
     getlabel logs logsName
-    overhead 'Cutting {{logsName}}' 53
+    overhead 'Cutting: {{logsName}}' 53
+    sysmsg '{{logsName}}' 53
     dclicktype 'scissors' backpack
     waitfortarget 3000
     target logs
