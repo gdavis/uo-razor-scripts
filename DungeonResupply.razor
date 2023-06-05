@@ -253,6 +253,17 @@ else
     overhead 'Not hungry.' 902
 endif
 
+# add gold to deposit box
+if findtype 'bank deposit safe' ground any any 2 as bank
+    while findtype 'gold coin' backpack as cash
+        getlabel cash cashName
+        overhead 'Depositing: {{cashName}}' 54
+        lift cash 60000
+        drop bank
+        wait delay
+    endwhile
+endif
+
 # open rares lockbox
 clearsysmsg 
 if findtype 'wooden box' backpack as box and findtype 'copper key' backpack as key
