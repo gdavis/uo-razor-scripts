@@ -23,7 +23,7 @@ waitforgump rentalGumpID 3000
 if not gumpexists rentalGumpID
     overhead 'Failed to enter room!' 38
     overhead 'Are you even near the inn?' 53
-elseif ingump 'Enter Your Room'
+elseif ingump 'Enter Your Room' 2393832411
     wait 250
 
     while not insysmsg 'You enter the rental room'
@@ -40,7 +40,7 @@ elseif ingump 'Enter Your Room'
     
     overhead 'Welcome home.'
     
-elseif ingump 'Rent This Room'
+elseif ingump 'Rent This Room' 2393832411
     gumpresponse 5
     waitforgump rentalGumpID 3000
     
@@ -61,7 +61,7 @@ elseif ingump 'Rent This Room'
     else
         overhead 'No access to any rooms!' 38
     endif
-elseif ingump 'Visit Other Rooms'
+elseif ingump 'Visit Other Rooms' 2393832411
     gumpresponse 2
     waitforgump rentalGumpID 3000
     
