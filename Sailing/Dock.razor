@@ -1,5 +1,9 @@
-# Finds a dockmaster and 
+# Finds a nearby dockmaster,
+# stashes the items in the hold
+# to a storage crate, and then
 # docks the ship. 
+# Written by Aphlux
+# Updated June 9, 2023
 while 1 = 1
     clearsysmsg 
     hotkey 'Next Target'
@@ -29,13 +33,26 @@ while 1 = 1
             
             if ingump 'Shipping Crate'
                 overhead 'Stashing hold into crate...'
-                gumpresponse 8 3287496917
-                waitforgump 3287496917 2000
                 
-                if insysmsg 'You must own a house'
-                    overhead 'Cannot use a shipping crate!' 38
-                    sysmsg 'You cannot use this script to dock unless you own a house or inn! Otherwise all the items would fall on the floor!' 38
-                    stop
+                while not insysmsg 'hold contents transported'
+                    if insysmsg 'The ship has not been stationary long enough to use this feature'
+                        overhead 'Yar, stay still!' 38
+                        wait 200
+                    elseif insysmsg 'You must own a house'
+                        overhead 'Cannot use a shipping crate!' 38
+                    sysmsg 'You must be the owner of an inn or house before docking so you can use a shipping crate! Without this, all your booty would drop to the floor for anyone to plunder! Aborting script.' 38
+                        stop
+                    elseif insysmsg 'hold does not have any items'
+                        sysmsg 'No shipping crate needed, no items in hold.'
+                        break
+                    endif
+                    
+                    gumpresponse 8 3287496917
+                    waitforgump 3287496917 2000
+                endwhile
+                
+                overhead 'Booty stashed!' 54
+            else
                 endif
             endif
             
@@ -45,7 +62,35 @@ while 1 = 1
             
             if ingump 'Dock Ship'
                 overhead 'Docking ship...'
-                gumpresponse 7 3287496917
+                
+                while not insysmsg 'You dock the ship.'
+                    if insysmsg 'The ship has not been stationary long enough'
+                        overhead 'Yar, stay still!' 38
+                        wait 200
+                    endif
+                    
+                    gumpresponse 7 3287496917
+                    waitforgump 3287496917 500
+                endwhile
+                
+                gumpclose 3287496917
+                
+                random 6
+                if insysmsg 'Random: 1'
+                    say "Land at last!" 69
+                elseif insysmsg 'Random: 2'
+                    say "Safe ashore, treasure in tow!" 69
+                elseif insysmsg 'Random: 3'
+                    say "The sea was rough, but we made it!" 69
+                elseif insysmsg 'Random: 4'
+                    say "What a voyage it has been! So many stories to tell." 69
+                elseif insysmsg 'Random: 5'
+                    say "A toast to the crew and our safe return!" 69
+                elseif insysmsg 'Random: 6'
+                    say "Safe ashore, treasure in tow!" 69
+                elseif insysmsg 'Random: 7'
+                    say "We weathered storms, now reap rewards!"
+                endif
             else
                 overhead 'No ship to dock!' 38
             endif
