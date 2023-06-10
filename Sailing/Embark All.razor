@@ -1,6 +1,61 @@
 # Recalls everything to the boat.
-say '[Embark'
-wait 600
-say '[EmbarkFollowers'
-wait 600
-say '[RecallBoardingParty'
+clearsysmsg 
+
+if not varexist shipTillerman
+    overhead 'Target your ship tillerman:' 54
+    setvar shipTillerman
+endif
+
+if gumpexists 3750376313
+    gumpclose 3750376313
+endif
+
+if gumpexists 4216593270
+    gumpclose 4216593270
+endif
+
+@clearignore 
+while findtype 'tiller man' ground as tillerman
+    dclick tillerman
+    wait 250
+    
+    while not gumpexists 3750376313 and not gumpexists 4216593270
+    endwhile
+    
+    if gumpexists 3750376313
+        # this is not your boat!
+        @ignore tillerman
+        gumpclose 3750376313
+        continue
+    elseif gumpexists 4216593270
+        overhead 'Found my tillerman!'
+    else
+        sysmsg 'FATAL Error! This should never happen. You are amazing, how do you do it?!'
+        stop
+    endif
+    
+    # embark yourself
+    gumpresponse 21 4216593270
+    waitforgump 4216593270
+    
+    if insysmsg 'Where do you wish to disembark to'
+        overhead 'You are already on the boat!' 38
+        hotkey 'Cancel Current Target'
+        sysmsg 'Embark sorta failed! You are already on board the boat!'
+        stop
+    endif
+
+    # embark followers
+    gumpresponse 22 4216593270
+    waitforgump 4216593270
+
+    # embark crew
+    gumpresponse 38 4216593270
+    waitforgump 4216593270
+    
+    gumpclose 4216593270
+    stop
+endwhile
+
+overhead 'EMBARK FAILED!' 38
+sysmsg 'EMBARK ERROR: Could not find a tillerman in range that I can command.' 38
