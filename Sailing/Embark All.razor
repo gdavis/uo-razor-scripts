@@ -1,10 +1,17 @@
-# Recalls everything to the boat.
+# Embarks your crew, followers, 
+# and yourself to your boat.
+#
+# IMPORTANT:
+# The tillerman target MUST
+# be set each time your boat
+# is docked and put back into
+# the water.
+#
+# by Aphlux
+# Updated June 9, 2023
+sysmsg 'Embarking...' 69
 clearsysmsg 
-
-if not varexist shipTillerman
-    overhead 'Target your ship tillerman:' 54
-    setvar shipTillerman
-endif
+@clearignore
 
 if gumpexists 3750376313
     gumpclose 3750376313
@@ -14,8 +21,12 @@ if gumpexists 4216593270
     gumpclose 4216593270
 endif
 
-@clearignore 
-while findtype 'tiller man' ground as tillerman
+if not varexist shipTillerman or not find shipTillerman ground
+    overhead 'Select your boat tillerman:' 54
+    setvar! shipTillerman
+endif
+
+if find shipTillerman ground as tillerman
     dclick tillerman
     wait 250
     
@@ -24,11 +35,12 @@ while findtype 'tiller man' ground as tillerman
     
     if gumpexists 3750376313
         # this is not your boat!
-        @ignore tillerman
+        sysmsg 'Embark failed! The `shipTillerman` variable is set to a boat you cannot control.' 38
+        unsetvar! shipTillerman
         gumpclose 3750376313
-        continue
+        loop
     elseif gumpexists 4216593270
-        overhead 'Found my tillerman!'
+        sysmsg 'Found my ship!' 54
     else
         sysmsg 'FATAL Error! This should never happen. You are amazing, how do you do it?!'
         stop
@@ -38,24 +50,29 @@ while findtype 'tiller man' ground as tillerman
     gumpresponse 21 4216593270
     waitforgump 4216593270
     
-    if insysmsg 'Where do you wish to disembark to'
+    if insysmsg 'You are too far away to embark'
+        overhead 'Too far from boat!' 38
+        gumpclose 4216593270
+        sysmsg 'Embark failed! Too far away from the boat!' 38
+        stop
+    elseif insysmsg 'Where do you wish to disembark to'
         overhead 'You are already on the boat!' 38
         hotkey 'Cancel Current Target'
-        sysmsg 'Embark sorta failed! You are already on board the boat!'
+        sysmsg 'Embark sorta failed! You are already onboard!'
         stop
     endif
-
+    
+    # recall boarding party
+    gumpresponse 38 4216593270
+    waitforgump 4216593270
+    
     # embark followers
     gumpresponse 22 4216593270
     waitforgump 4216593270
 
-    # embark crew
-    gumpresponse 38 4216593270
-    waitforgump 4216593270
-    
     gumpclose 4216593270
     stop
-endwhile
+endif
 
 overhead 'EMBARK FAILED!' 38
-sysmsg 'EMBARK ERROR: Could not find a tillerman in range that I can command.' 38
+sysmsg 'EMBARK ERROR: Could not find a ship nearby with a matching name. Make sure to set the tillerman target!' 38
