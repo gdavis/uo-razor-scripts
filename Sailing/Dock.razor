@@ -4,6 +4,7 @@
 # docks the ship. 
 # Written by Aphlux
 # Updated June 9, 2023
+@clearignore 
 while 1 = 1
     clearsysmsg 
     hotkey 'Next Target'
@@ -63,6 +64,7 @@ while 1 = 1
                 else
                     overhead 'Booty crate failed!' 38
                     sysmsg 'Booty from the hold could not be safely placed into a shippig crate! The ship hold could not be found' 38
+                    stop
                 endif
                 
             else
