@@ -1,0 +1,20 @@
+removelist boatLoot
+createlist boatLoot
+pushlist boatLoot 'muffins'
+pushlist boatLoot 'gold coin'
+pushlist boatLoot 'bag of gems'
+
+if findtype 'hatch' ground any any 2 as hold
+    dclick hold
+    wait 250
+
+    foreach itemID in boatLoot
+        while findtype itemID hold as booty
+            getlabel booty bootyName
+            sysmsg 'Looting {{bootyName}}'
+            lift booty 60000
+            drop backpack -1 -1 -1
+            wait 650
+        endwhile
+    endfor
+endif

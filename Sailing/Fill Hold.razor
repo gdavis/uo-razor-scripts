@@ -1,0 +1,24 @@
+removelist boatLoot
+createlist boatLoot
+pushlist boatLoot 'muffins'
+pushlist boatLoot 'gold coin'
+pushlist boatLoot 'bag of gems'
+
+if findtype 'hatch' ground any any 2 as hold
+    dclick hold
+    wait 250
+    
+    foreach itemID in boatLoot
+        while findtype itemID backpack as booty
+            lift booty 60000
+        drop hold -1 -1 -1
+            wait 650
+        endwhile
+    endfor
+else
+    overhead 'Too far from stash!' 38
+    sysmsg 'Failed to drop off loot into the ship hold, could not find one nearby!'
+    stop
+endif
+
+overhead 'Done filling hold' 69
