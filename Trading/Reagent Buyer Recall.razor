@@ -6,6 +6,17 @@ overhead '-Buyer Recall-' 24
 @setvar! runebookGumpID 1551740969
 setvar! isBuyingReagents 1
 
+# make sure this matches the last IF below
+@setvar! lastRuneIndex 69420
+
+if lastRuneIndex == runebookIndex
+    overhead 'All done, returning home...' 69
+    sysmsg 'Last rune destination reached. Recall routine complete.' 69
+    script 'Reagent Buyer Return Home'
+    setvar! isBuyingReagents 0
+    setvar! runebookIndex 0
+endif
+
 if not varexist activeRunebook
     overhead 'Choose the runebook of reagent vendors:'
     setvar! activeRunebook
@@ -69,9 +80,7 @@ if find activeRunebook backpack as book
         setvar! runebookIndex 15
     elseif runebookIndex = 15
         gumpresponse 95
-        setvar! runebookIndex 0
-        setvar! shouldReturnHome 1
-        #setvar! isBuyingReagents 0
+        setvar! runebookIndex 69420
     else
         overhead 'Invalid runebook index!' 38
         setvar! runebookIndex 0

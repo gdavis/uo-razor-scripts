@@ -46,6 +46,9 @@ endif
 
 @setvar! reachedLimit 0
 
+removelist satchelRegs
+createlist satchelRegs
+
 while 1 = 1
     clearsysmsg 
     hotkey 'Next Target'
@@ -75,28 +78,88 @@ while 1 = 1
             
             removelist foundItems
             createlist foundItems
+            
+            # find items on self that are not in our satchel
+            @setvar! satchelID 0
+            if findtype 'reagent satchel' self as satchel
+                @setvar! satchelID satchel
+            endif
+           
             while findtype 3976|3981|3980|3973|3974|3962|3972|3963|3854|3827 self as item
-                getlabel item itemName
-                pushlist foundItems item back
-
-                # do not move reagents from satchel
-                if findtype 'reagent satchel' self as satchel
-                    if find item satchel
-                        overhead 'Ignoring {{itemName}} in satchel' 908
-                        @ignore item
-                        continue
+                @setvar! isValidItem 0
+                if satchelID = 0
+                    @setvar! isValidItem 1
+                else 
+                    if inlist satchelRegs item 
+                        # do nothing, e.g. already ignored
+                        sysmsg 'found already ignored item'
+                    elseif find item satchelID
+                        # add new satchel reg to invalid list
+                        sysmsg 'adding item to reg list'
+                        pushlist satchelRegs item
+                    else 
+                        # valid when not in satchel
+                        sysmsg 'found new valid item' 54
+                        @setvar! isValidItem 1
                     endif
                 endif
                 
+                if isValidItem = 1
+                    getlabel item itemName
+                sysmsg 'Found: {{itemName}}' 69
+                    pushlist foundItems item back
+                else
+                    overhead 'invalid item'
+                endif
+                
+                @ignore item
+            endwhile
+            
+            # pickup items on ground
+            while findtype 3976|3981|3980|3973|3974|3962|3972|3963|3854|3827 ground any any 2 as item
+                if not inlist satchelRegs item
+                    getlabel item itemName
+                    pushlist foundItems item back
+                    sysmsg 'Found: {{itemName}}'
+                endif
+            
+                @ignore item
+            endwhile
+            
+            # move each found item
+            foreach item in foundItems
+                sysmsg '----foreach item start'
+                getlabel item itemName
+            
+                # do not move reagents from satchel
+#                if findtype 'reagent satchel' self as satchel
+#                    if find item satchel
+#                        overhead 'Ignoring {{itemName}} in satchel' 908
+#                        pushlist satchelRegs item back
+#                        @ignore item
+#                        continue
+#                    endif
+#                endif
+                
+                overhead 'Moving {{itemName}}' 54
+                
                 # move purchased items to packie
                 if followers > 0
-                    while findtype 'a pack llama' ground any any 2 as packie
+                    @setvar! skipItem 0
+                    while findtype 'a pack llama' ground any any 2 as packie and skipItem = 0
                         if noto packie = friend
-                            overhead 'Moving {{itemName}}' 54
+                            if find item packie
+                                @ignore item
+                                @setvar! skipItem 1
+                                sysmsg 'item is in packie, ignoring.' 38
+                                continue
+                            endif
+                            
                             clearsysmsg 
                             lift item 60000
                             drop packie -1 -1 -1
-                            wait 500
+                            wait 666
+                            @setvar! skipItem 1
                             @ignore item
                             
                             if counttype item packie > 0
@@ -155,13 +218,14 @@ while 1 = 1
                                 @setvar! reachedLimit 1
                             endif
                             
-                            break
+                            sysmsg 'breaking while'
+                            #break
                         else 
                             @ignore packie
                         endif
                     endwhile
                 endif
-            endwhile
+            endfor
             
             if reachedLimit = 1
                 setvar! shouldReturnHome 1
