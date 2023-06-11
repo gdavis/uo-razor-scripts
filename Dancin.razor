@@ -14,6 +14,9 @@
 # 13 - Left to Right
 # 14 - Right to Left
 # 15 - Warmode On/Off
+# 16 - Pause 0.5s
+# 17 - Pause 1s
+
 @setvar! circleNCW 1
 @setvar! circleNCCW 2
 @setvar! eastWest 7
@@ -31,22 +34,36 @@ removelist danceMoves
 createlist danceMoves
 
 # dance routine
-pushlist danceMoves 3 back
-pushlist danceMoves 9 back
-pushlist danceMoves 15 back
-pushlist danceMoves 4 back
-pushlist danceMoves 9 back
-pushlist danceMoves 15 back
-pushlist danceMoves 12 back
-pushlist danceMoves 15 back
 pushlist danceMoves 7 back
-pushlist danceMoves 9 back
-pushlist danceMoves 15 back
-pushlist danceMoves 7 back
-pushlist danceMoves 9 back
-pushlist danceMoves 15 back
+pushlist danceMoves 8 back
+pushlist danceMoves 17 back
 
-for 14
+pushlist danceMoves 7 back
+pushlist danceMoves 8 back
+pushlist danceMoves 17 back
+
+pushlist danceMoves 4 back
+pushlist danceMoves 17 back
+
+pushlist danceMoves 7 back
+pushlist danceMoves 17 back
+
+#pushlist danceMoves 3 back
+#pushlist danceMoves 9 back
+#pushlist danceMoves 15 back
+#pushlist danceMoves 4 back
+#pushlist danceMoves 9 back
+#pushlist danceMoves 15 back
+#pushlist danceMoves 12 back
+#pushlist danceMoves 15 back
+#pushlist danceMoves 7 back
+#pushlist danceMoves 9 back
+#pushlist danceMoves 15 back
+#pushlist danceMoves 7 back
+#pushlist danceMoves 9 back
+#pushlist danceMoves 15 back
+
+for 10
     if poplist danceMoves front as move
         if move = 1
             overhead '1 cw circle'
@@ -133,6 +150,12 @@ for 14
             warmode 'on'
             wait 250
             warmode 'off'
+        elseif move = 16
+            overhead '0.5s'
+            wait 500
+        elseif move = 17
+            overhead '1s'
+            wait 1000
         endif
     endif
 endfor
