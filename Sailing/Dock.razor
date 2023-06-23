@@ -3,7 +3,9 @@
 # to a storage crate, and then
 # docks the ship. 
 # Written by Aphlux
-# Updated June 9, 2023
+# Updated June 21, 2023
+# TODO:
+# - Test what happens trying to dock at non-guild player DM.
 @clearignore 
 while 1 = 1
     clearsysmsg 
@@ -20,6 +22,7 @@ while 1 = 1
    
         if insysmsg 'getlabel - Skipped'
             # Skipping player
+            @ignore lasttarget 
             continue
         endif  
         
@@ -115,6 +118,8 @@ while 1 = 1
             endif
             
             stop
+        else 
+            @ignore lasttarget
         endif
     endif
 endwhile

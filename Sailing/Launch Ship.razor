@@ -1,0 +1,95 @@
+# One-click boat launch that will
+# embark you and your followers,
+# ready the crew, reload cannons, 
+# and open ship menus, and begin repairs.
+# 
+# Written by Aphlux
+# Last updated June 21, 2023
+#
+# TODO:
+# - Summon pets if needed
+clearsysmsg 
+@clearignore 
+
+if gumpexists 3287496917
+    gumpclose 3287496917
+endif
+
+# this just needs 'dock' in it somewhere, can be customized
+say 'dock'
+waitforgump 3287496917 6000
+
+if not gumpexists 3287496917
+    overhead 'Failed to find dockmaster!' 38
+    stop
+endif
+
+# select boat to launch in list
+# response is 10 + button row, zero indexed.
+gumpresponse 10
+
+# wait for target cursor
+waitfortarget 6000
+
+if not targetexists 
+    overhead 'Failed to get cursor to launch ship!' 38
+    stop
+endif
+
+if insysmsg 'Where do you wish to place the ship'
+    overhead 'Launch ship where?'
+endif
+
+# wait for player to place ship
+while targetexists 
+endwhile
+
+# timeout timer
+removetimer boatLaunchTimer
+createtimer boatLaunchTimer
+
+# wait for expected sysmsgs
+while 1 = 1
+    if insysmsg 'A ship rune has been placed'
+        overhead 'Boat in the water!'
+        break
+    elseif insysmsg 'You have been onboard another ship'
+        overhead 'Ship not ready!' 38
+        sysmsg 'Launch Ship Failed - Ship is not ready!' 38
+        stop
+    elseif insysmsg 'That dockmaster is too far away'
+        overhead 'Dockmaster too far!' 38
+        sysmsg 'Launch Ship Failed - Dockmaster is too far away!'
+        stop
+    elseif insysmsg 'A ship cannot be placed there'
+        overhead 'Invalid location!' 38
+        sysmsg 'Launch Ship Failed - Invalid launch location' 38
+        stop
+    elseif insysmsg 'That location is too far away' or insysmsg 'That is too far away'
+        overhead 'Location too far!' 38
+        sysmsg 'Launch Ship Failed - Launch location is out of range' 38
+        stop
+    elseif timer boatLaunchTimer > 10000
+        overhead 'Launch timed out!' 38
+        sysmsg 'Launch Ship Failed - 10 seconds passed without the ship being placed' 38
+        stop
+    endif
+endwhile
+
+overhead 'Boarding ship...'
+say '[Embark'
+
+overhead 'Boarding followers...'
+say '[EmbarkFollowers'
+
+overhead 'Waking the crew...'
+say '[ReadyCrew'
+
+overhead 'Readying ship...'
+say '[Ship'
+say '[ShipHotbars'
+say '[TargetingMode'
+say '[Repair'
+say '[Reload'
+
+script 'Repair Ship'
