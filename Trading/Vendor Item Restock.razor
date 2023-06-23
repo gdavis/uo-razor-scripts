@@ -1,0 +1,184 @@
+clearsysmsg
+cleardragdrop
+
+# set this to your vendor using >info
+@setvar! vendor 0x6F9D5
+@setvar! vendorBackpackID 0x41DD748E
+@setvar! actionDelay 500
+
+# Steps to adding vendor items:
+# 1) add the item type in the itemIDs list
+# 2) add an itemName check below to set the price and x/y position
+removelist itemIDs
+createlist itemIDs
+pushlist itemIDs 'void orb'
+pushlist itemIDs 'aspect core'
+pushlist itemIDs 'flask'
+
+if not find vendor ground any any 2
+    overhead 'Failed to find vendor. Must be within 2 tiles!' 38
+    stop
+endif
+
+if not timerexists vendorTimeout
+    createtimer vendorTimeout
+endif
+
+settimer vendorTimeout 0
+dclick vendor
+
+while not gumpexists 1957446601
+    waitforgump 1957446601 6000
+
+    if timer vendorTimeout > 10000
+        overhead 'Failed to interact with vendor!' 38
+        stop
+    endif
+endwhile
+
+foreach itemID in itemIDs
+    # loop each item type and look for items
+    while findtype itemID backpack as foundItem
+        # reset price and container for each loop
+        @setvar! price 0
+        @setvar! containerID vendorBackpackID
+    
+        # example of changing container if we have a box of cores:
+        # @setvar! containerID coresBagID
+        
+        getlabel foundItem itemName
+        
+        # Rares
+        if 'a skill mastery orb' in itemName
+            @setvar! price 15000
+            @setvar! xPosition 50
+            @setvar! yPosition 95
+            
+        # Cores (19) ---------------------------------
+        elseif 'Air Aspect Core' in itemName
+            @setvar! price 40000
+            @setvar! xPosition 55
+            @setvar! yPosition 0
+            
+        elseif 'Artisan Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 60
+            @setvar! yPosition 0
+            
+        elseif 'Blood Aspect Core' in itemName
+            @setvar! price 5000
+            @setvar! xPosition 65
+            @setvar! yPosition 0
+            
+        elseif 'Command Aspect Core' in itemName
+            @setvar! price 24000
+            @setvar! xPosition 70
+            @setvar! yPosition 0
+            
+        elseif 'Death Aspect Core' in itemName
+            @setvar! price 3200
+            @setvar! xPosition 75
+            @setvar! yPosition 0
+        
+        elseif 'Discipline Aspect Core' in itemName
+            @setvar! price 4200
+            @setvar! xPosition 80
+            @setvar! yPosition 0
+            
+        elseif 'Earth Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 85
+            @setvar! yPosition 0
+            
+        elseif 'Eldritch Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 90
+            @setvar! yPosition 0
+            
+        elseif 'Fire Aspect Core' in itemName
+            @setvar! price 8000
+            @setvar! xPosition 95
+            @setvar! yPosition 0
+            
+        elseif 'Fortune Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 100
+            @setvar! yPosition 0
+            
+        elseif 'Gadget Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 105
+            @setvar! yPosition 0
+            
+        elseif 'Harvest Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 110
+            @setvar! yPosition 0
+            
+        elseif 'Holy Aspect Core' in itemName
+            @setvar! price 4200
+            @setvar! xPosition 115
+            @setvar! yPosition 0
+            
+        elseif 'Lyric Aspect Core' in itemName
+            @setvar! price 16000
+            @setvar! xPosition 120
+            @setvar! yPosition 0
+            
+        elseif 'Poison Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 125
+            @setvar! yPosition 0
+            
+        elseif 'Shadow Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 130
+            @setvar! yPosition 0
+            
+        elseif 'Void Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 135
+            @setvar! yPosition 0
+            
+        elseif 'War Aspect Core' in itemName
+            @setvar! price 0
+            @setvar! xPosition 140
+            @setvar! yPosition 0
+            
+        elseif 'Water Aspect Core' in itemName
+            @setvar! price 2500
+            @setvar! xPosition 145
+            @setvar! yPosition 0
+            
+        # Distillations ---------------------------
+        # these use core x position -10 to align correctly
+        elseif 'Fortune Aspect Distillation' in itemName
+            @setvar! price 15000
+            @setvar! xPosition 100
+            @setvar! yPosition 80
+            
+        elseif 'Lyric Aspect Distillation' in itemName
+            @setvar! price 8500
+            @setvar! xPosition 120
+            @setvar! yPosition 80
+            
+        endif
+        
+        if price == 0 
+            overhead 'Unknown price! Please update the script for: {{itemName}}' 38
+            stop
+        endif
+    
+        sysmsg 'Listing {{itemName}} for {{price}}gp/ea'
+        lift foundItem 1
+        drop containerID xPosition yPosition 0
+        
+        while not insysmsg 'Type in a price'
+        endwhile
+        
+        promptresponse price
+        wait actionDelay
+    endwhile
+endfor
+
+overhead 'All items listed.'
