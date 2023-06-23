@@ -240,13 +240,14 @@ endif
 # If found, smelt all the ore
 # that we have in the backpack
 if findtype 'forge' ground -1 -1 2
-    @setvar didSmelt 1
+    @setvar! didSmelt 0
+    @setvar! isDigging 0
 
     while findtype 'iron ore' backpack as ore
         getlabel ore oreName
         overhead '*smelts {{oreName}}*' 44
         dclick ore
-        @setvar didSmelt 1
+        @setvar! didSmelt 1
         wait 1250
         
         if insysmsg 'you do not see'
