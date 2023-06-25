@@ -74,7 +74,11 @@ gumpresponse 10
 # wait for target cursor
 waitfortarget 6000
 
-if not targetexists 
+if insysmsg 'You have traveled too recently and must wait'
+    overhead 'Travel cooldown!' 38
+    sysmsg 'Failed to launch! On travel cooldown!' 38
+    stop
+elseif not targetexists 
     overhead 'Failed to get cursor to launch ship!' 38
     stop
 endif
@@ -209,7 +213,6 @@ if skill 'spirit speak' >= 80
 endif
 
 script 'Repair Ship'
-
 
 
 
