@@ -1,6 +1,6 @@
 # Brings up a target cursor
 # to board a nearby boat.
-if findtype 5370 as boardingRope
+if findtype 5370 self 0 as boardingRope
     dclick boardingRope
     waitforgump 2881168634 1500
     gumpresponse 5 2881168634
