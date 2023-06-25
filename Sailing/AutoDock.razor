@@ -2,14 +2,17 @@
 # stashes the items in the hold
 # to a storage crate, and then
 # docks the ship. 
+#
+# NOTE: Razor auto-targetting can
+# fail, so use the TargetDock 
+# version if it fails.
+#
 # Written by Aphlux
-# Updated June 21, 2023
-# TODO:
-# - Test what happens trying to dock at non-guild player DM.
+# Updated June 25, 2023
 @clearignore 
 while 1 = 1
     clearsysmsg 
-    hotkey 'Next Monster Target'
+    hotkey 'Next Monster Mobile'
     
     if gumpexists 3287496917
         gumpclose 3287496917
