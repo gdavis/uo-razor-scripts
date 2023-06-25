@@ -4,15 +4,58 @@
 # and open ship menus, and begin repairs.
 # 
 # Written by Aphlux
-# Last updated June 21, 2023
+# Last updated June 25, 2023
 #
-# TODO:
-# - Summon pets if needed
+# ---------------------------
+# Summoner Pets
+# ---------------------------
+# 0 - No pet
+# 1 - Earth Elemental
+# 2 - Water Elemental
+# 3 - Fire Elemental
+# 4 - Air Elemental
+# 5 - Daemon
+# 6 - Creature
+@setvar! pet1 2
+@setvar! pet2 5
+@setvar! pet3 6
+# ---------------------------
+
 clearsysmsg 
 @clearignore 
 
 if gumpexists 3287496917
     gumpclose 3287496917
+endif
+
+# Supplies
+overhead 'Checking supplies...'
+if findtype 'rope' self 0 as item
+    getlabel item itemName
+    sysmsg 'Found {{itemName}}' 908
+else
+    overhead 'Missing boarding ropes!' 38
+endif
+
+if findtype 'spyglass' self as item
+    getlabel item itemName
+    sysmsg 'Found {{itemName}}' 908
+else
+    overhead 'Missing spyglasses!' 38
+endif
+
+if findtype 'ship repair kit' self as item
+    getlabel item itemName
+    sysmsg 'Found {{itemName}}' 908
+else
+    overhead 'Missing repair kits!' 38
+endif
+
+if findtype 'cannon ball' self as item
+    getlabel item itemName
+    sysmsg 'Found {{itemName}}' 908
+else
+    overhead 'Missing cannon balls!' 38
 endif
 
 # this just needs 'dock' in it somewhere, can be customized
@@ -63,15 +106,19 @@ while 1 = 1
         stop
     elseif insysmsg 'A ship cannot be placed there'
         overhead 'Invalid location!' 38
-        sysmsg 'Launch Ship Failed - Invalid launch location' 38
+        sysmsg 'Launch Ship Failed - Invalid launch location!' 38
+        stop
+    elseif insysmsg 'That location is out of your line of sight' or insysmsg 'That is too far away'
+        overhead 'Location too far!' 38
+        sysmsg 'Launch Ship Failed - Location out of line of sight!' 38
         stop
     elseif insysmsg 'That location is too far away' or insysmsg 'That is too far away'
         overhead 'Location too far!' 38
-        sysmsg 'Launch Ship Failed - Launch location is out of range' 38
+        sysmsg 'Launch Ship Failed - Launch location is out of range!' 38
         stop
     elseif timer boatLaunchTimer > 10000
         overhead 'Launch timed out!' 38
-        sysmsg 'Launch Ship Failed - 10 seconds passed without the ship being placed' 38
+        sysmsg 'Launch Ship Failed - 10 seconds passed without the ship being placed!' 38
         stop
     endif
 endwhile
@@ -92,4 +139,95 @@ say '[TargetingMode'
 say '[Repair'
 say '[Reload'
 
+@setvar! shouldSummonPet 0
+if skill 'spirit speak' >= 80
+    @setvar! shouldSummonPet 1
+    @setvar! petIndex 0
+    
+    if skill 'necromancy' > 0
+        say '[VengefulSpirit'
+        wait 500
+        say '[Wither'
+        wait 500
+    endif
+
+    while shouldSummonPet = 1 and followers < 5
+        @setvar! petType 0
+        
+        if followers = 0
+            @setvar! current 0
+        elseif followers = 1
+            @setvar! current 1
+        elseif followers = 2
+            @setvar! current 2
+        elseif followers = 3
+            @setvar! current 3
+        elseif followers = 4
+            @setvar! current 4
+        endif
+        
+        if petIndex == 0
+            @setvar! petType pet1
+        elseif petIndex == 1
+            @setvar! petType pet2
+        elseif petIndex == 2
+            @setvar! petType pet3
+        endif
+    
+        if petType == 1
+            cast 'Earth Elemental'
+        elseif petType == 2
+            cast 'Water Elemental'
+        elseif petType == 3
+            cast 'Fire Elemental'
+        elseif petType == 4
+            cast 'Air Elemental'
+        elseif petType == 5
+            cast 'Summon Daemon'
+        elseif petType == 6
+            cast 'Summ. Creature'
+        endif
+        
+        if petType > 0
+            # wait to finish summon
+            while followers == current
+            endwhile
+            # wait for spell recovery
+            wait 250
+        endif
+        
+        if petIndex == 0
+            @setvar! petIndex 1
+        elseif petIndex == 1
+            @setvar! petIndex 2
+        elseif petIndex == 2
+            @setvar! petIndex 3
+        else
+            break
+        endif
+    endwhile
+endif
+
 script 'Repair Ship'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
