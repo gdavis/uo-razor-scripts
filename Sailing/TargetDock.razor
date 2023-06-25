@@ -1,0 +1,125 @@
+# Targets a nearby dockmaster,
+# stashes the items in the hold
+# to a storage crate, and then
+# docks the ship. 
+# Written by Aphlux
+# Updated June 25, 2023
+@clearignore 
+clearsysmsg
+
+if gumpexists 3287496917
+    gumpclose 3287496917
+endif
+
+overhead 'Target the dockmaster:' 54
+@unsetvar! targetID
+@setvar! targetID
+while targetexists 
+    overhead 'waiting for selection'
+endwhile
+
+getlabel targetID targetName
+overhead '{{targetName}}'
+
+if insysmsg 'getlabel - Skipped'
+    overhead 'Cannot target a player!' 38
+    stop
+endif  
+
+if 'dockmaster' in targetName
+    overhead 'Found the dockmaster!' 54
+    menu targetID 1
+    waitforgump 3287496917 2000
+    
+    if not gumpexists 3287496917
+        overhead 'Failed to open Dock menu!' 38
+        stop
+    endif
+    
+    if ingump 'Shipping Crate' 3287496917
+        overhead 'Stashing hold into crate...'
+    
+        if findtype 'hatch' ground as hold
+            getlabel hold holdName
+            
+            if '[0/' in holdName
+                sysmsg 'Hold is empty, no crate needed.' 908
+            else
+                sysmsg 'Hold has booty, shipping crate required.' 54
+                while not insysmsg 'hold contents transported'
+                    if insysmsg 'The ship has not been stationary long enough to use this feature'
+                        overhead 'Yar, stay still!' 38
+                        wait 200
+                    elseif insysmsg 'You must own a house'
+                        overhead 'Cannot use a shipping crate!' 38
+                    sysmsg 'You must be the owner of an inn or house before docking so you can use a shipping crate! Without this, all your booty would drop to the floor for anyone to plunder! Aborting script.' 38
+                        stop
+                    elseif insysmsg 'hold does not have any items'
+                        sysmsg 'No shipping crate needed, no items in hold.'
+                        break
+                    endif
+                    
+                    gumpresponse 8 3287496917
+                    waitforgump 3287496917 2000
+                endwhile
+                
+                overhead 'Booty stashed!' 54
+            endif
+        else
+            overhead 'Booty crate failed!' 38
+            sysmsg 'Booty from the hold could not be safely placed into a shippig crate! The ship hold could not be found' 38
+            stop
+        endif
+        
+    else
+        endif
+    endif
+    
+    if not gumpexists 3287496917
+        overhead 'Dockmaster menu not available!' 38
+        stop
+    endif
+    
+    if ingump 'Dock Ship' 3287496917
+        overhead 'Docking ship...'
+        
+        while not insysmsg 'You dock the ship.'
+            if insysmsg 'The ship has not been stationary long enough'
+                overhead 'Yar, stay still!' 38
+                wait 200
+            endif
+            
+            gumpresponse 7 3287496917
+            waitforgump 3287496917 500
+        endwhile
+        
+        gumpclose 3287496917
+        
+        random 9
+        if insysmsg 'Random: 1'
+            say "Where is the rum!?" 69
+        elseif insysmsg 'Random: 2'
+            say "Safe ashore, treasure in tow!" 69
+        elseif insysmsg 'Random: 3'
+            say "I feel sick. Finally some solid ground!" 69
+        elseif insysmsg 'Random: 4'
+            say "What a voyage it has been! So many stories to tell." 69
+        elseif insysmsg 'Random: 5'
+            say "A toast to the crew and our safe return!" 69
+        elseif insysmsg 'Random: 6'
+            say "Earned every damn piece of this treasure!" 69
+        elseif insysmsg 'Random: 7'
+            say "We weathered storms, now reap rewards!"
+        elseif insysmsg 'Random: 8'
+            say 'Ye old sea wolf, ye done it.'
+        elseif insysmsg 'Random: 9'
+            say 'Landfall, ye grizzled sea dog. A damn fine haul.'
+        endif
+    else
+        overhead 'No ship to dock!' 38
+    endif
+    
+    stop
+else 
+    overhead 'Not a valid dockmaster!' 38
+endif

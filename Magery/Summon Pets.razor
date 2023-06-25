@@ -1,0 +1,79 @@
+# 0 - No pet
+# 1 - Earth Elemental
+# 2 - Water Elemental
+# 3 - Fire Elemental
+# 4 - Air Elemental
+# 5 - Daemon
+# 6 - Creature
+@setvar! pet1 2
+@setvar! pet2 5
+@setvar! pet3 6
+
+@setvar! shouldSummonPet 0
+if skill 'spirit speak' >= 80
+    @setvar! shouldSummonPet 1
+    @setvar! petIndex 0
+    
+    if skill 'necromancy' > 0
+        say '[VengefulSpirit'
+        wait 100
+        say '[Wither'
+        wait 100
+    endif
+
+    while shouldSummonPet = 1 and followers < 5
+        @setvar! petType 0
+        
+        if followers = 0
+            @setvar! current 0
+        elseif followers = 1
+            @setvar! current 1
+        elseif followers = 2
+            @setvar! current 2
+        elseif followers = 3
+            @setvar! current 3
+        elseif followers = 4
+            @setvar! current 4
+        endif
+        
+        if petIndex == 0
+            @setvar! petType pet1
+        elseif petIndex == 1
+            @setvar! petType pet2
+        elseif petIndex == 2
+            @setvar! petType pet3
+        endif
+    
+        if petType == 1
+            cast 'Earth Elemental'
+        elseif petType == 2
+            cast 'Water Elemental'
+        elseif petType == 3
+            cast 'Fire Elemental'
+        elseif petType == 4
+            cast 'Air Elemental'
+        elseif petType == 5
+            cast 'Summon Daemon'
+        elseif petType == 6
+            cast 'Summ. Creature'
+        endif
+        
+        if petType > 0
+            # wait to finish summon
+            while followers == current
+            endwhile
+            # wait for spell recovery
+            wait 250
+        endif
+        
+        if petIndex == 0
+            @setvar! petIndex 1
+        elseif petIndex == 1
+            @setvar! petIndex 2
+        elseif petIndex == 2
+            @setvar! petIndex 3
+        else
+            break
+        endif
+    endwhile
+endif
