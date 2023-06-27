@@ -4,7 +4,7 @@
 # and open ship menus, and begin repairs.
 # 
 # Written by Aphlux
-# Last updated June 25, 2023
+# Last updated June 26, 2023
 #
 # ---------------------------
 # Summoner Pets
@@ -129,18 +129,25 @@ endwhile
 
 overhead 'Boarding ship...'
 say '[Embark'
+wait 250
 
 overhead 'Boarding followers...'
 say '[EmbarkFollowers'
+wait 250
 
 overhead 'Waking the crew...'
 say '[ReadyCrew'
+wait 250
 
 overhead 'Readying ship...'
 say '[Ship'
+wait 250
 say '[ShipHotbars'
+wait 250
 say '[TargetingMode'
+wait 250
 say '[Reload'
+wait 250
 
 @setvar! shouldSummonPet 0
 if skill 'spirit speak' >= 80
@@ -211,9 +218,19 @@ if skill 'spirit speak' >= 80
     endwhile
 endif
 
+# eat foot if hungry
+if not findbuff 'Food Satisfaction'
+    if findtype 'tray' backpack as food 
+        dclick food
+        overhead 'NOM NOM NOM' 44
+    else
+        overhead 'HUNGRY! Need Food!' 38
+    endif
+else 
+    overhead 'Not hungry.' 902
+endif
+
 script 'Repair Ship'
-
-
 
 
 
