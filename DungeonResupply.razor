@@ -262,6 +262,14 @@ if findtype 'bank deposit safe' ground any any 2 as bank
         drop bank
         wait delay
     endwhile
+    
+    while findtype 'muffins' backpack as dubs
+        getlabel dubs cashName
+        overhead 'Depositing: {{cashName}}' 54
+        lift dubs 60000
+        drop bank
+        wait delay
+    endwhile
 endif
 
 # open rares lockbox
