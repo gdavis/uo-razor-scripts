@@ -40,7 +40,8 @@ if not find fishCreel backpack and not find fishCreel ground any any 2
     setvar fishCreel
     
     if fishCreel = 0
-        overhead 'What?! You can store no fish with no fishin creel!' 38
+        overhead 'What?! You can`t store no fish with no fishin` creel!' 38
+        sysmsg 'Target a valid container as the creel for your catches.' 38
         stop
     endif
 endif
