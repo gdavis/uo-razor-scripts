@@ -1,17 +1,32 @@
+# Lets go boat fishin!
+#
+# Requirements:
+# - Have a dress named "Fishing" with a fishing pole
+# 
+# Written by Aphlux
+# Last updated June 28, 2023
 clearsysmsg 
+@clearignore 
 
-#overhead "Target organizer 20 hotbag"
-#organizer 20 set 
-#while not insysmsg "Container set successfully"
-#    wait 250
-#endwhile
-
+# vars and timers
 @setvar! isFishin 0
+@setvar! fishinDelay 10000
+@setvar! fishinBarkDelay 5000
+if not timerexists fishBarkTimer
+    createtimer fishBarkTimer
+    settimer fishBarkTimer 69420
+endif
+
+if not timerexists fishActionTimer
+    createtimer fishActionTimer
+    settimer fishActionTimer 69420
+endif
 
 # set bag to place fish in
-if not find fishCreel self 
+if not find fishCreel backpack and not find fishCreel ground any any 2
     overhead 'Target a bag as your fishin creel:' 54
-    setvar fishCreel 0
+    sysmsg 'Select a container to places your fishing catches into. If you are using the ship hold, you must stand within 2 tiles of it.'
+    @setvar fishCreel 0
     setvar fishCreel
     
     if fishCreel = 0
@@ -20,19 +35,20 @@ if not find fishCreel self
     endif
 endif
 
+# equip the fishing pole
 @setvar! leftHandID lefthand
 if findtype 3520 self as rod
     if rod == leftHandID
-        overhead "Got my rod ready for fishin`!" 69
+        overhead "*readies fishing pole*" 908
     else
-        overhead "Where`s that fishin` rod...?" 54
+        overhead "Where`s that fishin` pole...?" 54
         clearhands both
         cleardragdrop
         dress 'Fishing'
         
         for 5
             if lhandempty
-                wait 1000
+            wait 250
             else
                 overhead "There`s that dang fishin` rod!" 69
                 break
@@ -45,57 +61,111 @@ else
     stop
 endif
 
-@setvar! fishinDelay 8550
-@setvar! fishinBarkDelay 5000
-if not timerexists fishBarkTimer
-    createtimer fishBarkTimer
-    settimer fishBarkTimer 69420
-endif
-
-
-if not timerexists fishActionTimer
-    createtimer fishActionTimer
-    settimer fishActionTimer 69420
-endif
-
+# fishin loop
 while not dead 
     if insysmsg "The world will save in 15 seconds"
         overhead "Just gonna rest my eyes a moment..." 54
         wait 20000
+        settimer fishActionTimer 0
     endif
     
     if isFishin = 1
+        # catcha check
         if timer fishActionTimer > fishinDelay
             overhead 'CAPTCHA CHECK!?' 54
+        
             if not timerexists captchaTimer
                 createtimer captchaTimer
             endif
             
             settimer captchaTimer 0
-            while not insysmsg 'Captcha Successful'
+            while not insysmsg 'Captcha successful'
                 wait 100
                 if timer captchaTimer > 5000
                     overhead 'Waiting for captcha check...'
                     settimer captchaTimer 0
                 endif
             endwhile
+            
+            settimer fishActionTimer 0
         endif
     
+        # list that stores catches that are not printed
+        # from a sysmsg. these have to be manually looked for.
+        removelist catches
+        createlist catches
+        
+        # check for lobster catch
+        @setvar! caughtLobster 0
+        while findtype 17619 backpack as lobster
+            if not find lobster fishCreel
+                sysmsg 'Found a new lobster catch!' 54
+                @setvar! caughtLobster 1
+                pushlist catches lobster
+            endif
+            
+            @ignore! lobster
+        endwhile
+        
+        # check for crab catch
+        @setvar! caughtCrab 0
+        while findtype 17617 backpack as catch
+            if not find catch fishCreel
+                sysmsg 'Found a new crab catch!' 54
+                @setvar! caughtCrab 1
+                pushlist catches catch
+            endif
+            @ignore! catch
+        endwhile
+        
         if insysmsg 'You catch a fish'
             overhead 'Caught one!' 89
             @setvar! isFishin 0
+            
         elseif insysmsg 'You catch a large fish'
             overhead 'Whoa, its a big one!' 89
             @setvar! isFishin 0
             
         # this seems to be an overhead and not a sysmsg.
         # need to find a clever way of seeing it happen
-        elseif insysmsg 'You catch a lobster'
+        elseif caughtLobster = 1
             overhead 'Hoo, a lobster!' 36
             @setvar! isFishin 0
+            
+        elseif caughtCrab = 1
+            overhead 'Oh snap! a crab!' 36
+            @setvar! isFishin 0
+        
         elseif insysmsg 'You retrieve a special fishing net'
             overhead 'Eyy, a new fishin net!' 54
             @setvar! isFishin 0
+            
+        elseif insysmsg 'did not find'
+            overhead "Fish ain`t bitin` here." 38
+            @setvar! isFishin 0
+        endif
+        
+        # when done fishing, move catches to the creel
+        if isFishin = 0        
+            # move items found by bag searching.
+            # more efficient than always finding/ignoing all items
+            foreach catch in catches 
+                lift catch 60000
+                drop fishCreel -1 -1 -1
+            endfor
+            
+            # move items with a system message
+            while findtype 2508|7710|3530|22326 backpack as catch
+                if not find catch fishCreel
+                    getlabel catch catchName
+                    sysmsg "Adding '{{catchName}}' to the creel"
+                    
+                    lift catch 60000
+                    drop fishCreel -1 -1 -1
+                    wait 250
+                endif
+                @ignore catch
+            endwhile
         endif
     
     elseif timer fishActionTimer > fishinDelay
@@ -105,45 +175,12 @@ while not dead
             settimer fishBarkTimer 0
         endif
     
-        hotkey 'Use item in hand'
         say "[secondgreaterability"
+        hotkey 'Use item in hand'
+        overhead '*casts line*' 908
         
         settimer fishActionTimer 0
         @setvar! isFishin 1
     endif
     
 endwhile
-
-#if lhandempty
-#    dress 'Fishing'
-#    wait 500
-#endif
-#
-#while not dead
-#    if insysmsg "The world will save in 15 seconds"
-#        overhead "World Save Pause"
-#        wait 20000
-#    endif
-#    
-#    if timer "fishy" > 8550
-#        say "[secondgreaterability"
-#    
-#        if lhandempty
-#            dress 'Fishing'
-#            wait 500
-#        endif
-#        
-#        hotkey 'Use item in hand'
-#        settimer "fishy" 0
-#        wait 500
-#        organizer 20
-#        wait 350
-#        
-#        if insysmsg "did not find"
-#            while not dead 
-#                say "Just relaxin on the waves"
-#                wait 1500
-#            endwhile
-#        endif
-#    endif
-#endwhile
