@@ -12,11 +12,17 @@ if gumpexists 3287496917
 endif
 
 overhead 'Target the dockmaster:' 54
-@unsetvar! targetID
+@setvar! targetID 0
 @setvar! targetID
 while targetexists 
     overhead 'waiting for selection'
 endwhile
+
+# make sure user did not cancel
+if targetID == 0
+    overhead 'Dock canceled' 38
+    stop
+endif
 
 getlabel targetID targetName
 overhead '{{targetName}}'
