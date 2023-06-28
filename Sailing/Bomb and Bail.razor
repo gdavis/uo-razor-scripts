@@ -1,0 +1,17 @@
+if findtype 'barrel' self 2825 as bomb
+    overhead 'LIGHTING FUSE!' 54
+    dclick bomb
+    cooldown 'Bomb'
+else
+    overhead 'No large bombs!' 38
+endif
+
+if varexist shipTillerman
+    script 'Sailing\Embark All'
+else
+    say '[Embark'
+    wait 150
+    say '[EmbarkFollowers'
+    wait 150
+    say '[RecallBoardingParty'
+endif
