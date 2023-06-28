@@ -27,6 +27,9 @@ while 1 = 1
             elseif insysmsg 'hull is already at full'
                 overhead 'Hull at maximum!'
                 @setvar! repairStep 1
+            elseif insysmsg 'before this ship may repaired again'
+                overhead 'Must wait to repair!' 38
+                stop
             endif
         endwhile
         gumpclose repairGump
