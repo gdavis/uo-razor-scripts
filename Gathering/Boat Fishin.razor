@@ -1,8 +1,18 @@
 # Lets go boat fishin!
 #
+# Features:
+# - Stores fish into targetted container (supports ship holds)
+# - Pauses on captcha check
+# - Feedback on what you caught
+#
 # Requirements:
 # - Have a dress named "Fishing" with a fishing pole
+# - Be on a boat with some fishing skill
 # 
+# Notes
+# - You may need to update the greater ability
+#   to be primary or secondary for your boat.
+#
 # Written by Aphlux
 # Last updated June 28, 2023
 clearsysmsg 
@@ -41,7 +51,7 @@ if findtype 3520 self as rod
     if rod == leftHandID
         overhead "*readies fishing pole*" 908
     else
-        overhead "Where`s that fishin` pole...?" 54
+        overhead "Where`s that dang fishin` pole...?" 54
         clearhands both
         cleardragdrop
         dress 'Fishing'
@@ -50,7 +60,7 @@ if findtype 3520 self as rod
             if lhandempty
             wait 250
             else
-                overhead "There`s that dang fishin` rod!" 69
+                overhead "Found it!" 69
                 break
             endif
         endfor
@@ -143,6 +153,11 @@ while not dead
         elseif insysmsg 'did not find'
             overhead "Fish ain`t bitin` here." 38
             @setvar! isFishin 0
+            
+        elseif insysmsg 'You fish a while, but fail'
+            overhead "Dangit. Missed `em..." 38
+            @setvar! isFishin 0
+            
         endif
         
         # when done fishing, move catches to the creel
