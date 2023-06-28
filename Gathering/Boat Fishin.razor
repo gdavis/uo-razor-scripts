@@ -1,0 +1,149 @@
+clearsysmsg 
+
+#overhead "Target organizer 20 hotbag"
+#organizer 20 set 
+#while not insysmsg "Container set successfully"
+#    wait 250
+#endwhile
+
+@setvar! isFishin 0
+
+# set bag to place fish in
+if not find fishCreel self 
+    overhead 'Target a bag as your fishin creel:' 54
+    setvar fishCreel 0
+    setvar fishCreel
+    
+    if fishCreel = 0
+        overhead 'What?! You can store no fish with no fishin creel!' 38
+        stop
+    endif
+endif
+
+@setvar! leftHandID lefthand
+if findtype 3520 self as rod
+    if rod == leftHandID
+        overhead "Got my rod ready for fishin`!" 69
+    else
+        overhead "Where`s that fishin` rod...?" 54
+        clearhands both
+        cleardragdrop
+        dress 'Fishing'
+        
+        for 5
+            if lhandempty
+                wait 1000
+            else
+                overhead "There`s that dang fishin` rod!" 69
+                break
+            endif
+        endfor
+    endif
+else 
+    overhead "I can`t go fishin` with no fishin` pole!" 38
+    sysmsg 'You do not have a fishing pole in your backpack!' 38
+    stop
+endif
+
+@setvar! fishinDelay 8550
+@setvar! fishinBarkDelay 5000
+if not timerexists fishBarkTimer
+    createtimer fishBarkTimer
+    settimer fishBarkTimer 69420
+endif
+
+
+if not timerexists fishActionTimer
+    createtimer fishActionTimer
+    settimer fishActionTimer 69420
+endif
+
+while not dead 
+    if insysmsg "The world will save in 15 seconds"
+        overhead "Just gonna rest my eyes a moment..." 54
+        wait 20000
+    endif
+    
+    if isFishin = 1
+        if timer fishActionTimer > fishinDelay
+            overhead 'CAPTCHA CHECK!?' 54
+            if not timerexists captchaTimer
+                createtimer captchaTimer
+            endif
+            
+            settimer captchaTimer 0
+            while not insysmsg 'Captcha Successful'
+                wait 100
+                if timer captchaTimer > 5000
+                    overhead 'Waiting for captcha check...'
+                    settimer captchaTimer 0
+                endif
+            endwhile
+        endif
+    
+        if insysmsg 'You catch a fish'
+            overhead 'Caught one!' 89
+            @setvar! isFishin 0
+        elseif insysmsg 'You catch a large fish'
+            overhead 'Whoa, its a big one!' 89
+            @setvar! isFishin 0
+            
+        # this seems to be an overhead and not a sysmsg.
+        # need to find a clever way of seeing it happen
+        elseif insysmsg 'You catch a lobster'
+            overhead 'Hoo, a lobster!' 36
+            @setvar! isFishin 0
+        elseif insysmsg 'You retrieve a special fishing net'
+            overhead 'Eyy, a new fishin net!' 54
+            @setvar! isFishin 0
+        endif
+    
+    elseif timer fishActionTimer > fishinDelay
+        if timer fishBarkTimer > fishinBarkDelay
+            overhead ' '
+            overhead 'Here fishy fishy...' 908
+            settimer fishBarkTimer 0
+        endif
+    
+        hotkey 'Use item in hand'
+        say "[secondgreaterability"
+        
+        settimer fishActionTimer 0
+        @setvar! isFishin 1
+    endif
+    
+endwhile
+
+#if lhandempty
+#    dress 'Fishing'
+#    wait 500
+#endif
+#
+#while not dead
+#    if insysmsg "The world will save in 15 seconds"
+#        overhead "World Save Pause"
+#        wait 20000
+#    endif
+#    
+#    if timer "fishy" > 8550
+#        say "[secondgreaterability"
+#    
+#        if lhandempty
+#            dress 'Fishing'
+#            wait 500
+#        endif
+#        
+#        hotkey 'Use item in hand'
+#        settimer "fishy" 0
+#        wait 500
+#        organizer 20
+#        wait 350
+#        
+#        if insysmsg "did not find"
+#            while not dead 
+#                say "Just relaxin on the waves"
+#                wait 1500
+#            endwhile
+#        endif
+#    endif
+#endwhile
