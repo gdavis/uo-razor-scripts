@@ -230,8 +230,13 @@ else
     overhead 'Not hungry.' 902
 endif
 
-script 'Repair Ship'
+# prep tillerman for embarking
+if not varexist shipTillerman or not find shipTillerman ground
+    overhead 'Select your boat tillerman:' 54
+    setvar! shipTillerman
+endif
 
+script 'Repair Ship'
 
 
 
