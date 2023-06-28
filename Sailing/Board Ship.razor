@@ -1,9 +1,42 @@
 # Brings up a target cursor
 # to board a nearby boat.
+clearsysmsg 
 if findtype 5370 self 0 as boardingRope
     dclick boardingRope
     waitforgump 2881168634 1500
     gumpresponse 5 2881168634
+    
+    while not insysmsg 'You successfully board the ship'
+        if insysmsg 'That ship is too far away to board'
+            overhead 'Too far away!' 38
+            sysmsg 'Boarding failed, too far away!' 38
+            gumpclose 2881168634
+            stop
+        elseif insysmsg 'That is not a valid ship target'
+            overhead 'Invalid target!' 38
+            sysmsg 'Boarding failed, target a ship!' 38
+            gumpclose 2881168634
+            stop
+        elseif insysmsg 'You are already on that ship'
+            overhead 'Already there!' 54
+            sysmsg 'Boarding failed successfully!' 38
+            gumpclose 2881168634
+            stop
+        elseif insysmsg 'You may only attempt to board a ship'
+            overhead 'Not damaged enough!' 38
+            sysmsg 'Boarding failed, hit em harder!' 38
+            gumpclose 2881168634
+            stop
+        elseif insysmsg 'Your boarding party fails'
+            overhead 'Failed to board!' 38
+            sysmsg 'Boarding failed, try again!' 38
+            gumpclose 2881168634
+            cooldown 'Boarding Party' 0
+            stop
+        endif
+        wait 50
+    endwhile
+    
 else
     overhead 'No boarding rope!' 35
 endif
