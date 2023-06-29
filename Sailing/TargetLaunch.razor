@@ -162,6 +162,30 @@ overhead 'Waking the crew...'
 say '[ReadyCrew'
 wait 250
 
+# target the tillerman and verify
+setvar shipTillerman 0
+while shipTillerman = 0
+    if not varexist shipTillerman or not find shipTillerman ground
+        overhead 'Select your boat tillerman:' 54
+        setvar shipTillerman 0
+        setvar! shipTillerman
+    endif
+
+    if shipTillerman = 0
+        overhead 'Invalid tillerman! Retarget!' 38
+    else 
+        # check name to make sure the trash 
+        # or something wasnt targetted
+        getlabel shipTillerman tillermanName
+        
+        if 'Hull:' in tillermanName
+        else
+            overhead 'Invalid tillerman! Retarget!' 38
+            setvar shipTillerman 0
+        endif
+    endif
+endwhile
+
 overhead 'Readying ship...'
 say '[Ship'
 wait 250
@@ -171,12 +195,6 @@ say '[TargetingMode'
 wait 250
 say '[Reload'
 wait 250
-
-# prep tillerman for embarking
-if not varexist shipTillerman or not find shipTillerman ground
-    overhead 'Select your boat tillerman:' 54
-    setvar! shipTillerman
-endif
 
 @setvar! shouldSummonPet 0
 if skill 'spirit speak' >= 80
@@ -260,7 +278,6 @@ else
 endif
 
 script 'Repair Ship'
-
 
 
 

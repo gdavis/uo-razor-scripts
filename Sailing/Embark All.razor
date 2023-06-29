@@ -21,26 +21,31 @@ if gumpexists 4216593270
     gumpclose 4216593270
 endif
 
-if not varexist shipTillerman or not find shipTillerman ground
-    overhead 'Select your boat tillerman:' 54
-    setvar shipTillerman 0
-    setvar! shipTillerman
-endif
+# target the tillerman and verify
+setvar shipTillerman 0
+while shipTillerman = 0
+    if not varexist shipTillerman or not find shipTillerman ground
+        overhead 'Select your boat tillerman:' 54
+        setvar shipTillerman 0
+        setvar! shipTillerman
+    endif
 
-if shipTillerman = 0
-    overhead 'Invalid tillerman! Retarget!' 38
-    loop
-endif
+    if shipTillerman = 0
+        overhead 'Invalid tillerman! Retarget!' 38
+    else 
+        # check name to make sure the trash 
+        # or something wasnt targetted
+        getlabel shipTillerman tillermanName
+        
+        if 'Hull:' in tillermanName
+        else
+            overhead 'Invalid tillerman! Retarget!' 38
+            setvar shipTillerman 0
+        endif
+    endif
+endwhile
 
-getlabel shipTillerman tillermanName
-
-if 'Hull:' in tillermanName
-    
-else
-    overhead 'Invalid tillerman! Retarget!' 38
-    unsetvar shipTillerman
-endif
-
+# interact with tillerman
 if find shipTillerman ground as tillerman
     dclick tillerman
     wait 250
