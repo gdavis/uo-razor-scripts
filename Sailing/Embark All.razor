@@ -23,7 +23,22 @@ endif
 
 if not varexist shipTillerman or not find shipTillerman ground
     overhead 'Select your boat tillerman:' 54
+    setvar shipTillerman 0
     setvar! shipTillerman
+endif
+
+if shipTillerman = 0
+    overhead 'Invalid tillerman! Retarget!' 38
+    loop
+endif
+
+getlabel shipTillerman tillermanName
+
+if 'Hull:' in tillermanName
+    
+else
+    overhead 'Invalid tillerman! Retarget!' 38
+    unsetvar shipTillerman
 endif
 
 if find shipTillerman ground as tillerman
