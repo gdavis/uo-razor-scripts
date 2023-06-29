@@ -29,8 +29,8 @@ if not varexist shipTillerman or not find shipTillerman ground
 endif
 
 if shipTillerman = 0
-    overhead 'Invalid tillerman! Retarget!' 38
-    loop
+    overhead 'Targetting cancelled!' 38
+    stop
 else 
     # check name to make sure the trash 
     # or something wasnt targetted
@@ -39,7 +39,7 @@ else
     if 'Hull:' in tillermanName
     else
         overhead 'Invalid tillerman! Retarget!' 38
-        setvar shipTillerman 0
+        unsetvar  shipTillerman
         loop
     endif
 endif
