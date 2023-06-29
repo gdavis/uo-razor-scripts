@@ -1,6 +1,13 @@
 if findtype 'barrel' self 2825 as bomb
-    overhead 'LIGHTING FUSE!' 54
     dclick bomb
+    wait 200
+    
+    if insysmsg 'You cannot use ship bombs on board friendly ships'
+        overhead 'Friendly ship!'
+        stop
+    endif
+    
+    overhead 'BOMB PLACED!' 54
     cooldown 'Bomb'
 else
     overhead 'No large bombs!' 38
