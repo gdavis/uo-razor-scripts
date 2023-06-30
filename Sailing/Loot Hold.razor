@@ -1,8 +1,162 @@
+overhead '+ Looting hold +' 54
+
+if not varexist lootBag or not find lootBag backpack
+    overhead 'Select your loot bag:' 54
+    @setvar lootBag 0
+    setvar lootBag
+    
+    if lootBag = 0
+        overhead 'Failed to set loot bag!'
+        stop
+    endif
+endif
+
 removelist boatLoot
 createlist boatLoot
-pushlist boatLoot 'muffins'
-pushlist boatLoot 'gold coin'
-pushlist boatLoot 'bag of gems'
+pushlist boatLoot 43206
+pushlist boatLoot 29363
+pushlist boatLoot 43166
+pushlist boatLoot 22336
+pushlist boatLoot 29348
+pushlist boatLoot 17087
+pushlist boatLoot 3985
+pushlist boatLoot 8826
+pushlist boatLoot 3827
+pushlist boatLoot 29030
+pushlist boatLoot 3836
+pushlist boatLoot 5981
+pushlist boatLoot 4248
+pushlist boatLoot 5359
+pushlist boatLoot 3839
+pushlist boatLoot 3838
+pushlist boatLoot 3843
+pushlist boatLoot 2597
+pushlist boatLoot 29036
+pushlist boatLoot 48407
+pushlist boatLoot 3834
+pushlist boatLoot 3865
+pushlist boatLoot 3859
+pushlist boatLoot 3885
+pushlist boatLoot 3856
+pushlist boatLoot 3878
+pushlist boatLoot 3877
+pushlist boatLoot 3873
+pushlist boatLoot 3861
+pushlist boatLoot 3862
+pushlist boatLoot 576
+pushlist boatLoot 5123
+pushlist boatLoot 7177
+pushlist boatLoot 7027
+pushlist boatLoot 3920
+pushlist boatLoot 5131
+pushlist boatLoot 5179
+pushlist boatLoot 5075
+pushlist boatLoot 3980
+pushlist boatLoot 5060
+pushlist boatLoot 5076
+pushlist boatLoot 5042
+pushlist boatLoot 10245
+pushlist boatLoot 3938
+pushlist boatLoot 3913
+pushlist boatLoot 7169
+pushlist boatLoot 3909
+pushlist boatLoot 5063
+pushlist boatLoot 5089
+pushlist boatLoot 3981
+pushlist boatLoot 7170
+pushlist boatLoot 7033
+pushlist boatLoot 3976
+pushlist boatLoot 3762
+pushlist boatLoot 5040
+pushlist boatLoot 5103
+pushlist boatLoot 5117
+pushlist boatLoot 7181
+pushlist boatLoot 7029
+pushlist boatLoot 3568
+pushlist boatLoot 6264
+pushlist boatLoot 3742
+pushlist boatLoot 5139
+pushlist boatLoot 6263
+pushlist boatLoot 7026
+pushlist boatLoot 5125
+pushlist boatLoot 3740
+pushlist boatLoot 5121
+pushlist boatLoot 3973
+pushlist boatLoot 3974
+pushlist boatLoot 5204
+pushlist boatLoot 5105
+pushlist boatLoot 5185
+pushlist boatLoot 5078
+pushlist boatLoot 5115
+pushlist boatLoot 7175
+pushlist boatLoot 5059
+pushlist boatLoot 7034
+pushlist boatLoot 3713
+pushlist boatLoot 3915
+pushlist boatLoot 5112
+pushlist boatLoot 5070
+pushlist boatLoot 5049
+pushlist boatLoot 5119
+pushlist boatLoot 5205
+pushlist boatLoot 5046
+pushlist boatLoot 3962
+pushlist boatLoot 3934
+pushlist boatLoot 7035
+pushlist boatLoot 3911
+pushlist boatLoot 7179
+pushlist boatLoot 5106
+pushlist boatLoot 5143
+pushlist boatLoot 3573
+pushlist boatLoot 3719
+pushlist boatLoot 5177
+pushlist boatLoot 7610
+pushlist boatLoot 5181
+pushlist boatLoot 3917
+pushlist boatLoot 5132
+pushlist boatLoot 3963
+pushlist boatLoot 7031
+pushlist boatLoot 5207
+pushlist boatLoot 5056
+pushlist boatLoot 5085
+pushlist boatLoot 3763
+pushlist boatLoot 5129
+pushlist boatLoot 5187
+pushlist boatLoot 3721
+pushlist boatLoot 3972
+pushlist boatLoot 5138
+pushlist boatLoot 3570
+pushlist boatLoot 5101
+pushlist boatLoot 5061
+pushlist boatLoot 5074
+pushlist boatLoot 5142
+pushlist boatLoot 5182
+pushlist boatLoot 5146
+pushlist boatLoot 6265
+pushlist boatLoot 5090
+pushlist boatLoot 5203
+pushlist boatLoot 5044
+pushlist boatLoot 5144
+pushlist boatLoot 3932
+pushlist boatLoot 5201
+pushlist boatLoot 5127
+pushlist boatLoot 3572
+pushlist boatLoot 7173
+pushlist boatLoot 5135
+pushlist boatLoot 3937
+pushlist boatLoot 3571
+pushlist boatLoot 22326
+pushlist boatLoot 27611
+pushlist boatLoot 9917
+pushlist boatLoot 3821
+pushlist boatLoot 5356
+pushlist boatLoot 8455
+pushlist boatLoot 5362
+pushlist boatLoot 45315
+pushlist boatLoot 8454
+pushlist boatLoot 22187
+pushlist boatLoot 5901
+pushlist boatLoot 2539
+pushlist boatLoot 5905
 
 if findtype 'hatch' ground any any 2 as hold
     dclick hold
@@ -13,8 +167,13 @@ if findtype 'hatch' ground any any 2 as hold
             getlabel booty bootyName
             sysmsg 'Looting {{bootyName}}'
             lift booty 60000
-            drop backpack -1 -1 -1
+            drop lootBag -1 -1 -1
             wait 650
         endwhile
     endfor
 endif
+
+overhead 'Done looting!' 69
+
+# return to spyglassing
+script 'Sailing\Spyglass Search'
