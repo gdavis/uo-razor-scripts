@@ -155,47 +155,46 @@ endif
 ## Recall Escape --------------
 
 # Ask user to provide the recall rune
-if not varexist 'recallTarget' or 'recallTarget' = 0
+if not varexist recallTarget or recallTarget = 0
     overhead 'Target the recall runebook or rune to use:'
-    @setvar 'recallTarget' 0
-    setvar 'recallTarget'
+    @setvar recallTarget 0
+    setvar recallTarget
 endif
 
 # Check if the stored rune 
 # is actually reachable
-if find 'recallTarget' self
-    getlabel 'recallTarget' targetName
+if recallTarget = 0
+    overhead 'Failed to set a recall target!' 38
+    loop
+elseif find recallTarget backpack
+    getlabel recallTarget targetName
 
     if 'a rune tome' in targetName or 'runebook' in targetName
         # found valid target
     else
-        @setvar! foundRune 0
-        @clearignore 
-        while foundRune = 0 and findtype 'recall rune' backpack as rune
-            @ignore rune
-            if rune = recallTarget
-                overhead 'Found valid recall target' 69
-                @setvar! foundRune 1
-            endif
-        endwhile
-        
-        if foundRune = 0 
-            overhead 'Failed to find a valid recall target!' 38
-            @unsetvar recallTarget
-            loop
-        endif
+        overhead 'WARNING: Recall target is not set to a rune, runebook, or rune tome!' 54
+        @setvar recallTarget 0
     endif
 else
-    overhead 'Stored recall target not found!' 38
-    overhead 'Target a new recall runebook or rune to use:'
+    # rune targets are not found in the backpack
+    # for whatever reason, so we need do 
+    # search for it by type and see if it exists
+    @setvar! foundRune 0
+    @clearignore
+    while foundRune = 0 and findtype 'recall rune' backpack as rune
+        @ignore rune
+        if rune = recallTarget
+            # overhead 'Found valid recall target' 69
+            @setvar! foundRune 1
+            break
+        endif
+    endwhile
     
-    @setvar 'recallTarget' 0
-    loop
-endif
-
-if 'recallTarget' = 0
-    overhead 'Failed to set a recall target!' 38
-    loop
+    if foundRune = 0 
+        overhead 'Failed to find a valid recall target!' 38
+        @setvar recallTarget 0
+        loop
+    endif    
 endif
 
 
