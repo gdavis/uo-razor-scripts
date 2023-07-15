@@ -1,5 +1,30 @@
-dclick 0x488C1EE9
+if lhandempty
+    if not findtype hatchetID self
+        overhead 'Out of Hatchets' 38
+        
+        if not hidden and skill 'hiding' > 50
+            skill 'Hiding'
+            wait actionDelay
+        endif
+        
+        @setvar! isActive 0
+        replay
+    else 
+        overhead 'Equipping Hatchet' 53
+        dclicktype hatchetID backpack
+        wait 667
+    endif
+endif
+
+hotkey 'Use item in left hand'
 waitfortarget
 target 'self'
 wait 2000
+
+
+if insysmsg 'You have completely exhausted your lumber camp'
+    overhead 'Done here, headed home!' 54
+    script 'RecallInn'
+endif
+
 loop
