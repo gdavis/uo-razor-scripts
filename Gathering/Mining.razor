@@ -155,51 +155,46 @@ endif
 ## Recall Escape --------------
 
 # Ask user to provide the recall rune
-if skill 'magery' >= 60 and not varexist 'recallTarget'
+if not varexist 'recallTarget' or 'recallTarget' = 0
     overhead 'Target the recall runebook or rune to use:'
+    @setvar 'recallTarget' 0
     setvar 'recallTarget'
 endif
 
 # Check if the stored rune 
 # is actually reachable
-if not find 'recallTarget' backpack 
+if find 'recallTarget' self
+    getlabel 'recallTarget' targetName
+
+    if 'a rune tome' in targetName or 'runebook' in targetName
+        # found valid target
+    else
+        @setvar! foundRune 0
+        @clearignore 
+        while foundRune = 0 and findtype 'recall rune' backpack as rune
+            @ignore rune
+            if rune = recallTarget
+                overhead 'Found valid recall target' 69
+                @setvar! foundRune 1
+            endif
+        endwhile
+        
+        if foundRune = 0 
+            overhead 'Failed to find a valid recall target!' 38
+            @unsetvar recallTarget
+            loop
+        endif
+    endif
+else
     overhead 'Stored recall target not found!' 38
     overhead 'Target a new recall runebook or rune to use:'
     
-    setvar 'recallTarget' 0
-    setvar 'recallTarget'
-    
-    if 'recallTarget' = 0
-        overhead 'Failed to set a recall target!' 38
-        loop
-        
-    else 
-        getlabel recallTarget targetName
-        if 'a rune tome' in targetName or 'runebook' in targetName
-            overhead 'Found valid recall target' 69
-        else
-            @setvar! foundRune 0
-            @clearignore 
-            while foundRune = 0 and findtype 'recall rune' backpack as rune
-                @ignore rune
-                if rune = recallTarget
-                    overhead 'Found valid recall target' 69
-                    @setvar! foundRune 1
-                endif
-            endwhile
-            
-            if foundRune = 0 
-                overhead 'Failed to find a valid recall target!' 38
-                unsetvar recallTarget
-                loop
-            endif
-        endif
-    endif
+    @setvar 'recallTarget' 0
+    loop
 endif
 
-if not find 'recallTarget' backpack 
-    overhead 'WARNING! Recall target is not reachable and PK escape will fail!' 38
-    sysmsg 'WARNING! Recall target is not reachable and PK escape will fail!' 38
+if 'recallTarget' = 0
+    overhead 'Failed to set a recall target!' 38
     loop
 endif
 
