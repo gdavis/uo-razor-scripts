@@ -145,15 +145,73 @@ endif
 
 ## Recall Escape --------------
 
-# PK check
+# Ask user to provide the recall rune
+if skill 'magery' >= 60 and not varexist 'recallTarget'
+    overhead 'Target the recall runebook or rune to use:'
+    setvar 'recallTarget'
+endif
+
+# Check if the stored rune 
+# is actually reachable
+if not find 'recallTarget' backpack 
+    overhead 'Stored recall target not found!' 38
+    overhead 'Target a new recall runebook or rune to use:'
+    
+    setvar 'recallTarget' 0
+    setvar 'recallTarget'
+    
+    if 'recallTarget' = 0
+        overhead 'Failed to set a recall target!' 38
+        loop
+        
+    else 
+        getlabel recallTarget targetName
+        if 'a rune tome' in targetName or 'runebook' in targetName
+            overhead 'Found valid recall target' 69
+        else
+            @setvar! foundRune 0
+            @clearignore 
+            while foundRune = 0 and findtype 'recall rune' backpack as rune
+                @ignore rune
+                if rune = recallTarget
+                    overhead 'Found valid recall target' 69
+                    @setvar! foundRune 1
+                endif
+            endwhile
+            
+            if foundRune = 0 
+                overhead 'Failed to find a valid recall target!' 38
+                unsetvar recallTarget
+                loop
+            endif
+        endif
+    endif
+endif
+
+if not find 'recallTarget' backpack 
+    overhead 'WARNING! Recall target is not reachable and PK escape will fail!' 38
+    sysmsg 'WARNING! Recall target is not reachable and PK escape will fail!' 38
+    loop
+endif
+
+
+## PK Check --------------
+
 if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     overhead 'PK WARNING - ESCAPE'
 
+    # if you have a custom recall script, 
+    # replace this value with yours. otherwise,
+    # we will try to use the recall target and recall.
+    script 'RecallInn'
+
     if skill 'magery' >= 60
         overhead 'Time to leave!' 34
-        sysmsg 'Lumberjack -> Recall to Inn!' 44
-        @setvar! isActive 0
-        script 'RecallInn'
+        cast 'Recall'
+        waitfortarget 6000
+        target 'recallTarget'
+    else
+        overhead 'PK Detected!' 38
     endif
     
     if skill 'Hiding' >= 50 
