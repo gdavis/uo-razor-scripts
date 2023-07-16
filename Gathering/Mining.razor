@@ -152,6 +152,28 @@ if skill 'Tracking' >= 50 and not findbuff 'Tracking'
 endif
 
 
+## World Save -----------------
+
+if not varexist isWorldSaving
+    @setvar! isWorldSaving 0
+endif
+
+if insysmsg 'The world will save' or isWorldSaving = 1
+
+    if insysmsg 'World save complete'
+        overhead 'Save complete, continuing...' 53
+        clearsysmsg 
+        @setvar! isWorldSaving 0
+    elseif isWorldSaving = 0
+        @setvar! isWorldSaving 1    
+        @setvar! shouldHide 1
+    endif
+    
+    @setvar! isActive 0
+    replay
+endif
+
+
 ## Recall Escape --------------
 
 # Ask user to provide the recall rune
@@ -172,8 +194,7 @@ elseif find recallTarget backpack
     if 'a rune tome' in targetName or 'runebook' in targetName
         # found valid target
     else
-        overhead 'WARNING: Recall target is not set to a rune, runebook, or rune tome!' 54
-        @setvar recallTarget 0
+        sysmsg 'WARNING: Recall target is not set to a rune, runebook, or rune tome!' 54
     endif
 else
     # rune targets are not found in the backpack
@@ -239,27 +260,6 @@ if shouldHide = 1 and timer hideTimer > hideDelay
     if hidden 
         @setvar! shouldHide 0
     endif
-endif
-
-
-## World Save -----------------
-if not varexist isWorldSaving
-    @setvar! isWorldSaving 0
-endif
-
-if insysmsg 'The world will save' or isWorldSaving = 1
-
-    if insysmsg 'World save complete'
-        overhead 'Save complete, continuing...' 53
-        clearsysmsg 
-        @setvar! isWorldSaving 0
-    elseif isWorldSaving = 0
-        @setvar! isWorldSaving 1    
-        @setvar! shouldHide 1
-    endif
-    
-    @setvar! isActive 0
-    replay
 endif
 
 

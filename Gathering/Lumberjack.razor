@@ -163,8 +163,7 @@ elseif find recallTarget backpack
     if 'a rune tome' in targetName or 'runebook' in targetName
         # found valid target
     else
-        overhead 'WARNING: Recall target is not set to a rune, runebook, or rune tome!' 54
-        @setvar recallTarget 0
+        sysmsg 'WARNING: Recall target is not set to a rune, runebook, or rune tome!' 54
     endif
 else
     # rune targets are not found in the backpack
