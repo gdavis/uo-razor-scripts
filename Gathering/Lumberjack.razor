@@ -143,6 +143,29 @@ if skill 'Tracking' >= 50 and not findbuff 'Tracking'
 endif
 
 
+## World Save -----------------
+
+if not varexist isWorldSaving
+    @setvar! isWorldSaving 0
+endif
+
+if insysmsg 'The world is saving'
+    if insysmsg 'World save complete'
+        overhead 'Save complete, continuing...' 53
+        clearsysmsg 
+        @setvar! isWorldSaving 0
+        settimer chopTime 0
+    else
+        overhead 'Detected world save!'
+        @setvar! isWorldSaving 1    
+        @setvar! shouldHide 1
+        @setvar! isActive 0
+        settimer chopTime 0
+    endif
+    replay
+endif
+
+
 ## Recall Escape --------------
 
 # Ask user to provide the recall rune
@@ -232,27 +255,6 @@ if shouldHide = 1
     endif
 endif
 
-
-## World Save -----------------
-if not varexist isWorldSaving
-    @setvar! isWorldSaving 0
-endif
-
-if insysmsg 'The world is saving'
-    if insysmsg 'World save complete'
-        overhead 'Save complete, continuing...' 53
-        clearsysmsg 
-        @setvar! isWorldSaving 0
-        settimer chopTime 0
-    else
-        overhead 'Detected world save!'
-        @setvar! isWorldSaving 1    
-        @setvar! shouldHide 1
-        @setvar! isActive 0
-        settimer chopTime 0
-    endif
-    replay
-endif
 
 ## Check Weight ----------------
 # check if bags are full
