@@ -1,0 +1,37 @@
+getlabel righthand rhandItem
+@setvar! pickaxeEquipped 0
+@setvar! pickaxeID 3718
+if 'pickaxe' in rhandItem
+    @setvar! pickaxeEquipped 1
+endif
+
+if rhandempty or pickaxeEquipped = 0
+    if not findtype pickaxeID backpack
+        overhead 'Out of Pickaxes' 38
+        
+        if not hidden and skill 'hiding' > 50
+            skill 'Hiding'
+            wait actionDelay
+        endif
+        
+        stop
+    else 
+        overhead 'Equipping Pickaxe' 53
+        dclicktype pickaxeID backpack
+        wait 500
+    endif
+endif
+
+
+hotkey 'Use item in right hand'
+#waitfortarget
+#target 'self'
+wait 2000
+
+
+if insysmsg 'You do not see any harvestable resources'
+    overhead 'Done here, headed home!' 54
+    script 'RecallInn'
+endif
+
+loop
