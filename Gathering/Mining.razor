@@ -463,6 +463,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         @setvar! isDigging 0
         @setvar! isActive 0
         @setvar! shouldHide 1
+        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -475,6 +476,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         @setvar! shouldHide 1
         @setvar! isDigging 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -485,6 +487,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
 
         @setvar! isDigging 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -529,6 +532,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         @setvar! shouldHide 0
         @setvar! isDigging 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -540,6 +544,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         @setvar! shouldHide 1
         @setvar! isDigging 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
 
@@ -550,6 +555,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         @setvar! shouldHide 0
         @setvar! isDigging 0 
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
 
@@ -557,6 +563,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
         overhead 'Too fast?' 44
 
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
 else
