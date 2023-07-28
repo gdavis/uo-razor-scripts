@@ -393,6 +393,7 @@ if isChopping = 1
         @setvar! isChopping 0
         @setvar! isActive 0
         @setvar! shouldHide 1
+        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -405,6 +406,7 @@ if isChopping = 1
         @setvar! shouldHide 1
         @setvar! isChopping 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -415,6 +417,7 @@ if isChopping = 1
 
         @setvar! isChopping 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
 endif
@@ -474,6 +477,7 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
         @setvar! shouldHide 0
         @setvar! isChopping 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -485,6 +489,7 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
         @setvar! shouldHide 1
         @setvar! isChopping 0
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
 
@@ -495,6 +500,7 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
         @setvar! shouldHide 0
         @setvar! isChopping 0 
         @setvar! isActive 0
+        @setvar! hasCaptcha 0
         replay
     endif
 
