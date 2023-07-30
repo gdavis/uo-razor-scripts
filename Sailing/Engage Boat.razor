@@ -1,0 +1,27 @@
+# Actions when first engaging a ship.
+overhead 'Select ship target:' 54
+setvar! shipTarget 0
+setvar shipTarget
+
+if shipTarget = 0
+    overhead 'Invalid target' 38
+    loop
+endif
+
+say '[CrewAttack'
+wft 6000
+target shipTarget
+wait 250
+
+if followers > 0
+    say 'all kill'
+    wft 6000
+    target shipTarget
+    wait 250
+endif
+
+if skill 'magery' == 100
+    cast 'Mass Curse'
+    wft 6000
+    target shipTarget
+endif
