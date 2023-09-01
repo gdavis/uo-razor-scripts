@@ -14,6 +14,12 @@ createlist itemIDs
 pushlist itemIDs 'void orb'
 pushlist itemIDs 'aspect core'
 pushlist itemIDs 'flask'
+pushlist itemIDs 'spellbook'
+pushlist itemIDs 'tambourine'
+pushlist itemIDs 'lap harp'
+pushlist itemIDs 'drum'
+pushlist itemIDs 'bamboo flute'
+pushlist itemIDs 'lute'
 
 if not find vendor ground any any 2
     overhead 'Failed to find vendor. Must be within 2 tiles!' 38
@@ -50,8 +56,8 @@ foreach itemID in itemIDs
         
         # Rares
         if 'a skill mastery orb' in itemName
-            @setvar! price 15000
-            @setvar! xPosition 50
+            @setvar! price 15750
+            @setvar! xPosition 150
             @setvar! yPosition 95
             
         # Cores (19) ---------------------------------
@@ -161,9 +167,47 @@ foreach itemID in itemIDs
             @setvar! price 8500
             @setvar! xPosition 120
             @setvar! yPosition 80
+        
+        # Spellbooks
+        elseif 'eminently potent magic' in itemName
+            @setvar price 1200
+            @setvar! xPosition 55
+            @setvar! yPosition 90
+        
+        elseif 'exceedingly potent magic' in itemName
+            @setvar price 4500
+            @setvar! xPosition 75
+            @setvar! yPosition 90
             
+        elseif 'supremely potent magic' in itemName
+            @setvar price 16500
+            @setvar! xPosition 95
+            @setvar! yPosition 90
+            
+        # BARD InSTRUMenTs ==============================
+        elseif 'eminently melodious' in itemName
+            @setvar price 1000
+            @setvar! xPosition 0
+            @setvar! yPosition 70
+        
+        elseif 'exceedingly melodious' in itemName
+            @setvar price 3500
+            @setvar! xPosition 90
+            @setvar! yPosition 70
+            
+        elseif 'supremely melodious' in itemName
+            @setvar price 15500
+            @setvar! xPosition 180
+            @setvar! yPosition 70
+            
+        elseif '[blessed' in itemName
+            @ignore foundItem
+            sysmsg 'Ignoring blessed item: {{itemName}}' 908
+            continue
         endif
         
+        # halt script if item is in the item list
+        # but a price has not yet been defined.
         if price == 0 
             overhead 'Unknown price! Please update the script for: {{itemName}}' 38
             stop

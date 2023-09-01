@@ -1,7 +1,10 @@
 # Looks for encoded maps,
 # and decodes them.
 
-@setvar! decodeGumpID 1520869851
+@setvar! oreMapGumpID 3367641484
+@setvar! tmapGumpID 1520869851
+@setvar! lumberMapGumpID 1332805401
+@setvar! skinningMapGumpID 3473029237
 
 if not varexist tmapSpyglass or not find tmapSpyglass backpack
     overhead 'Select your spyglass:'
@@ -10,7 +13,33 @@ endif
 
 @clearignore 
 while findtype 5356 backpack as tmap
+    gumpclose oreMapGumpID
+    gumpclose tmapGumpID
+    gumpclose lumberMapGumpID
+    gumpclose skinningMapGumpID
+    wait 500
+
     getlabel tmap mapName
+
+    @setvar! decodeGumpID 0
+    if 'treasure map' in mapName
+        @setvar! decodeGumpID tmapGumpID
+    elseif 'ore map' in mapName
+        @setvar! decodeGumpID oreMapGumpID
+    elseif 'lumber map' in mapName
+        @setvar! decodeGumpID lumberMapGumpID
+    elseif 'skinning map' in mapName
+        @setvar! decodeGumpID skinningMapGumpID
+    else 
+        overhead 'Unknow map type! Aborting.' 38
+        sysmsg 'Unknow map type! Aborting.' 38
+        stop
+    endif
+    
+    if decodeGumpID == 0 
+        overhead 'Unknown map type!' 38
+        sysmsg 'Unknown map type!' 38
+    endif
 
     while gumpexists decodeGumpID
         gumpclose decodeGumpID
@@ -29,11 +58,14 @@ while findtype 5356 backpack as tmap
         
     else
         dclick tmapSpyglass
-        wft
+        wft 1000
         target tmap
         waitforgump decodeGumpID
         
-        if ingump 'Improve Map Accuracy' 1520869851
+        if insysmsg 'You have reached the maximum accuracy possible'
+            sysmsg 'Map at maximum accuracy.' 54
+            @ignore tmap
+        elseif ingump 'Improve Map Accuracy'
             overhead 'Improving accuracy...'    
             gumpresponse 4 decodeGumpID
             waitforgump decodeGumpID
@@ -44,3 +76,6 @@ while findtype 5356 backpack as tmap
         endif
     endif
 endwhile
+
+overhead 'Decoding complete' 69
+sysmsg 'Decoding complete' 69

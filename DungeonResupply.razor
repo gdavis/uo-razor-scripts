@@ -184,9 +184,14 @@ endif
 # unload listed items not dumped into recylcer
 clearsysmsg 
 @clearignore 
-overhead 'Unloading items...' 53
+@setvar! foundItems 0
 foreach itemID in basicItems
     while findtype itemID lootBag as item
+        if foundItems = 0
+            overhead 'Unloading items...' 53
+            @setvar! foundItems 1
+        endif
+        
         getlabel item itemName
         if 'unidentified' in itemName
             overhead "Moving: '{{itemName}}'" 444
@@ -206,7 +211,7 @@ endfor
 @clearignore
 
 # add treasure maps to tome
-if findtype 'book' ground 2990 any any 2 as tome
+if findtype 'book' ground 2990 any any 2 as tome and findtype 'map' backpack 0
     overhead 'Unloading treasure maps...' 53
     menu tome 0
 endif
@@ -240,6 +245,13 @@ if findtype 'book' ground 1495 any any 2 as tome and findtype 'folded cloth' bac
     overhead 'Unloading rare cloth...' 53
     menu tome 0
 endif
+
+# add skill scrolls to tome
+if findtype 'book' ground 2963 any any 2 as tome and findtype 'scroll of calling' backpack
+    overhead 'Unloading skill scrolls...' 53
+    menu tome 0
+endif
+
 
 # eat foot if hungry
 if not findbuff 'Food Satisfaction'
