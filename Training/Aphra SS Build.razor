@@ -10,51 +10,61 @@ if not timerexists medTimer
     settimer medTimer 99999
 endif
 
-if diffmana = 0 and timer medTimer > 5000
-    # find wiz hat
-    if findtype 5912 backpack as hat
-        dclick hat
-        wait 650
+if skill 'meditation' < 100
+    if diffmana = 0 and timer medTimer > 5000
+        # take off wiz hat if started with it on
+        if mana = 105
+            dclick currentHat
+            wait 800
+        endif
         
-        #while diffmana > 0
-            skill 'meditation'
-        #endwhile
-        
-        settimer medTimer 0
-        
-        dclick currentHat
-        wait 650
+        # find wiz hat
+        if findtype 5912 backpack as hat
+            dclick hat
+            wait 800
+            
+            while diffmana > 0
+                skill 'meditation'
+            endwhile
+            
+            settimer medTimer 0
+            
+            dclick currentHat
+            wait 800
+        endif
     endif
 endif
 
 # --- Spirit Speak
 
-if not timerexists ssTimer
-    createtimer ssTimer
-    settimer ssTimer 99999
+if skill 'spiritspeak'  < 120
+    if not timerexists ssTimer
+        createtimer ssTimer
+        settimer ssTimer 99999
+    endif
+
+    if ssTimer > 750 
+        skill 'spiritspeak'    
+        settimer ssTimer 0
+    endif
 endif
 
-if ssTimer > 2000 
-    skill 'spiritspeak'    
-    settimer ssTimer 0
-    wait 500
-endif
 
 # --- Camping
 
-if skill 'Camping' >= 80
-    overhead 'Legendary Camper!'
-else 
-    if not findtype "kindling" backpack
-        overhead "Need more kindling" 34
-        wait 5000
-        replay
-    endif
-        
-    if not findtype "campfire" ground 0 1 1
-        dclicktype "kindling" backpack
-        wait 3500
-    endif
-endif
+#if skill 'Camping' >= 120
+#    overhead 'Legendary Camper!'
+#else 
+#    if not findtype "kindling" backpack
+#        overhead "Need more kindling" 34
+#        wait 5000
+#        replay
+#    endif
+#        
+#    if not findtype "campfire" ground 0 1 1
+#        dclicktype "kindling" backpack
+#        wait 3500
+#    endif
+#endif
 
 loop
