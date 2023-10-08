@@ -93,7 +93,7 @@ endif
 
 if skill 'item identification' = 120 and findtype 'ornate elven chest' ground any any 2 as itemBox and timer itemIDTimer > itemIDTimeout
     skill 'itemidentification'
-    wft 3000
+    wft 8000
     target itemBox
     settimer itemIDTimer 0
 endif
