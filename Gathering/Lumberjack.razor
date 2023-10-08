@@ -19,7 +19,7 @@
 
 # enter a weight that is 
 # 2 less than max to not go overweight.
-@setvar! maxWeight 450
+@setvar! maxWeight 565
 
 
 
@@ -180,10 +180,19 @@ if recallTarget = 0
     loop
 elseif find recallTarget backpack
     getlabel recallTarget targetName
-
-    if 'a rune tome' in targetName or 'runebook' in targetName
-        # found valid target
-    else
+    @setvar! foundRecallable 0
+    
+    @clearignore 
+    while findtype 7956|29103|8901 backpack as recallable
+        if recallable == recallTarget
+            @setvar! foundRecallable 1
+            break
+        endif
+        @ignore recallable
+    endwhile
+    @clearignore
+    
+    if foundRecallable = 0
         sysmsg 'WARNING: Recall target is not set to a rune, runebook, or rune tome!' 54
     endif
 else
