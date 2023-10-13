@@ -13,7 +13,7 @@
 # Inspired by NBK bot.
 # Uses inscription character to cast 
 # long buffs on players.
-@setvar! buffCooldown 30000
+@setvar! buffCooldown 10000
 @setvar! speakCooldown 30000
 
 # choose whether to periodically
@@ -317,7 +317,7 @@ if insysmsg 'New target set'
                         settimer playerID 0
                     else
                         sysmsg 'BUFFBOT: {{playerID}} has been buffed too recently.' 38
-                        say 'Come back later, you get one every two minutes.'
+                        say 'Come back later, you get one every 10 seconds.'
                         break
                     endif
                 endif
