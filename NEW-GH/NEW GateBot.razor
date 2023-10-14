@@ -43,26 +43,27 @@ if timer gateRunning > 15000
     settimer gateRunning 0
 endif
 
-# green lantern for towns
-# 1182 = wilderness hue
-@setvar! lanternOn 2594
-@setvar! lanternOff 2597
-if findtype lanternOn ground 1182 any 2 as lantern
+# golden oil lamp for towns
+@setvar! lanternOn 55434
+@setvar! lanternOff 55433
+
+if findtype lanternOn ground any any 2 as lantern
     @setvar! destination townsLoc
     @setvar! itemOn lanternOn
     @setvar! itemOff lanternOff
-    @setvar! itemHue 1182
     overhead 'Town Gate' 54
     say 'Town portal, coming up!'
 endif
 
-# golden oil lamp for dungeons
-@setvar! torchOn 55434
-@setvar! torchOff 55433
-if findtype torchOn ground any any 2 as torch
+# green lantern for towns
+# 1182 = wilderness hue
+@setvar! torchOn 2594
+@setvar! torchOff 2597
+if findtype torchOn ground 1182 any 2 as torch
     @setvar! destination dungeonLoc
     @setvar! itemOn torchOn
     @setvar! itemOff torchOff
+    @setvar! itemHue 1182
     overhead 'Dungeon Gate' 54
     say 'Dungeon gate, right away!'
 endif
