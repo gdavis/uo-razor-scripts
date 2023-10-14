@@ -1,16 +1,9 @@
 # Script for Chiv bot in my inn.
 # Opens a gate to town, dungeons, or shrines
-# when a lantern, torch, or candle is lit.
+# when a matching light source is lit.
 # Will walk forward out of a chair when
 # opening so you can walk right in.
 #overhead '--GATE BOT--' 920
-
-# check for starting location
-if not position 4306 797
-    overhead 'Not in correct position!' 38
-    wait 2500
-    loop
-endif
 
 # running overhead timer
 if not timerexists gateRunning
@@ -36,6 +29,7 @@ endif
 @setvar! destination 0
 @setvar! itemOn 0
 @setvar! itemOff 0
+@setvar! itemHue 0
 
 # locations that match chiv gate
 # gump button ids
@@ -49,18 +43,22 @@ if timer gateRunning > 15000
     settimer gateRunning 0
 endif
 
+# green lantern for towns
+# 1182 = wilderness hue
 @setvar! lanternOn 2594
 @setvar! lanternOff 2597
-if findtype lanternOn ground 0 any 2 as lantern
+if findtype lanternOn ground 1182 any 2 as lantern
     @setvar! destination townsLoc
     @setvar! itemOn lanternOn
     @setvar! itemOff lanternOff
+    @setvar! itemHue 1182
     overhead 'Town Gate' 54
     say 'Town portal, coming up!'
 endif
 
-@setvar! torchOn 2578
-@setvar! torchOff 3947
+# golden oil lamp for dungeons
+@setvar! torchOn 55434
+@setvar! torchOff 55433
 if findtype torchOn ground any any 2 as torch
     @setvar! destination dungeonLoc
     @setvar! itemOn torchOn
@@ -69,6 +67,7 @@ if findtype torchOn ground any any 2 as torch
     say 'Dungeon gate, right away!'
 endif
 
+# candle for shrines
 @setvar! candleOn 2575
 @setvar! candleOff 2600
 if findtype candleOn ground any any 2 as candle
@@ -104,7 +103,7 @@ while timer gateTimer < gateCooldown
     
     # check for the item being turned off
     # and abort the gate.
-    if findtype itemOff ground any any 2 as item
+    if findtype itemOff ground itemHue any 2 as item
         say 'Okay, nevermind the portal.'
         loop
     endif
@@ -119,7 +118,7 @@ settimer gateTimer 0
 say 'Safe travels!'
 
 # turn off item
-if itemOn != 0 and findtype itemOn ground any any 2 as item
+if itemOn != 0 and findtype itemOn ground itemHue any 2 as item
     overhead 'Turning off item.' 920
     dclick item
     wait 1000
