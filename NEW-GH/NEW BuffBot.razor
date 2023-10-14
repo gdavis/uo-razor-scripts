@@ -362,6 +362,7 @@ while timer buffTimer < 30000
                 endif
                 
                 # check if player is on cooldown
+                @setvar! isPlayerBuffable 1
                 if timerexists playerID
                     if timer playerID > buffCooldown
                         sysmsg 'BUFFBOT: {{playerID}} can be buffed again.' 84
@@ -370,6 +371,7 @@ while timer buffTimer < 30000
                         sysmsg 'BUFFBOT: {{playerID}} has been buffed too recently.' 38
                         say 'Come back later, you get one every 15 seconds.'
                         @setvar! waitingForRange 0
+                        @setvar! isPlayerBuffable 0
                     endif
                 endif
                 
@@ -378,26 +380,28 @@ while timer buffTimer < 30000
                     wait 6000
                 endif
                 
-                cast 'Bless'
-                wft 6000
-                
-                target player
-                wait 1500
-                
-                if targetexists 
-                    say 'Did you just walk away from me? Hrmph.'
-                
-                else             
-                    cast 'Arch Protection'
+                if isPlayerBuffable = 1
+                    cast 'Bless'
                     wft 6000
                     
                     target player
-                    wait 1000
+                    wait 1500
                     
-                    say 'Next!'
+                    if targetexists 
+                        say 'Did you just walk away from me? Hrmph.'
                     
-                    createtimer playerID
-                    settimer playerID 0
+                    else             
+                        cast 'Arch Protection'
+                        wft 6000
+                        
+                        target player
+                        wait 1000
+                        
+                        say 'Next!'
+                        
+                        createtimer playerID
+                        settimer playerID 0
+                    endif
                 endif
 
                 @setvar! waitingForRange 0
