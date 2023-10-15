@@ -1,12 +1,11 @@
-if skill 'wrestling' == 80
-    setskill 'wrestling' lock
-    setskill 'meditation' lock
-    stop
-endif
-
 if not varexist currentHat or not find currentHat self
     overhead 'Select your headwear:' 54
     setvar currentHat
+endif
+
+if skill 'meditation' == 100
+    setskill 'meditation' lock
+    stop
 endif
 
 if diffmana = 0
