@@ -1,0 +1,22 @@
+if targetexists 
+    hotkey 'Cancel Current Target'
+endif
+
+while findtype 5912 backpack as hat
+    if findtype 3999 backpack as scissors
+        dclick scissors
+        wft 6000
+        target hat
+        wait 750
+    endif
+endwhile
+
+while findtype 5990 backpack as cloth and findtype 23034 ground any any 2 as stockpile
+    menu stockpile 0
+    wft 6000
+    target cloth
+    wait 750
+endwhile
+
+wait 3000
+loop
