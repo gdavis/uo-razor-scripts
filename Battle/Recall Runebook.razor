@@ -1,7 +1,9 @@
 hotkey 'Recall'
 waitfortarget
 
-if findtype 'runebook' backpack
+if find recallTarget backpack
+    target recallTarget
+elseif findtype 'runebook' backpack
     targettype 'runebook' backpack
 elseif findtype 'runetome' backpack
     targettype 'runetome' backpack
