@@ -1,0 +1,120 @@
+# move list of weapons into safe bag
+if listexists stashList
+    removelist stashList
+endif
+createlist stashList
+## Add item names using >info 
+## to stash other weapon types
+pushlist stashList 'kryss'
+pushlist stashList 'Long Spear'
+pushlist stashList 'war fork'
+pushlist stashList 'short spear'
+pushlist stashList 'bow'
+pushlist stashList 'crossbow'
+pushlist stashList 'heavy crossbow'
+pushlist stashList 'spellbook'
+pushlist stashList 'bardiche'
+pushlist stashList 'viking sword'
+pushlist stashList 'katana'
+pushlist stashList 'halberd'
+
+# ----------------------------
+@clearignore
+cleardragdrop
+
+# 5117 = heavy xbow
+@setvar weaponID 5117
+
+# clear previous item moves
+hotkey 'Clear Drag/Drop Queue'
+
+@setvar! weaponSerial 0
+    
+
+if findtype weaponID lefthand
+    overhead 'H-XBow Already Equipped!' 54
+    @setvar! weaponSerial -1
+elseif findtype weaponID backpack 2207 as weapon 
+    overhead '+Verite H-Xbow' 
+    @setvar! weaponSerial weapon
+# 2897 == poison aspect
+elseif findtype weaponID backpack 2897 as weapon 
+    overhead '+Poison H-Xbow' 36
+    @setvar! weaponSerial weapon
+# 2599 == void aspect
+elseif findtype weaponID backpack 2599 as weapon 
+    overhead '+Void H-Xbow' 14
+    @setvar! weaponSerial weapon
+# 2504 == war aspect
+elseif findtype weaponID backpack 2503 as weapon
+    overhead '+War H-Xbow' 36
+    @setvar! weaponSerial weapon
+# 1790 == shadow aspect
+elseif findtype weaponID backpack 1790 as weapon
+    overhead '+Shadow H-Xbow' 902
+    @setvar! weaponSerial weapon
+# normal
+elseif findtype weaponID backpack as weapon
+    overhead '+Reg H-Xbow' 920
+    @setvar! weaponSerial weapon
+endif
+
+if weaponSerial != 0 and find weaponSerial backpack
+    if targetexists
+        # this seems to fix the bug where wearing
+        # a spellbook and trying to equip a xbow
+        # will give you a message about 
+        # holding something in both hands that 
+        # prevents the xbow from equipping
+        # by unequipping the spellbook first.
+        if findtype 'spellbook' righthand as book
+            overhead 'removing spellbook'
+            clearhands right
+        endif
+
+        getlabel weaponSerial weaponName
+        overhead 'equipping {{weaponName}}'
+        
+        #overhead '--PRECASTED--' 54
+        cast 'magic arrow'
+        
+        lift weaponSerial 1
+        drop self lefthand
+    else
+        overhead 'CLICKING WEAPON'
+        dclick weaponSerial
+    endif
+endif
+
+
+# stash items into bag
+if findtype 'bag' backpack 0 as myBag 
+    @clearignore 
+    foreach itemID in stashList
+        while findtype itemID backpack as weapon
+            getlabel weapon weaponName
+            @setvar! shouldStash 0
+            
+            if 'unidentified' in weaponName
+                sysmsg 'Ignoring magic item'
+            elseif 'blessed' in weaponName
+                sysmsg 'Ignoring blessed item'
+            elseif not find weapon myBag and weaponSerial != weapon
+                @setvar! shouldStash 1
+            endif
+            
+            if shouldStash = 1
+                sysmsg 'Stashing: {{weaponName}}' 920
+                lift weapon 1
+                drop myBag -1 -1 -1
+                wait 250
+            endif
+            
+            @ignore weapon
+        endwhile
+    endfor
+    @clearignore
+else
+    overhead 'NO BAG FOUND!' 38
+    stop
+endif
