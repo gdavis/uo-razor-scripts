@@ -54,14 +54,12 @@ endif
 if isActive = 1
     clearsysmsg 
 
-    removetimer 'digTimeout'
     removetimer 'digTime'
     removetimer 'waitAlert'
     removetimer equipTimer
     removetimer hideTimer
     
     @setvar! isDigging 0
-    @setvar! hasCaptcha 0
     @setvar! isActive 0
     @setvar! isWorldSaving 0
     @setvar! isEquipping 0
@@ -86,10 +84,6 @@ if usePackie == 1 and not varexist packie
     setvar packie
 endif
 
-if not timerexists 'digTimeout'
-    createtimer 'digTimeout'
-endif
-
 if not timerexists 'digTime'
     createtimer  'digTime'
 endif
@@ -100,10 +94,6 @@ endif
 
 if not varexist isDigging
     @setvar! isDigging 0
-endif
-
-if not varexist hasCaptcha
-    @setvar! hasCaptcha 0
 endif
 
 if not varexist ingotBag
@@ -400,33 +390,9 @@ if rhandempty or pickaxeEquipped = 0
     endif
 endif
 
-
-## Captcha --------------------
-# check if we need to stop for captcha
-if hasCaptcha = 1
-    if insysmsg 'Captcha successful'
-        overhead 'CAPTCHA PASSED'
-        @setvar! hasCaptcha 0
-        settimer 'digTimeout' 0
-        settimer 'digTime' 0
-    else
-        # only show an overhead every few seconds
-        if timer 'waitAlert' > messageThrottle
-            overhead 'Waiting for captcha...' 44
-            settimer 'waitAlert' 0
-        endif
-    
-        wait actionDelay
-    endif
-    
-    @setvar! isActive 0
-    replay
-endif
-
-
 ## Do the dig ----------------
 # use the pickaxe
-if isDigging = 0 and hasCaptcha = 0 and isEquipping = 0
+if isDigging = 0 and isEquipping = 0
     #overhead 'new dig'
 
     if not hidden
@@ -435,7 +401,6 @@ if isDigging = 0 and hasCaptcha = 0 and isEquipping = 0
             overhead '*swings pickaxe*' 645
             dclick pick
             
-            settimer 'digTimeout' 0
             settimer 'digTime' 0
             @setvar! isDigging 1
             wait actionDelay
@@ -459,24 +424,13 @@ endif
 ## Dig Result -----------------
 # check results after digging
 if isDigging = 1 and timer 'digTime' > digDuration
-    
-    if timer 'digTimeout' > digWait
-        overhead 'Dig timed out!' 38
-        overhead 'Captcha?' 38
-        @setvar! hasCaptcha 1
-        @setvar! shouldHide 1
-        @setvar! isActive 0
-        replay
-    endif
 
     if insysmsg 'Harvesting is not allowed'
-        overhead 'Cannot mine here!' 38
-        removetimer 'digTimeout'    
+        overhead 'Cannot mine here!' 38  
         
         @setvar! isDigging 0
         @setvar! isActive 0
         @setvar! shouldHide 1
-        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -484,23 +438,18 @@ if isDigging = 1 and timer 'digTime' > digDuration
         overhead 'EMPTY' 923
         sysmsg 'No ore here to mine.' 138
         
-        removetimer 'digTimeout'
-        
         @setvar! shouldHide 1
         @setvar! isDigging 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
     
     # check if we fail
     if insysmsg 'You loosen some rocks'
         overhead 'YOU FAILED' 38
-        removetimer 'digTimeout'    
 
         @setvar! isDigging 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -540,35 +489,28 @@ if isDigging = 1 and timer 'digTime' > digDuration
     endif
     
     if digSuccess = 1
-        removetimer 'digTimeout'
-
         @setvar! shouldHide 0
         @setvar! isDigging 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
     
     # recent travel
     if insysmsg 'You have recently traveled'
         overhead 'Travel Cooldown...' 24
-        removetimer 'digTimeout'    
 
         @setvar! shouldHide 1
         @setvar! isDigging 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
 
     if insysmsg 'That is too far away'
         overhead 'Moving...' 24
-        removetimer 'digTimeout'   
 
         @setvar! shouldHide 0
         @setvar! isDigging 0 
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
 
@@ -576,7 +518,6 @@ if isDigging = 1 and timer 'digTime' > digDuration
         overhead 'Too fast?' 44
 
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
 else

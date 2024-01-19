@@ -54,7 +54,6 @@ if isActive = 1
     removetimer hideTimer
     
     @setvar! isChopping 0
-    @setvar! hasCaptcha 0
     @setvar! isActive 0
     @setvar! isWorldSaving 0
     @setvar! isEquipping 0
@@ -89,10 +88,6 @@ endif
 
 if not varexist isChopping
     @setvar! isChopping 0
-endif
-
-if not varexist hasCaptcha
-    @setvar! hasCaptcha 0
 endif
 
 if not timerexists 'waitAlert'
@@ -329,32 +324,9 @@ if lhandempty
 endif
 
 
-## Captcha --------------------
-# check if we need to stop for captcha
-if hasCaptcha = 1
-    if insysmsg 'Captcha successful'
-        overhead 'CAPTCHA PASSED'
-        @setvar! hasCaptcha 0
-        settimer 'chopTime' 0
-    else
-        # only show an overhead every few seconds
-        if timer 'waitAlert' > messageThrottle
-            overhead 'Waiting for captcha...' 44
-            settimer 'waitAlert' 0
-        endif
-    
-        @setvar! shouldHide 1
-        wait actionDelay
-    endif
-    
-    @setvar! isActive 0
-    replay
-endif
-
-
 ## Do the chop ----------------
 # use the hatchet
-if isChopping = 0 and hasCaptcha = 0 and isEquipping = 0
+if isChopping = 0 and isEquipping = 0
     #overhead 'new chop'
 
     if not hidden
@@ -396,7 +368,6 @@ if isChopping = 1
         @setvar! isChopping 0
         @setvar! isActive 0
         @setvar! shouldHide 1
-        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -407,7 +378,6 @@ if isChopping = 1
         @setvar! shouldHide 1
         @setvar! isChopping 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -417,7 +387,6 @@ if isChopping = 1
 
         @setvar! isChopping 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
 endif
@@ -467,7 +436,6 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
         @setvar! shouldHide 0
         @setvar! isChopping 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
     
@@ -478,7 +446,6 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
         @setvar! shouldHide 1
         @setvar! isChopping 0
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
 
@@ -488,7 +455,6 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
         @setvar! shouldHide 0
         @setvar! isChopping 0 
         @setvar! isActive 0
-        @setvar! hasCaptcha 0
         replay
     endif
 
