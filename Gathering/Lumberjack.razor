@@ -12,8 +12,7 @@
 # - Configurable Weight
 # - Packie Support
 # - Pause and Hide during World Save
-# - Captcha Detection
-# - Auto-equip Pickaxe
+# - Auto-equips axe
 # - Prints type of lumber gathered
 # - Hide when the node is empty
 # - Move cut logs to container
@@ -49,7 +48,6 @@ endif
 if isActive = 1
     clearsysmsg 
 
-    removetimer 'chopTimeout'
     removetimer 'chopTime'
     removetimer 'waitAlert'
     removetimer equipTimer
@@ -79,10 +77,6 @@ endif
 if usePackie == 1 and not varexist packie
     overhead 'Select or pack horse or llama:'
     setvar packie
-endif
-
-if not timerexists 'chopTimeout'
-    createtimer 'chopTimeout'
 endif
 
 if not timerexists 'chopTime'
@@ -341,7 +335,6 @@ if hasCaptcha = 1
     if insysmsg 'Captcha successful'
         overhead 'CAPTCHA PASSED'
         @setvar! hasCaptcha 0
-        settimer 'chopTimeout' 0
         settimer 'chopTime' 0
     else
         # only show an overhead every few seconds
@@ -372,7 +365,6 @@ if isChopping = 0 and hasCaptcha = 0 and isEquipping = 0
             wft 7000
             target self
             
-            settimer 'chopTimeout' 0
             settimer 'chopTime' 0
             @setvar! isChopping 1
             @setvar! shouldHide 0
@@ -400,7 +392,6 @@ endif
 if isChopping = 1
     if insysmsg 'Harvesting is not allowed'
         overhead 'Cannot chop here!' 38
-        removetimer 'chopTimeout'    
         
         @setvar! isChopping 0
         @setvar! isActive 0
@@ -413,8 +404,6 @@ if isChopping = 1
         overhead 'EMPTY' 923
         sysmsg 'No wood here to chop.' 138
         
-        removetimer 'chopTimeout'
-        
         @setvar! shouldHide 1
         @setvar! isChopping 0
         @setvar! isActive 0
@@ -425,7 +414,6 @@ if isChopping = 1
     # check if we fail
     if insysmsg 'You hack'
         overhead 'YOU FAILED' 38
-        removetimer 'chopTimeout'    
 
         @setvar! isChopping 0
         @setvar! isActive 0
@@ -435,15 +423,6 @@ if isChopping = 1
 endif
 
 if isChopping = 1 and timer 'chopTime' > chopDuration
-    if timer 'chopTimeout' > chopWait
-        overhead 'Chop timed out!' 38
-        overhead 'Captcha?' 38
-        @setvar! hasCaptcha 1
-        @setvar! shouldHide 1
-        @setvar! isActive 0
-        replay
-    endif
-    
     # check if we were successful
     @setvar! chopSuccess 0
     
@@ -482,7 +461,6 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
     endif
     
     if chopSuccess = 1
-        removetimer 'chopTimeout'
         organizer 10
         wait 250
 
@@ -496,7 +474,6 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
     # recent travel
     if insysmsg 'You have recently traveled'
         overhead 'Travel Cooldown...' 24
-        removetimer 'chopTimeout'    
 
         @setvar! shouldHide 1
         @setvar! isChopping 0
@@ -507,7 +484,6 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
 
     if insysmsg 'That is too far away'
         overhead 'Moving...' 24
-        removetimer 'chopTimeout'   
 
         @setvar! shouldHide 0
         @setvar! isChopping 0 
