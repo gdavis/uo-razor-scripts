@@ -143,6 +143,11 @@ else
     endif
 endif
 
-hotkey 'Cancel Current Target'
+if skill 'tasteidentification' < 120
+    skill 'tasteidentification'
+    waitfortarget 3000
+    target 0x437EE911
+    wait 3000
+endif
 
 loop
