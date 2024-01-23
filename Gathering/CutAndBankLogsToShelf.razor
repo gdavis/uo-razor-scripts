@@ -16,9 +16,15 @@ endwhile
 
 # set container that holds logs so we dont 
 # place everything into the stockpile
-if not varexist logsBag
+if not varexist logsBag or not find logsBag backpack
     overhead 'Select the bag that has the boards:'
     setvar logsBag
+endif
+
+if not find logsBag backpack
+    overhead 'Failed to find logs bag!'
+    unsetvar logsBag
+    stop
 endif
 
 # find the nearest resource stockpile

@@ -38,6 +38,9 @@ elseif skill 'resisting spells' < 70
 elseif skill 'resisting spells' < 80
     @setvar! minMana 30
     @setvar! spellID 3
+elseif skill 'resisting spells' < 100
+    @setvar! minMana 40
+    @setvar! spellID 4
 else
     overhead 'unfinished' 38
     wait 4000
@@ -70,6 +73,9 @@ elseif spellID = 2
 elseif spellID = 3   
     overhead '70-80'
     hotkey 'Energy Bolt'
+elseif spellID = 4 
+    overhead '80-100'
+    hotkey 'Flamestrike'
 else 
     overhead 'Unfinished' 38
     wait 4000
