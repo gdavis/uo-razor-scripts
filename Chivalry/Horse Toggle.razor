@@ -1,0 +1,10 @@
+if not varexist horseToken
+    overhead 'Select your horse token:' 54
+    setvar horseToken 0
+    setvar horseToken
+endif
+
+if find horseToken backpack as token
+    dclick token
+endif    
+
