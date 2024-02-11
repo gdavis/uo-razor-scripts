@@ -1,0 +1,167 @@
+if find routeTome backpack as tome
+    overhead 'Next stop #{{routeRune}}'
+ 
+    dclick tome
+    waitforgump 167090027 3000
+    
+    if routeRune = 0
+        gumpresponse 200
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 1
+        
+    elseif routeRune = 1
+        gumpresponse 201
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 2
+        
+    elseif routeRune = 2
+        gumpresponse 202
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 3
+        
+    elseif routeRune = 3
+        gumpresponse 203
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 4
+        
+    elseif routeRune = 4
+        gumpresponse 204
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 5
+        
+    elseif routeRune = 5
+        gumpresponse 205
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 6
+        
+    elseif routeRune = 6
+        gumpresponse 206
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 7
+        
+    elseif routeRune = 7
+        gumpresponse 207
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 8
+        
+    elseif routeRune = 8
+        gumpresponse 208
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 9
+        
+    elseif routeRune = 9
+        gumpresponse 209
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 10
+        
+    elseif routeRune = 10
+        gumpresponse 210
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 11
+        
+    elseif routeRune = 11
+        gumpresponse 211
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 12
+        
+    elseif routeRune = 12
+        gumpresponse 212
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 13
+        
+    elseif routeRune = 13
+        gumpresponse 213
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 14
+        
+    elseif routeRune = 14
+        gumpresponse 214
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 15
+        
+    elseif routeRune = 15
+        gumpresponse 215
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 16
+        
+    elseif routeRune = 16
+        gumpresponse 216
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 17
+        
+    elseif routeRune = 17
+        gumpresponse 217
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 18
+        
+    elseif routeRune = 18
+        gumpresponse 218
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 19
+        
+    elseif routeRune = 19
+        gumpresponse 219
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 20
+        
+    elseif routeRune = 20
+        gumpresponse 220
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 21
+        
+    elseif routeRune = 21
+        gumpresponse 221
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 22
+        
+    elseif routeRune = 22
+        gumpresponse 222
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 23
+        
+     elseif routeRune = 23
+        gumpresponse 223
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 24
+        
+    elseif routeRune = 24
+        gumpresponse 224
+        waitforgump 167090027
+        gumpresponse 10
+        setvar! routeRune 25
+        
+    elseif routeRune = 25
+        gumpresponse 225
+        waitforgump 167090027
+        gumpresponse 20
+        setvar! routeRune 0
+    
+    endif
+else
+    sysmsg 'ERROR: Could not find tome in backpack' 38
+    stop
+endif

@@ -1,0 +1,16 @@
+setvar! routeRune 0
+
+@setvar routeTome 0
+setvar routeTome
+
+if routeTome = 0
+    sysmsg 'ERROR: Route tome not set'38
+    stop
+endif
+
+if find routeTome backpack
+    script 'Route Next'
+else
+    sysmsg 'ERROR: Could not find tome in backpack' 38
+    stop
+endif
