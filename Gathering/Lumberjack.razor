@@ -3,6 +3,8 @@
 # Setup: 
 # - Configure Organizer 10 to store logs in a nested bag 
 # - Update the maxWeight below to match your character
+# - Ensure you DO NOT have system messages filtered!
+#   (Filters tab > Text & Messages > Filter Messages)
 #
 # Features:
 # - Non-blocking wait times
@@ -48,8 +50,8 @@ endif
 if isActive = 1
     clearsysmsg 
 
-    removetimer 'chopTime'
-    removetimer 'waitAlert'
+    removetimer chopTime
+    removetimer waitAlert
     removetimer equipTimer
     removetimer hideTimer
     
@@ -65,10 +67,10 @@ endif
 # constants
 @setvar! actionDelay 275
 @setvar! chopDuration 4500
-@setvar! chopWait 7500
 @setvar! messageThrottle 3000
 @setvar! hatchetID 3908
 @setvar! hideDelay 2000
+@setvar! equipDelay 3000
 
 # mark script as running
 @setvar! isActive 1
@@ -78,8 +80,8 @@ if usePackie == 1 and not varexist packie
     setvar packie
 endif
 
-if not timerexists 'chopTime'
-    createtimer  'chopTime'
+if not timerexists chopTime
+    createtimer  chopTime
 endif
 
 if not timerexists hideTimer
@@ -90,10 +92,17 @@ if not varexist isChopping
     @setvar! isChopping 0
 endif
 
-if not timerexists 'waitAlert'
-    createtimer 'waitAlert'
+if not timerexists waitAlert
+    createtimer waitAlert
 endif
 
+# timer started after equipping a new pickaxe.
+# used to fix an issue where immediately
+# trying to use the axe would
+# not work if it was just equipped.
+if not timerexists equipTimer
+    createtimer equipTimer
+endif
 
 ## Start ----------------------    
 #sysmsg "Im chopping"
@@ -101,7 +110,7 @@ endif
 if dead
     overhead 'YOU DIED' 38
     sysmsg 'YOU DIED' 38
-    sysmsg 'Stopping Miner.' 24
+    sysmsg 'Stopping Lumberjack.' 24
     @setvar! isActive 0
     stop
 endif
@@ -261,8 +270,8 @@ endif
 # check if bags are full
 if weight >= maxWeight
     
-    if timer 'waitAlert' > messageThrottle
-        settimer 'waitAlert' 0
+    if timer waitAlert > messageThrottle
+        settimer waitAlert 0
         overhead 'Carrying too much!' 38
         sysmsg 'Carrying too much!' 38
     endif
@@ -278,20 +287,6 @@ endif
 
 
 ## Axe --------------------
-#@setvar! axeEquipped 0
-#if findtype hatchetID lefthand
-#    @setvar! axeEquipped 1
-#endif
-#
-# timer started after equipping a new pickaxe.
-# used to fix an issue where immediately
-# trying to use the axe would
-# not work if it was just equipped.
-@setvar! equipDelay 3000
-if not timerexists equipTimer
-    createtimer equipTimer
-endif
-
 if isEquipping = 1 
     if timer equipTimer < equipDelay
         overhead 'waiting to equip' 44
@@ -337,7 +332,7 @@ if isChopping = 0 and isEquipping = 0
             wft 7000
             target self
             
-            settimer 'chopTime' 0
+            settimer chopTime 0
             @setvar! isChopping 1
             @setvar! shouldHide 0
             wait actionDelay
@@ -346,9 +341,9 @@ if isChopping = 0 and isEquipping = 0
         endif
     else
         # only show an overhead every few seconds
-        if timer 'waitAlert' > messageThrottle
+        if timer waitAlert > messageThrottle
             overhead 'Waiting...' 902
-            settimer 'waitAlert' 0
+            settimer waitAlert 0
         endif
         
         wait actionDelay
@@ -391,7 +386,7 @@ if isChopping = 1
     endif
 endif
 
-if isChopping = 1 and timer 'chopTime' > chopDuration
+if isChopping = 1 and timer chopTime > chopDuration
     # check if we were successful
     @setvar! chopSuccess 0
     
@@ -422,8 +417,8 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
     elseif insysmsg 'avarwood'
         overhead 'AVARWOOD' 209
         @setvar! chopSuccess 1
-        elseif insysmsg 'You chop some logs'
-            overhead 'WOOD' 640
+    elseif insysmsg 'You chop some logs'
+        overhead 'WOOD' 640
         @setvar! chopSuccess 1
     else 
         setvar! 'success' 0
@@ -431,7 +426,7 @@ if isChopping = 1 and timer 'chopTime' > chopDuration
     
     if chopSuccess = 1
         organizer 10
-        wait 250
+        wait actionDelay
 
         @setvar! shouldHide 0
         @setvar! isChopping 0
