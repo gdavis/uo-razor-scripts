@@ -7,22 +7,23 @@
 # The script will equip, target, and shoot them.
 #
 # Written by Aphlux Feb 12, 2024
-if not findtype 'heart arrow' backpack
-    overhead 'No more mending arrows!' 38
-    stop
-endif
-
-if not findtype 'bow' lefthand and findtype 'bow' backpack as bow
-    overhead 'Equipping heart-mending bow!' 36
-    dclick bow
-endif
-
-if not findtype 'bow' lefthand 
-    sysmsg 'ERROR: Need a bow to mend hearts!' 38
-    stop
-endif
 
 while 1 = 1
+    if not findtype 'heart arrow' backpack
+        overhead 'No more mending arrows!' 38
+        stop
+    endif
+
+    if not findtype 'bow' lefthand and findtype 'bow' backpack as bow
+        overhead 'Equipping heart-mending bow!' 36
+        dclick bow
+    endif
+
+    if not findtype 'bow' lefthand 
+        sysmsg 'ERROR: Need a bow to mend hearts!' 38
+        stop
+    endif    
+
     clearsysmsg 
     hotkey 'Next Target'
     
