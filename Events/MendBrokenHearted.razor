@@ -50,6 +50,11 @@ while 1 = 1
                     continue
                 endif
                 
+                if insysmsg 'Target cannot be seen'
+                    overhead 'Cannot see!' 38
+                    continue
+                endif
+                
                 wait 2000
             else
                 overhead 'Ran out of mending arrows!' 38
