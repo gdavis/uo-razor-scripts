@@ -28,8 +28,12 @@ while 1 = 1
     clearsysmsg 
     hotkey 'Next Target'
     
+    if targetexists 
+        hotkey 'Cancel Current Target'
+    endif
+    
     if insysmsg 'New target set'
-        #@setvar! targetID lasttarget 
+        @setvar! targetID lasttarget 
         getlabel lasttarget targetName
         sysmsg '{{targetName}}' 36
    
@@ -40,12 +44,13 @@ while 1 = 1
         
         if '[Broken Hearted]' in targetName
             overhead 'Found a sad soul!'
+            overhead '{{targetName}}' 36
             
             if findtype 'heart arrow' backpack as arrow
                 overhead '▼▼ BROKEN HEART! ▼▼' 36 lasttarget
                 dclick arrow
                 wft
-                target lasttarget
+                target targetID
                 wait 250
                 
                 if insysmsg 'That is too far away'
