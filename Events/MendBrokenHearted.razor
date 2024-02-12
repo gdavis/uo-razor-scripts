@@ -1,0 +1,52 @@
+
+if not findtype 'heart arrow' backpack
+    overhead 'No more heart arrows!' 38
+    stop
+endif
+
+if not findtype 'bow' lefthand and findtype 'bow' backpack as bow
+    overhead 'Equipping heartmending bow!' 36
+    dclick bow
+endif
+
+if not findtype 'bow' lefthand 
+    sysmsg 'ERROR: Need a bow to mend hearts!' 38
+    stop
+endif
+
+while 1 = 1
+    clearsysmsg 
+    hotkey 'Next Target'
+    
+    if insysmsg 'New target set'
+        #@setvar! targetID lasttarget 
+        getlabel lasttarget targetName
+        sysmsg '{{targetName}}' 36
+   
+        if insysmsg 'getlabel - Skipped'
+            # Skipping player
+            continue
+        endif  
+        
+        if '[Broken Hearted]' in targetName
+            overhead 'Found a sad soul!'
+            
+            if findtype 'heart arrow' backpack as arrow
+                overhead 'MENDING HEART!' 36
+                dclick arrow
+                wft
+                target lasttarget
+                
+                if insysmsg 'That is too far away'
+                    overhead 'TOO FAR!' 38
+                    continue
+                endif
+                
+                wait 2000
+            else
+                overhead 'Ran out of mending arrows!' 38
+                stop
+            endif
+        endif
+    endif
+endwhile
