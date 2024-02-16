@@ -1,6 +1,6 @@
 # Creates a bunch of mushrooms and puts them
 # into a nearby storage shelf.
-for 2000
+for 500
     if not findtype 3972 self or not findtype 3973 self or not findtype 3974 self
         overhead 'Out of regs!' 38
         if findtype 'storage shelf' ground -1 -1 2 as shelf
@@ -9,11 +9,10 @@ for 2000
         endif
     endif    
 
-    hotkey 'Create Food'
     cast 'Create Food'
-    wait 750
+    wait 1250
     
-    if diffweight < 25 or index == 4
+    if diffweight < 25 or index == 499
         overhead 'Stashing shrooms...' 69
     
         if findtype 'mushroom' self as shroom
