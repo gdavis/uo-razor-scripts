@@ -1,3 +1,94 @@
+# Lumbermap by Aphlux
+# Exhausts a lumbermap location and safely escapes PKs.
+#
+
+## Recall Escape --------------
+
+# Ask user to provide the recall rune
+if not varexist recallTarget or recallTarget = 0
+    overhead 'Target the recall runebook or rune to use:'
+    @setvar recallTarget 0
+    setvar recallTarget
+endif
+
+# Check if the stored rune 
+# is actually reachable
+if recallTarget = 0
+    overhead 'Failed to set a recall target!' 38
+    loop
+elseif find recallTarget backpack
+    getlabel recallTarget targetName
+    @setvar! foundRecallable 0
+    
+    @clearignore 
+    while findtype 7956|29103|8901 backpack as recallable
+        if recallable == recallTarget
+            @setvar! foundRecallable 1
+            break
+        endif
+        @ignore recallable
+    endwhile
+    @clearignore
+    
+    if foundRecallable = 0
+        sysmsg 'WARNING: Recall target is not set to a rune, runebook, or rune tome!' 54
+    endif
+else
+    # rune targets are not found in the backpack
+    # for whatever reason, so we need do 
+    # search for it by type and see if it exists
+    @setvar! foundRune 0
+    @clearignore
+    while foundRune = 0 and findtype 'recall rune' backpack as rune
+        @ignore rune
+        if rune = recallTarget
+            # overhead 'Found valid recall target' 69
+            @setvar! foundRune 1
+            break
+        endif
+    endwhile
+    
+    if foundRune = 0 
+        overhead 'Failed to find a valid recall target!' 38
+        @setvar recallTarget 0
+        loop
+    endif    
+endif
+
+
+## PK Check --------------
+
+if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
+    overhead 'PK WARNING - ESCAPE'
+
+    # if you have a custom recall script, 
+    # replace this value with yours. otherwise,
+    # we will try to use the recall target and recall.
+    script 'RecallInn'
+
+    if skill 'magery' >= 60
+        overhead 'Time to leave!' 34
+        cast 'Recall'
+        waitfortarget 6000
+        target 'recallTarget'
+    else
+        overhead 'PK Detected!' 38
+    endif
+    
+    if skill 'Hiding' >= 50 
+        while not hidden and not dead
+            skill 'hiding'
+        wait 750
+        endwhile
+    endif
+    
+    sysmsg 'Lumberjack stopped after Escaping PK!' 44
+    stop
+endif
+
+
+## Lumber part
+
 if lhandempty
     if not findtype hatchetID self
         overhead 'Out of Hatchets' 38
@@ -23,6 +114,10 @@ wait 2000
 
 
 if insysmsg 'You have completely exhausted your lumber camp'
+    organizer 10
+    while queued
+    endwhile
+
     overhead 'Done here, headed home!' 54
     script 'RecallInn'
 endif
