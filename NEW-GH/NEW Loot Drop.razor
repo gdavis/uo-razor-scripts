@@ -65,10 +65,12 @@ waitforgump 2865667423
 
 removelist regulars
 removelist lessers
+removelist lessersStacked
 removelist greaters
 
 createlist regulars
 createlist lessers
+createlist lessersStacked
 createlist greaters
 
 # regular items --------------------
@@ -79,10 +81,13 @@ pushlist regulars 'seed of renewal'
 # lesser rares ---------------------
 
 # plant chemicals
-pushlist lessers 29030
+pushlist lessersStacked 29030
 
 # arcane essence
-pushlist lessers 12686         
+pushlist lessersStacked 12686
+
+# carpet dye
+pushlist lessers 29036
 
 # greater rares --------------------
 
@@ -115,9 +120,6 @@ pushlist greaters 3843
 # backpack dye
 pushlist greaters 3839              
 
-# carpet dye
-pushlist greaters 29036       
-      
 # facial hair dye
 pushlist greaters 3843              
 
@@ -239,10 +241,48 @@ foreach itemID in regulars
     endwhile
 endfor
 
+# move lessers that should be separated into single items
 foreach itemID in lessers
     while findtype itemID lootBag as loot
         getlabel loot lootName
         sysmsg 'Moving lesser rare: {{lootName}}' 89
+        lift loot 1
+        wait dragDelay
+        
+        # random horizontal placement at top
+        clearsysmsg 
+        random 10
+        if insysmsg 'Random: 1'
+            drop lessersChest 0 125 0
+        elseif insysmsg 'Random: 2'
+            drop lessersChest 28 125 0
+        elseif insysmsg 'Random: 3'
+            drop lessersChest 40 125 0
+        elseif insysmsg 'Random: 4'
+            drop lessersChest 52 125 0
+        elseif insysmsg 'Random: 5'
+            drop lessersChest 64 125 0
+        elseif insysmsg 'Random: 6'
+            drop lessersChest 76 125 0
+        elseif insysmsg 'Random: 7'
+            drop lessersChest 88 125 0
+        elseif insysmsg 'Random: 8'
+            drop lessersChest 100 125 0
+        elseif insysmsg 'Random: 9'
+            drop lessersChest 112 125 0
+        elseif insysmsg 'Random: 10'
+            drop lessersChest 124 125 0
+        endif
+        
+        wait dropDelay
+    endwhile
+endfor
+
+# move lessers that can be stacked
+foreach itemID in lessersStacked
+    while findtype itemID lootBag as loot
+        getlabel loot lootName
+        sysmsg 'Moving stacked lesser rare: {{lootName}}' 89
         lift loot 60000
         wait dragDelay
         drop lessersChest -1 -1 -1
@@ -250,6 +290,7 @@ foreach itemID in lessers
     endwhile
 endfor
 
+# move greaters separated into single item stacks
 foreach itemID in greaters
     while findtype itemID lootBag as loot
         getlabel loot lootName
