@@ -1,20 +1,34 @@
 # NEW! Loot Dropoff
 # Moves distributed items into 3 chests:
-# - regular (gold check chest)
+# - regular items (gold check chest)
 # - lessers (plant chems, arcane scrolls, <6k items)
 # - greaters (cores, maps, nice stuff)
 #
+# TIP: If you target the wrong container,
+# retarget the correct one using the Options
+# tab above and update the 'lootBag' variable
+#
 # Last updated Feb. 24, 2024
 # by Aphlux
+#----------------------------------------------------------- 
 
 # Timings
 @setvar! dragDelay 100
 @setvar! dropDelay 300
 
 # setup loot container
-if not varexist lootBag or not find lootBag self
-    overhead 'Select your loot container:'
+if overrideLootbag != 0
+    setvar lootBag overrideLootbag
+elseif not varexist lootBag or not find lootBag self
+    overhead 'Select your loot container:' 53
+    setvar lootBag 0
     setvar lootBag
+endif
+
+if lootBag = 0
+    overhead 'Failed to find loot bag!' 38
+    sysmsg 'Failed to find the loot bag! Restart the script and retarget the loot bag.'
+    stop
 endif
 
 # Prep chests ---------------------------
@@ -139,7 +153,7 @@ pushlist greaters 'pristine lumber '
 @clearignore 
 while findtype 'map' lootBag as loot
     getlabel loot lootName
-    sysmsg 'Moving map: {{lootName}}'
+    sysmsg 'Moving map: {{lootName}}' 442
     lift loot 1
     wait dragDelay
     
@@ -205,7 +219,7 @@ endwhile
 # arcane scrolls (because requires hue)
 while findtype 'blank scroll%s%' lootBag 2609 as loot
     getlabel loot lootName
-    sysmsg 'Moving lesser rare: {{lootName}}'
+    sysmsg 'Moving lesser rare: {{lootName}}' 89
     lift loot 60000
     wait dragDelay
     drop lessersChest -1 -1 -1
@@ -217,7 +231,7 @@ endwhile
 foreach itemID in regulars
     while findtype itemID lootBag as loot
         getlabel loot lootName
-        sysmsg 'Moving regular item: {{lootName}}'
+        sysmsg 'Moving regular item: {{lootName}}' 1001
         lift loot 60000
         wait dragDelay
         drop goldChest -1 -1 -1
@@ -228,7 +242,7 @@ endfor
 foreach itemID in lessers
     while findtype itemID lootBag as loot
         getlabel loot lootName
-        sysmsg 'Moving lesser rare: {{lootName}}'
+        sysmsg 'Moving lesser rare: {{lootName}}' 89
         lift loot 60000
         wait dragDelay
         drop lessersChest -1 -1 -1
@@ -239,7 +253,7 @@ endfor
 foreach itemID in greaters
     while findtype itemID lootBag as loot
         getlabel loot lootName
-        sysmsg 'Moving greater rare: {{lootName}}'
+        sysmsg 'Moving greater rare: {{lootName}}' 14
         lift loot 1
         wait dragDelay
         
@@ -271,3 +285,6 @@ foreach itemID in greaters
         wait dropDelay
     endwhile
 endfor
+
+# reset override
+@setvar overrideLootbag 0

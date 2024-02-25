@@ -1,0 +1,13 @@
+# Overrides the loot bag target 
+# for the loot drop script to
+# the dragon chest. Allows the
+# same script to unload and sort
+# from different source containers.
+
+@setvar! dragonChestId 0x4D70B2BB
+@setvar overrideLootbag dragonChestId
+
+dclick dragonChestId
+waitforgump 2865667423
+
+script 'NEW Loot Drop'
