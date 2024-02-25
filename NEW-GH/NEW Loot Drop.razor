@@ -1,0 +1,273 @@
+# NEW! Loot Dropoff
+# Moves distributed items into 3 chests:
+# - regular (gold check chest)
+# - lessers (plant chems, arcane scrolls, <6k items)
+# - greaters (cores, maps, nice stuff)
+#
+# Last updated Feb. 24, 2024
+# by Aphlux
+
+# Timings
+@setvar! dragDelay 100
+@setvar! dropDelay 300
+
+# setup loot container
+if not varexist lootBag or not find lootBag self
+    overhead 'Select your loot container:'
+    setvar lootBag
+endif
+
+# Prep chests ---------------------------
+
+@setvar! goldChest 0x4D70B4E2
+@setvar! lessersChest 0x41E85C8E
+@setvar! greatersChest 0x4981ED36
+
+if not find goldChest ground any any 2 
+    overhead 'Cannot reach gold chest!' 38
+    stop
+endif
+
+if not find lessersChest ground any any 2 
+    overhead 'Cannot reach lessers chest!' 38
+    stop
+endif
+
+if not find greatersChest ground any any 2 
+    overhead 'Cannot reach greaters chest!' 38
+    stop
+endif
+
+dclick goldChest
+waitforgump 2865667423
+
+dclick lessersChest
+waitforgump 2865667423
+
+dclick greatersChest
+waitforgump 2865667423
+
+# Loot Lists -----------------------------
+
+removelist regulars
+removelist lessers
+removelist greaters
+
+createlist regulars
+createlist lessers
+createlist greaters
+
+# regular items --------------------
+pushlist regulars 'gold coin'
+pushlist regulars 'research materials'
+pushlist regulars 'seed of renewal'
+
+# lesser rares ---------------------
+
+# plant chemicals
+pushlist lessers 29030
+
+# arcane essence
+pushlist lessers 12686         
+
+# greater rares --------------------
+
+pushlist greaters 'aspect core'
+
+# aspect distillation
+pushlist greaters 17686
+
+# aspect extract
+pushlist greaters 3836
+
+# mastercrafting diagram
+pushlist greaters 17087
+
+# rare cloth
+pushlist greaters 5981              
+
+# skill ball
+pushlist greaters 22336             
+
+# skill scroll
+pushlist greaters 8826              
+
+# spell hue deed
+pushlist greaters 5359              
+             
+# accessory dye
+pushlist greaters 3843              
+
+# backpack dye
+pushlist greaters 3839              
+
+# carpet dye
+pushlist greaters 29036       
+      
+# facial hair dye
+pushlist greaters 3843              
+
+# funiture dye
+pushlist greaters 29025   
+          
+# hair dye
+pushlist greaters 3843              
+
+# headwear dye
+pushlist greaters 3842              
+
+# runebook dye
+pushlist greaters 3838              
+
+# tattoo dye
+pushlist greaters 15297
+
+# mount gear dye
+pushlist greaters 15296 
+
+pushlist greaters 'dungeon seed'
+pushlist greaters 'carpet'
+pushlist greaters 'rug'
+pushlist greaters 'immaculate stone'
+pushlist greaters 'pristine lumber ' 
+
+
+# Complex rare rules ----------------
+# e.g. resource maps vs treasure maps
+# Anything worth less than 6k goes
+# into the  lesser rares chest
+@clearignore 
+while findtype 'map' lootBag as loot
+    getlabel loot lootName
+    sysmsg 'Moving map: {{lootName}}'
+    lift loot 1
+    wait dragDelay
+    
+    @setvar! dropChest greatersChest
+    @setvar! dropY 145
+    
+    # standard treasure map
+    if hue loot = 0
+        
+    # skinning map
+    elseif hue loot = 2651
+        @setvar! dropY 140
+        if 'avarhide' in lootName or 'valehide' in lootName  or 'verehide' in lootName or 'rosehide' in lootName
+        else
+            @setvar! dropChest lessersChest
+        endif
+    
+    # ore map 
+    elseif hue loot = 2796
+        @setvar! dropY 135
+    
+    # lumber map
+    elseif hue loot = 2799
+        @setvar! dropY 130
+        if 'dull' in lootName or 'shadow' in lootName or 'copper' in lootName or 'bronze' in lootName
+            @setvar! dropChest lessersChest
+        endif
+    
+    # fishing map
+    elseif hue loot = 2904
+        @setvar! dropY 125
+    
+        if 'avarscale' in lootName or 'valescale' in lootName or 'verescale' in lootName or 'rosescale' in lootName
+        else
+            @setvar! dropChest lessersChest
+        endif
+    endif
+    
+    if 'avar' in lootName or 'level 7' in lootName
+        @setvar! dropX 0
+    elseif 'vale' in lootName or 'valor' in lootName or 'level 6' in lootName
+        @setvar! dropX 15
+    elseif 'vere' in lootName or 'level 5' in lootName
+        @setvar! dropX 30
+    elseif 'agapite' in lootName or 'rose' in lootName or 'level 4' in lootName
+        @setvar! dropX 45
+    elseif 'gold' in lootName or 'level 3' in lootName
+        @setvar! dropX 60
+    elseif 'bronze' in lootName or 'level 2' in lootName
+        @setvar! dropX 75
+    elseif 'dull' in lootName or 'level 1' in lootName
+        @setvar! dropX 90
+    elseif 'copper' in lootName
+        @setvar! dropX 105
+    elseif 'shadow' in lootName
+        @setvar! dropX 120
+    endif
+    
+    drop dropChest dropX dropY -1
+    wait dropDelay
+endwhile
+
+# arcane scrolls (because requires hue)
+while findtype 'blank scroll%s%' lootBag 2609 as loot
+    getlabel loot lootName
+    sysmsg 'Moving lesser rare: {{lootName}}'
+    lift loot 60000
+    wait dragDelay
+    drop lessersChest -1 -1 -1
+    wait dropDelay
+endwhile
+
+# Sort items to chests ---------------------------
+
+foreach itemID in regulars
+    while findtype itemID lootBag as loot
+        getlabel loot lootName
+        sysmsg 'Moving regular item: {{lootName}}'
+        lift loot 60000
+        wait dragDelay
+        drop goldChest -1 -1 -1
+        wait dropDelay
+    endwhile
+endfor
+
+foreach itemID in lessers
+    while findtype itemID lootBag as loot
+        getlabel loot lootName
+        sysmsg 'Moving lesser rare: {{lootName}}'
+        lift loot 60000
+        wait dragDelay
+        drop lessersChest -1 -1 -1
+        wait dropDelay
+    endwhile
+endfor
+
+foreach itemID in greaters
+    while findtype itemID lootBag as loot
+        getlabel loot lootName
+        sysmsg 'Moving greater rare: {{lootName}}'
+        lift loot 1
+        wait dragDelay
+        
+        # random horizontal placement at top
+        clearsysmsg 
+        random 10
+        if insysmsg 'Random: 1'
+            drop greatersChest 0 0 0
+        elseif insysmsg 'Random: 2'
+            drop greatersChest 28 0 0
+        elseif insysmsg 'Random: 3'
+            drop greatersChest 40 0 0
+        elseif insysmsg 'Random: 4'
+            drop greatersChest 52 0 0
+        elseif insysmsg 'Random: 5'
+            drop greatersChest 64 0 0
+        elseif insysmsg 'Random: 6'
+            drop greatersChest 76 0 0
+        elseif insysmsg 'Random: 7'
+            drop greatersChest 88 0 0
+        elseif insysmsg 'Random: 8'
+            drop greatersChest 100 0 0
+        elseif insysmsg 'Random: 9'
+            drop greatersChest 112 0 0
+        elseif insysmsg 'Random: 10'
+            drop greatersChest 124 0 0
+        endif
+        
+        wait dropDelay
+    endwhile
+endfor
