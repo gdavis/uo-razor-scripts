@@ -11,8 +11,6 @@
 # Last updated Feb. 25, 2024
 # by Aphlux
 #----------------------------------------------------------- 
-# TODO: Add colored leather, boss token ("toy"), collectable cards ("card")
-# TODO: If in range, drop into magic recycler or rune tome
 # 
 
 # Timings
@@ -32,6 +30,21 @@ if lootBag = 0
     overhead 'Failed to find loot bag!' 38
     sysmsg 'Failed to find the loot bag! Restart the script and retarget the loot bag.'
     stop
+endif
+
+
+# Dump magic items and runes
+# NOTE: this is done before checking the chests
+# since the script will stop if they are not in range.
+
+if findtype 'ornate elven chest' ground any any 2 as recycler
+    overhead 'Added magics' 68
+    menu recycler 1
+endif
+
+if findtype 29104 ground 2085 any 2 as tome
+    overhead 'Dropped off runes' 68
+    menu tome 0
 endif
 
 # Prep chests ---------------------------
@@ -80,6 +93,7 @@ createlist greaters
 pushlist regulars 'gold coin'
 pushlist regulars 'research materials'
 pushlist regulars 'seed of renewal'
+pushlist regulars 'toy'
 
 # lesser rares ---------------------
 
@@ -91,6 +105,12 @@ pushlist lessersStacked 12686
 
 # carpet dye
 pushlist lessers 29036
+
+# collectible cards
+pushlist lessers 'parchment'
+
+# accessory dye
+pushlist lessers 3843 
 
 # greater rares --------------------
 
@@ -115,10 +135,7 @@ pushlist greaters 22336
 pushlist greaters 8826              
 
 # spell hue deed
-pushlist greaters 5359              
-             
-# accessory dye
-pushlist greaters 3843              
+pushlist greaters 5359             
 
 # backpack dye
 pushlist greaters 3839              
@@ -231,6 +248,18 @@ while findtype 'blank scroll%s%' lootBag 2609 as loot
     wait dropDelay
 endwhile
 
+# dump all non-regular leather
+while findtype 'cut up leather' lootBag as loot
+    if hue loot = 0
+        @ignore loot
+    else
+        lift loot 60000
+        wait dragDelay
+        drop goldChest -1 -1 -1
+        wait dropDelay
+    endif
+endwhile
+
 # Sort items to chests ---------------------------
 
 foreach itemID in regulars
@@ -333,5 +362,5 @@ endfor
 # reset override
 @setvar overrideLootbag 0
 
-overhead 'Drop off done!' 38
-sysmsg 'Drop off done!' 38
+overhead 'Drop off done!' 68
+sysmsg 'Drop off done!' 68
