@@ -72,7 +72,7 @@ while 1 = 1
             # 3976|3981|3980|3973|3974|3962|3972|3963 = regs
             # 3854 = empty bottles
             # 3827 = scrolls
-            overhead 'Looking for reagents to move the packie...'
+            sysmsg 'Looking for reagents to move the packie...' 54
             
             removelist foundItems
             createlist foundItems
@@ -90,21 +90,18 @@ while 1 = 1
                 else 
                     if inlist satchelRegs item 
                         # do nothing, e.g. already ignored
-                        sysmsg 'found already ignored item'
                     elseif find item satchelID
                         # add new satchel reg to invalid list
-                        sysmsg 'adding item to reg list'
                         pushlist satchelRegs item
                     else 
                         # valid when not in satchel
-                        sysmsg 'found new valid item' 54
                         @setvar! isValidItem 1
                     endif
                 endif
                 
                 if isValidItem = 1
                     getlabel item itemName
-                sysmsg 'Found: {{itemName}}' 69
+                    sysmsg 'Found: {{itemName}}' 69
                     pushlist foundItems item back
                 else
                     overhead 'invalid item'
@@ -126,19 +123,7 @@ while 1 = 1
             
             # move each found item
             foreach item in foundItems
-                sysmsg '----foreach item start'
                 getlabel item itemName
-            
-                # do not move reagents from satchel
-#                if findtype 'reagent satchel' self as satchel
-#                    if find item satchel
-#                        overhead 'Ignoring {{itemName}} in satchel' 908
-#                        pushlist satchelRegs item back
-#                        @ignore item
-#                        continue
-#                    endif
-#                endif
-                
                 overhead 'Moving {{itemName}}' 54
                 
                 # move purchased items to packie
@@ -153,7 +138,7 @@ while 1 = 1
                                 continue
                             endif
                             
-                            clearsysmsg 
+                            clearsysmsg
                             lift item 60000
                             drop packie -1 -1 -1
                             wait 666
@@ -173,6 +158,9 @@ while 1 = 1
                             endif
                             
                             # Reagent Limits
+                            dclick packie
+                            wait 150
+                            
                             if blackPearlLimit > 0 and counttype 3962 packie > blackPearlLimit
                                 overhead 'Reached Black Pearl limit' 54
                                 @setvar! reachedLimit 1
@@ -215,9 +203,6 @@ while 1 = 1
                                 overhead 'Reached Blank Scroll limit' 54
                                 @setvar! reachedLimit 1
                             endif
-                            
-                            sysmsg 'breaking while'
-                            #break
                         else 
                             @ignore packie
                         endif
@@ -228,7 +213,6 @@ while 1 = 1
             if reachedLimit = 1
                 setvar! shouldReturnHome 1
             endif
-            
 
             # set the intial target if needed
             if firstTarget == 0
