@@ -1,3 +1,5 @@
+overhead 'Restocking Vendor!' 54
+
 clearsysmsg
 cleardragdrop
 
@@ -20,6 +22,10 @@ pushlist itemIDs 'lap harp'
 pushlist itemIDs 'drum'
 pushlist itemIDs 'bamboo flute'
 pushlist itemIDs 'lute'
+# mcd
+pushlist itemIDs 'Book of Truth'
+# rare cloth
+pushlist itemIDs 'folded cloth'
 
 if not find vendor ground any any 2
     overhead 'Failed to find vendor. Must be within 2 tiles!' 38
@@ -60,9 +66,14 @@ foreach itemID in itemIDs
             @setvar! xPosition 150
             @setvar! yPosition 95
             
+        elseif 'mastercrafting diagram' in itemName
+            @setvar! price 20000
+            @setvar! xPosition 150
+            @setvar! yPosition 95
+            
         # Cores (19) ---------------------------------
         elseif 'Air Aspect Core' in itemName
-            @setvar! price 42500
+            @setvar! price 82500
             @setvar! xPosition 55
             @setvar! yPosition 0
             
@@ -72,27 +83,27 @@ foreach itemID in itemIDs
             @setvar! yPosition 0
             
         elseif 'Blood Aspect Core' in itemName
-            @setvar! price 9000
+            @setvar! price 20000
             @setvar! xPosition 65
             @setvar! yPosition 0
             
         elseif 'Command Aspect Core' in itemName
-            @setvar! price 165000
+            @setvar! price 182000
             @setvar! xPosition 70
             @setvar! yPosition 0
             
         elseif 'Death Aspect Core' in itemName
-            @setvar! price 9000
+            @setvar! price 22500
             @setvar! xPosition 75
             @setvar! yPosition 0
         
         elseif 'Discipline Aspect Core' in itemName
-            @setvar! price 11000
+            @setvar! price 29000
             @setvar! xPosition 80
             @setvar! yPosition 0
             
         elseif 'Earth Aspect Core' in itemName
-            @setvar! price 7500
+            @setvar! price 25000
             @setvar! xPosition 85
             @setvar! yPosition 0
             
@@ -112,22 +123,22 @@ foreach itemID in itemIDs
             @setvar! yPosition 0
             
         elseif 'Gadget Aspect Core' in itemName
-            @setvar! price 0
+            @setvar! price 25000
             @setvar! xPosition 105
             @setvar! yPosition 0
             
         elseif 'Harvest Aspect Core' in itemName
-            @setvar! price 0
+            @setvar! price 180000
             @setvar! xPosition 110
             @setvar! yPosition 0
             
         elseif 'Holy Aspect Core' in itemName
-            @setvar! price 4200
+            @setvar! price 20000
             @setvar! xPosition 115
             @setvar! yPosition 0
             
         elseif 'Lyric Aspect Core' in itemName
-            @setvar! price 27500
+            @setvar! price 55000
             @setvar! xPosition 120
             @setvar! yPosition 0
             
@@ -152,12 +163,17 @@ foreach itemID in itemIDs
             @setvar! yPosition 0
             
         elseif 'Water Aspect Core' in itemName
-            @setvar! price 14000
+            @setvar! price 30000
             @setvar! xPosition 145
             @setvar! yPosition 0
             
         # Distillations ---------------------------
         # these use core x position -10 to align correctly
+        elseif 'Command Aspect Distillation' in itemName
+            @setvar! price 10000
+            @setvar! xPosition 70
+            @setvar! yPosition 80
+            
         elseif 'Fortune Aspect Distillation' in itemName
             @setvar! price 15000
             @setvar! xPosition 100
@@ -170,19 +186,19 @@ foreach itemID in itemIDs
         
         # Spellbooks
         elseif 'eminently potent magic' in itemName
-            @setvar price 1200
+            @setvar price 1500
             @setvar! xPosition 55
-            @setvar! yPosition 90
+            @setvar! yPosition 110
         
         elseif 'exceedingly potent magic' in itemName
-            @setvar price 4500
+            @setvar price 5000
             @setvar! xPosition 75
-            @setvar! yPosition 90
+            @setvar! yPosition 110
             
         elseif 'supremely potent magic' in itemName
             @setvar price 16500
             @setvar! xPosition 95
-            @setvar! yPosition 90
+            @setvar! yPosition 110
             
         # BARD InSTRUMenTs ==============================
         elseif 'eminently melodious' in itemName
@@ -199,6 +215,22 @@ foreach itemID in itemIDs
             @setvar price 15500
             @setvar! xPosition 180
             @setvar! yPosition 70
+            
+        # Rare Cloth
+        elseif 'rare cloth' in itemName and 'inferno' in itemName 
+            @setvar price 12000
+            @setvar! xPosition 50
+            @setvar! yPosition 120
+        
+        elseif 'rare cloth' in itemName and 'metallic eggplant' in itemName 
+            @setvar price 32000
+            @setvar! xPosition 80
+            @setvar! yPosition 120
+
+        elseif 'rare cloth' in itemName and 'wilderness' in itemName 
+            @setvar price 9000
+            @setvar! xPosition 100
+            @setvar! yPosition 120            
             
         elseif '[blessed' in itemName
             @ignore foundItem
@@ -225,4 +257,4 @@ foreach itemID in itemIDs
     endwhile
 endfor
 
-overhead 'All items listed.'
+overhead 'All items listed.' 68
