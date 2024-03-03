@@ -24,12 +24,7 @@ cleardragdrop
 
 # 5117 = heavy xbow
 @setvar weaponID 5117
-
-# clear previous item moves
-hotkey 'Clear Drag/Drop Queue'
-
 @setvar! weaponSerial 0
-    
 
 if findtype weaponID lefthand
     overhead 'H-XBow Already Equipped!' 54
@@ -60,7 +55,7 @@ elseif findtype weaponID backpack as weapon
 endif
 
 if weaponSerial != 0 and find weaponSerial backpack
-    if targetexists
+    if targetexists harmful
         # this seems to fix the bug where wearing
         # a spellbook and trying to equip a xbow
         # will give you a message about 
@@ -111,6 +106,7 @@ if findtype 'bag' backpack 0 as myBag
             
             if shouldStash = 1
                 sysmsg 'Stashing: {{weaponName}}' 920
+                cleardragdrop
                 lift weapon 1
                 drop myBag -1 -1 -1
                 wait 250
