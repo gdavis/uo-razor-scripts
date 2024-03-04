@@ -49,7 +49,7 @@ while findtype 5356 backpack as tmap
     if 'undeciphered' in mapName
         overhead 'Deciphering {{mapName}}...'
         dclick tmapSpyglass
-        wft
+        wft 3000
         target tmap
         waitforgump decodeGumpID
         gumpresponse 4 decodeGumpID
@@ -58,7 +58,7 @@ while findtype 5356 backpack as tmap
         
     else
         dclick tmapSpyglass
-        wft 1000
+        wft 3000
         target tmap
         waitforgump decodeGumpID
         

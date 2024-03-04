@@ -1,7 +1,3 @@
-# Lumbermap by Aphlux
-# Exhausts a lumbermap location and safely escapes PKs.
-#
-
 ## Recall Escape --------------
 
 # Ask user to provide the recall rune
@@ -82,44 +78,32 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
         endwhile
     endif
     
-    sysmsg 'Lumberjack stopped after Escaping PK!' 44
+    sysmsg 'Skinning stopped after Escaping PK!' 44
     stop
 endif
 
+# Skin the ground yo
 
-## Lumber part
-
-if lhandempty
-    if not findtype hatchetID self
-        overhead 'Out of Hatchets' 38
-        
-        if not hidden and skill 'hiding' > 50
-            skill 'Hiding'
-            wait actionDelay
-        endif
-        
-        @setvar! isActive 0
-        replay
-    else 
-        overhead 'Equipping Hatchet' 53
-        dclicktype hatchetID backpack
-        wait 667
+if findtype 'Elven Spellblade' backpack as knife
+    dclick knife
+    wft 4000
+    
+    if targetexists neutral
+        target self
     endif
-endif
+    
+    wait 2000
 
-hotkey 'Use item in left hand'
-waitfortarget
-target 'self'
-wait 2000
-
-
-if insysmsg 'You have completely exhausted your lumber camp'
-    organizer 10
-    while queued
-    endwhile
-
-    overhead 'Done here, headed home!' 54
-    script 'RecallInn'
+    if insysmsg 'You have completely exhausted your hunting ground'
+        organizer 10
+        while queued
+        endwhile
+        
+        overhead 'Done here, headed home!' 54
+        script 'RecallInn'
+    endif
+else
+    overhead 'No skinning knife!' 38
 endif
 
 loop

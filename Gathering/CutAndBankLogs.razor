@@ -10,5 +10,12 @@ if findtype 'log%s' backpack
     wait 2000
     loop
 else 
+    # add plant stuff to shelf
+    if findtype 'garden shelf' ground any any any 2 as shelf
+        menu shelf 0
+        wft 3000
+        target self
+    endif
+
     overhead 'Logs cut and banked.'
 endif

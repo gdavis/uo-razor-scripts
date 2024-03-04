@@ -27,6 +27,13 @@ if not find logsBag backpack
     stop
 endif
 
+# add plant stuff to shelf
+if findtype 'garden shelf' ground any any any 2 as shelf
+    menu shelf 0
+    wft 3000
+    target self
+endif
+
 # find the nearest resource stockpile
 if findtype 'resource container' ground -1 -1 2 as pile
     overhead 'Found resource stockpile' 908

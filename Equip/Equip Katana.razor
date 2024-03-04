@@ -17,7 +17,6 @@ pushlist stashList 'bardiche'
 pushlist stashList 'halberd'
 pushlist stashList 'viking sword'
 
-
 # ----------------------------
 @clearignore
 cleardragdrop
@@ -74,6 +73,7 @@ if findtype 'bag' backpack 0 as myBag
             endif
             
             if shouldStash = 1 and not find weapon myBag
+                cleardragdrop
                 lift weapon
                 drop myBag -1 -1 -1
                 sysmsg 'Stashing: {{weaponName}}' 920

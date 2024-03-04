@@ -22,9 +22,6 @@ pushlist stashList 'halberd'
 @clearignore
 cleardragdrop
 
-# clear previous item moves
-hotkey 'Clear Drag/Drop Queue'
-
 if findtype 'spellbook' backpack 0 as book
     getlabel book bookName
     if 'blessed' in bookName
@@ -74,6 +71,7 @@ if findtype 'bag' backpack 0 as myBag
             
             if shouldStash = 1 and not find weapon myBag
                 sysmsg 'Stashing: {{weaponName}}' 920
+                cleardragdrop
                 lift weapon
                 drop myBag -1 -1 -1
                 wait 250

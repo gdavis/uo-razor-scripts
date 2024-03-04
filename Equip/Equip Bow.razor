@@ -23,10 +23,6 @@ cleardragdrop
 
 # 5042 = bow
 @setvar weaponID 5042
-
-# clear previous item moves
-hotkey 'Clear Drag/Drop Queue'
-
 @setvar! weaponSerial 0
 
 # check if equipped
@@ -60,7 +56,7 @@ elseif findtype weaponID backpack as weapon
 endif
 
 if weaponSerial != 0 and find weaponSerial backpack
-    if targetexists
+    if targetexists harmful
         # this seems to fix the bug where wearing
         # a spellbook and trying to equip a xbow
         # will give you a message about 
@@ -86,11 +82,6 @@ if weaponSerial != 0 and find weaponSerial backpack
     endif
 endif
 
-#if weaponSerial != 0 and find weaponSerial backpack
-#    overhead 'CLICKING BOW'
-#    dclick weaponSerial
-#endif
-
 @setvar! harmfulTarget lastharmful
 if harmfulTarget != 0 
     warmode on
@@ -114,6 +105,7 @@ if findtype 'bag' backpack 0 as myBag
             endif
             
             if shouldStash = 1 and not find weapon myBag
+                cleardragdrop
                 lift weapon
                 drop myBag -1 -1 -1
                 sysmsg 'Stashing: {{weaponName}}' 920
