@@ -14,7 +14,7 @@
 #   to be primary or secondary for your boat.
 #
 # Written by Aphlux
-# Last updated June 28, 2023
+# Last updated March 24, 2024
 clearsysmsg 
 @clearignore 
 
@@ -22,6 +22,7 @@ clearsysmsg
 @setvar! isFishin 0
 @setvar! fishinDelay 10000
 @setvar! fishinBarkDelay 5000
+
 if not timerexists fishBarkTimer
     createtimer fishBarkTimer
     settimer fishBarkTimer 69420
@@ -81,26 +82,6 @@ while not dead
     endif
     
     if isFishin = 1
-        # catcha check
-        if timer fishActionTimer > fishinDelay
-            overhead 'CAPTCHA CHECK!?' 54
-        
-            if not timerexists captchaTimer
-                createtimer captchaTimer
-            endif
-            
-            settimer captchaTimer 0
-            while not insysmsg 'Captcha successful'
-                wait 100
-                if timer captchaTimer > 5000
-                    overhead 'Waiting for captcha check...'
-                    settimer captchaTimer 0
-                endif
-            endwhile
-            
-            settimer fishActionTimer 0
-        endif
-    
         # list that stores catches that are not printed
         # from a sysmsg. these have to be manually looked for.
         removelist catches
