@@ -496,7 +496,7 @@ if isDigging = 1 and timer 'digTime' > digDuration
     endif
     
     # recent travel
-    if insysmsg 'You have recently traveled'
+    if insysmsg 'You have recently traveled' or insysmsg 'You have recently teleported'
         overhead 'Travel Cooldown...' 24
 
         @setvar! shouldHide 1
