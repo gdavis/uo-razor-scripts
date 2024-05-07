@@ -28,7 +28,7 @@ if not find logsBag backpack
 endif
 
 # add plant stuff to shelf
-if findtype 'garden shelf' ground any any any 2 as shelf
+if findtype 'garden shelf' ground any any any 2 as shelf or findtype 'golden garden shelf' ground any any any 2 as shelf
     menu shelf 0
     wft 3000
     target self
