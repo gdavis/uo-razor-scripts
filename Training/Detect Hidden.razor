@@ -1,0 +1,28 @@
+# cycles between training lockpicking
+# and detect hidden until 120
+if findtype 3712 backpack as box
+    dclick box
+    
+    waitforgump 736038070 3000
+    
+    # lockpick
+    if skill 'lockpicking' < 120
+        sysmsg 'Lockpicking...' 69
+        gumpresponse 4
+        waitforgump 736038070 3000
+        wait 7000
+    endif
+    
+    # detect trap
+    if skill 'detectinghidden' < 120
+        sysmsg 'Detecting...' 69
+        gumpresponse 7
+        waitforgump 736038070 3000
+        wait 7000
+    endif
+    
+    loop
+else
+    overhead 'MISSING STRONG BOX!' 38
+    stop
+endif
