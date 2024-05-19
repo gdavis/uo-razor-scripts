@@ -33,6 +33,11 @@ if findtype 5370 self 0 as boardingRope
             gumpclose 2881168634
             cooldown 'Boarding Party' 0
             stop
+        elseif insysmsg 'before you may send another boarding party'
+            overhead 'Not ready to board!' 38
+            sysmsg 'Not ready to board, try again!' 38
+            gumpclose 2881168634
+            stop
         endif
         wait 50
     endwhile
