@@ -4,6 +4,10 @@ say '[PainSpike'
 while not targetexists 
 endwhile
 
+if targetexists neutral and noto lasttarget = harmful
+    target lasttarget
+endif
+
 while targetexists 
 endwhile
 wait 100

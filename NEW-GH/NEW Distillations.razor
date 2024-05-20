@@ -21,7 +21,7 @@
 #
 # Written by:       Aphlux (aka Aphra)
 # Created on:       September 4, 2022
-# Last updated:     January 22, 2023
+# Last updated:     May 19, 2024
 #overhead '--DISTILLATIONS--' 24
 clearsysmsg
 
@@ -185,98 +185,119 @@ while findtype 'bottle' self as extract
     // page 3
     if 'Air' in extractName
         overhead 'Air' 1001
-        gumpresponse 200 alchGumpID
-
+        gumpresponse 204 alchGumpID
+    
+    elseif 'Arcane' in extractName
+        overhead 'Arcane' 6
+        gumpresponse 205 alchGumpID
+        
     elseif 'Artisan' in extractName
         overhead 'Artisan' 544
-        gumpresponse 201 alchGumpID
+        gumpresponse 206 alchGumpID
 
     elseif 'Blood' in extractName
         overhead 'Blood' 38        
-        gumpresponse 202 alchGumpID
+        gumpresponse 207 alchGumpID
         
     elseif 'Command' in extractName
         overhead 'Command' 68
-        gumpresponse 203 alchGumpID
+        gumpresponse 208 alchGumpID
 
     elseif 'Death' in extractName
         overhead 'Death' 923
-        gumpresponse 204 alchGumpID
+        gumpresponse 209 alchGumpID
 
+    // page 4
     elseif 'Discipline' in extractName
         overhead 'Discipline' 442
-        gumpresponse 205 alchGumpID
+        gumpresponse 200 alchGumpID
 
     elseif 'Earth' in extractName
         overhead 'Earth' 544
-        gumpresponse 206 alchGumpID
+        gumpresponse 201 alchGumpID
 
     elseif 'Eldritch' in extractName
         overhead 'Eldritch' 24
-        gumpresponse 207 alchGumpID
+        gumpresponse 202 alchGumpID
 
     elseif 'Fire' in extractName
         overhead 'Fire' 38
-        gumpresponse 208 alchGumpID
+        gumpresponse 203 alchGumpID
 
     elseif 'Fortune' in extractName
         overhead 'Fortune' 53
-        gumpresponse 209 alchGumpID
+        gumpresponse 204 alchGumpID
+        
+    elseif 'Frost' in extractName
+        overhead 'Frost' 53
+        gumpresponse 205 alchGumpID
     
-    // page 4
     elseif 'Gadget' in extractName
         overhead 'Gadget' 53
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 200 alchGumpID
+        gumpresponse 206 alchGumpID
         
     elseif 'Harvest' in extractName
         overhead 'Harvest' 53
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 201 alchGumpID
+        gumpresponse 207 alchGumpID
 
     elseif 'Holy' in extractName
         overhead 'Holy' 53
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 202 alchGumpID
+        gumpresponse 208 alchGumpID
 
+    elseif 'Lightning' in extractName
+        overhead 'Lightning' 53
+        gumpresponse nextPageResponse alchGumpID
+        waitforgump alchGumpID
+        gumpresponse 209 alchGumpID 
+        
+    // page 5
     elseif 'Lyric' in extractName
         overhead 'Lyric' 38
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 203 alchGumpID
+        gumpresponse 201 alchGumpID
+        
+    elseif 'Madness' in extractName
+        overhead 'Madness' 38
+        gumpresponse nextPageResponse alchGumpID
+        waitforgump alchGumpID
+        gumpresponse 202 alchGumpID
 
     elseif 'Poison' in extractName
         overhead 'Poison' 68
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 204 alchGumpID
+        gumpresponse 203 alchGumpID
 
     elseif 'Shadow' in extractName
         overhead 'Shadow' 923
         gumpresponse nextPageResponse
         waitforgump alchGumpID
-        gumpresponse 205 alchGumpID
+        gumpresponse 204 alchGumpID
 
     elseif 'Void' in extractName
         overhead 'Void' 14
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 206 alchGumpID
+        gumpresponse 205 alchGumpID
 
     elseif 'War' in extractName
         overhead 'War' 44
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 207 alchGumpID
+        gumpresponse 206 alchGumpID
         
     elseif 'Water' in extractName
         overhead 'Water' 8
         gumpresponse nextPageResponse alchGumpID
         waitforgump alchGumpID
-        gumpresponse 208 alchGumpID
+        gumpresponse 207 alchGumpID
 
     else 
         overhead 'Unknown extract type! {{extractName}}' 38

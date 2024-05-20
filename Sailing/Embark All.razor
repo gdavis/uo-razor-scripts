@@ -8,7 +8,7 @@
 # the water.
 #
 # by Aphlux
-# Updated June 9, 2023
+# Updated May 19, 2024
 sysmsg 'Embarking...' 69
 clearsysmsg 
 @clearignore
@@ -66,7 +66,7 @@ if find shipTillerman ground as tillerman
     endif
     
     # embark yourself
-    gumpresponse 21 4216593270
+    gumpresponse 201 4216593270
     waitforgump 4216593270
     
     if insysmsg 'You are too far away to embark'
@@ -82,11 +82,11 @@ if find shipTillerman ground as tillerman
     endif
     
     # recall boarding party
-    gumpresponse 38 4216593270
+    gumpresponse 211 4216593270
     waitforgump 4216593270
     
     # embark followers
-    gumpresponse 22 4216593270
+    gumpresponse 202 4216593270
     waitforgump 4216593270
 
     gumpclose 4216593270
