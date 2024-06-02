@@ -278,13 +278,18 @@ if findtype 'book' ground 2963 any any 2 as tome and findtype 'scroll of calling
     menu tome 0
 endif
 
+# arcane runes to tome
+if findtype 'book' ground 2085 any any 2 as tome and findtype 'rune' backpack
+    overhead 'Unloading arcane runes...' 53
+    menu tome 0
+endif
+
 # add plant stuff to shelf
 if findtype 'garden shelf' ground any any any 2 as shelf or findtype 'golden garden shelf' ground any any any 2 as shelf
     menu shelf 0
     wft 3000
     target self
 endif
-
 
 # eat foot if hungry
 if not findbuff 'Food Satisfaction'
