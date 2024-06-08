@@ -27,7 +27,7 @@ if skill 'necromancy' < 80
     endif
 elseif skill 'necromancy' < 120
     cast 'Create Food'
-    wait 1500
+    wait 1000
     
     if findtype 'reagent satchel' self as satchel
         if counttype 'Garlic' satchel < 10 or counttype 'Ginseng' satchel < 10 or counttype 'Mandrake Root%s%' satchel < 10
@@ -51,20 +51,25 @@ else
     wait 3500
 endif
 
-if mana < 20
-    skill 'Meditation'
-    wait 500
-            
-    if findbuff 'actively meditating'
-        while mana < maxmana
-            overhead 'Meditating...'
-            wait 3500
-        endwhile
-        replay
-    else
-        overhead 'Retrying meditation...'
-        wait 5500
-        replay
+if mana < 10
+    
+    if skill 'Meditation' > 50
+        skill 'Meditation'
+        wait 500
+                
+        if findbuff 'actively meditating'
+            while mana < maxmana
+                overhead 'Meditating...'
+                wait 3500
+            endwhile
+            replay
+        else
+            overhead 'Retrying meditation...'
+            wait 5500
+            replay
+        endif
+    elseif findtype 29012 backpack as shroom
+        dclick shroom
     endif
 endif
 
