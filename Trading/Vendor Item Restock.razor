@@ -26,6 +26,8 @@ pushlist itemIDs 'lute'
 pushlist itemIDs 'Book of Truth'
 # rare cloth
 pushlist itemIDs 'folded cloth'
+# ingots
+pushlist itemIDs 'crate'
 
 if not find vendor ground any any 2
     overhead 'Failed to find vendor. Must be within 2 tiles!' 38
@@ -62,7 +64,7 @@ foreach itemID in itemIDs
         
         # Rares
         if 'a skill mastery orb' in itemName
-            @setvar! price 15000
+            @setvar! price 20000
             @setvar! xPosition 150
             @setvar! yPosition 95
             
@@ -88,12 +90,12 @@ foreach itemID in itemIDs
             @setvar! yPosition 0
             
         elseif 'Command Aspect Core' in itemName
-            @setvar! price 182000
+            @setvar! price 100000
             @setvar! xPosition 70
             @setvar! yPosition 0
             
         elseif 'Death Aspect Core' in itemName
-            @setvar! price 22500
+            @setvar! price 10000
             @setvar! xPosition 75
             @setvar! yPosition 0
         
@@ -103,7 +105,7 @@ foreach itemID in itemIDs
             @setvar! yPosition 0
             
         elseif 'Earth Aspect Core' in itemName
-            @setvar! price 25000
+            @setvar! price 10000
             @setvar! xPosition 85
             @setvar! yPosition 0
             
@@ -232,10 +234,21 @@ foreach itemID in itemIDs
             @setvar! xPosition 100
             @setvar! yPosition 120            
             
+        elseif 'iron ingot commodity' in itemName
+            @setvar price 95000
+            @setvar! xPosition 0
+            @setvar! yPosition 0
+            
+        elseif 'board commodity' in itemName
+            @setvar price 87500
+            @setvar! xPosition 0
+            @setvar! yPosition 80
+            
         elseif '[blessed' in itemName
             @ignore foundItem
             sysmsg 'Ignoring blessed item: {{itemName}}' 908
             continue
+            
         endif
         
         # halt script if item is in the item list
