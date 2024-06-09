@@ -1,24 +1,24 @@
-@setvar! arcaneRuneIndex 0
-@setvar! arcaneDropStart 0
-
 if arcaneRuneIndex = 0
     if findtype 39909 backpack 2916 as rune
         dclick rune
         @setvar! arcaneRuneIndex 1
+        overhead 'Dropping arcane rune'
     else 
         sysmsg 'Missing essence rune!' 54
     endif
 elseif arcaneRuneIndex = 1
-    if findtype 39909 backpack 2606 as rune
+    if findtype 39916 backpack 2606 as rune
         dclick rune
         @setvar! arcaneRuneIndex 2
+        overhead 'Dropping spellshield rune'
     else 
         sysmsg 'Missing spellshield rune!' 54
     endif
 elseif arcaneRuneIndex = 2
-    if findtype 39909 backpack 2384 as rune
+    if findtype 39905 backpack 2384 as rune
         dclick rune
         @setvar! arcaneRuneIndex 3
+        overhead 'Dropping poison ward rune'
     else 
         sysmsg 'Missing poison ward rune!' 54
     endif
@@ -26,27 +26,80 @@ elseif arcaneRuneIndex = 3
     if findtype 39909 backpack 2897 as rune
         dclick rune
         @setvar! arcaneRuneIndex 4
+        overhead 'Dropping ignore bleed rune'
     else 
         sysmsg 'Missing ignore bleed rune!' 54
     endif
 elseif arcaneRuneIndex = 4
-    if findtype 39909 backpack 2377 as rune
+    if findtype 39889 backpack 2377 as rune
         dclick rune
         @setvar! arcaneRuneIndex 5
+        overhead 'Dropping frenzy rune'
     else 
         sysmsg 'Missing frenzy rune!' 54
     endif
 elseif arcaneRuneIndex = 5
-    if findtype 39909 backpack 2247 as rune
+    if findtype 39896 backpack 2247 as rune
         dclick rune
         @setvar! arcaneRuneIndex 6
+        overhead 'Dropping healing rune'
     else 
         sysmsg 'Missing healing rune!' 54
     endif
 elseif arcaneRuneIndex = 6
+    if findtype 39892 backpack 2117 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 7
+        overhead 'Dropping +follower damage rune'
+    else 
+        sysmsg 'Missing +follower damage rune!' 54
+    endif
 elseif arcaneRuneIndex = 7
+    if findtype 39898 backpack 2897 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 8
+        overhead 'Dropping immunity rune'
+    else 
+        sysmsg 'Missing immunity rune!' 54
+    endif
 elseif arcaneRuneIndex = 8
+    if findtype 39911 backpack 2384 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 9
+        overhead 'Dropping toxicity rune'
+    else 
+        sysmsg 'Missing toxicity rune!' 54
+    endif
 elseif arcaneRuneIndex = 9
+    if findtype 39918 backpack 2377 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 10
+        overhead 'Dropping fortification rune'
+    else 
+        sysmsg 'Missing fortification rune!' 54
+    endif
 elseif arcaneRuneIndex = 10
+    if findtype 39897 backpack 2377 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 11
+        overhead 'Dropping +meele damage rune'
+    else 
+        sysmsg 'Missing +meele damage rune!' 54
+    endif
 elseif arcaneRuneIndex = 11   
+    if findtype 39912 backpack 2606 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 12
+        overhead 'Dropping mana refund rune'
+    else 
+        sysmsg 'Missing mana refund chance rune!' 54
+    endif
+elseif arcaneRuneIndex = 12   
+    if findtype 39891 backpack 2606 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 0
+        overhead 'Dropping +spell damage rune'
+    else 
+        sysmsg 'Missing +spell damage rune!' 54
+    endif
 endif
