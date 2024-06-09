@@ -1,3 +1,5 @@
+sysmsg 'Placing rune #{{arcaneRuneIndex}}' 54
+
 if arcaneRuneIndex = 0
     if findtype 39909 backpack 2916 as rune
         dclick rune
@@ -99,6 +101,7 @@ elseif arcaneRuneIndex = 12
         dclick rune
         @setvar! arcaneRuneIndex 0
         overhead 'Dropping +spell damage rune'
+        overhead 'Done dropping runes!'
     else 
         sysmsg 'Missing +spell damage rune!' 54
     endif
