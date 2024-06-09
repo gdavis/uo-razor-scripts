@@ -1,0 +1,52 @@
+@setvar! arcaneRuneIndex 0
+@setvar! arcaneDropStart 0
+
+if arcaneRuneIndex = 0
+    if findtype 39909 backpack 2916 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 1
+    else 
+        sysmsg 'Missing essence rune!' 54
+    endif
+elseif arcaneRuneIndex = 1
+    if findtype 39909 backpack 2606 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 2
+    else 
+        sysmsg 'Missing spellshield rune!' 54
+    endif
+elseif arcaneRuneIndex = 2
+    if findtype 39909 backpack 2384 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 3
+    else 
+        sysmsg 'Missing poison ward rune!' 54
+    endif
+elseif arcaneRuneIndex = 3
+    if findtype 39909 backpack 2897 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 4
+    else 
+        sysmsg 'Missing ignore bleed rune!' 54
+    endif
+elseif arcaneRuneIndex = 4
+    if findtype 39909 backpack 2377 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 5
+    else 
+        sysmsg 'Missing frenzy rune!' 54
+    endif
+elseif arcaneRuneIndex = 5
+    if findtype 39909 backpack 2247 as rune
+        dclick rune
+        @setvar! arcaneRuneIndex 6
+    else 
+        sysmsg 'Missing healing rune!' 54
+    endif
+elseif arcaneRuneIndex = 6
+elseif arcaneRuneIndex = 7
+elseif arcaneRuneIndex = 8
+elseif arcaneRuneIndex = 9
+elseif arcaneRuneIndex = 10
+elseif arcaneRuneIndex = 11   
+endif
