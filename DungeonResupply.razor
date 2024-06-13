@@ -205,36 +205,36 @@ endif
 if findtype 'ornate elven chest' ground any any 2 as itemBox
     overhead 'Unloading unidentified items...' 53
     menu itemBox 1
-endif
-
-# unload listed items not dumped into recylcer
-clearsysmsg 
-@clearignore 
-@setvar! foundItems 0
-foreach itemID in basicItems
-    while findtype itemID lootBag as item
-        if foundItems = 0
-            overhead 'Unloading items...' 53
-            @setvar! foundItems 1
-        endif
-        
-        getlabel item itemName
-        if 'unidentified' in itemName
-            overhead "Moving: '{{itemName}}'" 444
-            lift item
-            drop magicItemBag -1 -1 -1
-            wait 250
-            
-            if insysmsg 'That container cannot hold more'
-                overhead 'Loot bag is full!' 38
-                stop
+else
+    # unload listed items not dumped into recylcer
+    clearsysmsg 
+    @clearignore 
+    @setvar! foundItems 0
+    foreach itemID in basicItems
+        while findtype itemID lootBag as item
+            if foundItems = 0
+                overhead 'Unloading items...' 53
+                @setvar! foundItems 1
             endif
-        endif
-        
-        @ignore item
-    endwhile
-endfor
-@clearignore
+            
+            getlabel item itemName
+            if 'unidentified' in itemName
+                overhead "Moving: '{{itemName}}'" 444
+                lift item
+                drop magicItemBag -1 -1 -1
+                wait 250
+                
+                if insysmsg 'That container cannot hold more'
+                    overhead 'Loot bag is full!' 38
+                    stop
+                endif
+            endif
+            
+            @ignore item
+        endwhile
+    endfor
+    @clearignore
+endif
 
 # add treasure maps to tome
 if findtype 'book' ground 2990 any any 2 as tome and findtype 'map' backpack 0
