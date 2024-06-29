@@ -1,3 +1,11 @@
+if not timerexists hatSwapTimer
+    createtimer hatSwapTimer
+endif
+
+if timer hatSwapTimer > 5000
+    overhead '[hat swapping]' 54
+    settimer hatSwapTimer 0
+endif
 
 if not varexist currentHat or not find currentHat self
     overhead 'Select your headwear:' 54

@@ -309,7 +309,7 @@ if findtype 'bank deposit safe' ground any any 2 as bank
         getlabel cash cashName
         overhead 'Depositing: {{cashName}}' 54
         lift cash 60000
-        drop bank
+        drop bank -1 -1 0
         wait delay
     endwhile
     
