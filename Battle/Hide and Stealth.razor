@@ -27,5 +27,7 @@ if skill 'Stealth' > 50
         wait 100
     endwhile
     
-    script 'Magic Hat Stam Swap'
+    if findtype 5912 backpack
+        script 'Magic Hat Stam Swap'
+    endif
 endif
