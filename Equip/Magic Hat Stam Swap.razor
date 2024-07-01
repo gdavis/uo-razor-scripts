@@ -12,7 +12,7 @@ if not varexist currentHat or not find currentHat self
     setvar currentHat
 endif
 
-if diffstam = 0 and findtype "wizard's hat" backpack as hat
+if diffstam < 3 and findtype 5912 backpack as hat
     dclick hat
     wait 650
     
