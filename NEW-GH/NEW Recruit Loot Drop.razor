@@ -1,0 +1,185 @@
+# NEW! Recruit Loot Dropoff
+# Moves distributed items into the dragon chest
+# that will later be sorted by higher rank members.
+#
+# TIP: If you target the wrong container,
+# retarget the correct one using the Options
+# tab above and update the 'lootBag' variable
+#
+# Version 1.0
+# Last updated July 2, 2024
+# by Aphlux
+#----------------------------------------------------------- 
+# 
+@clearignore
+
+# Timings
+@setvar! dragDelay 100
+@setvar! dropDelay 300
+
+# setup loot container
+if not varexist lootBag or not find lootBag self
+    overhead 'Select your loot container or target yourself:' 53
+    setvar lootBag 0
+    setvar lootBag
+endif
+
+if lootBag = 0
+    overhead 'Failed to find loot bag!' 38
+    sysmsg 'Failed to find the loot bag! Restart the script and retarget the loot bag.'
+    stop
+endif
+
+# Dump magic items and runes
+# NOTE: this is done before checking the chests
+# since the script will stop if they are not in range.
+
+if findtype 'ornate elven chest' ground any any 2 as recycler
+    overhead 'Dropped off magic items' 68
+    menu recycler 1
+endif
+
+if findtype 29104 ground 2085 any 2 as tome
+    overhead 'Dropped off runes' 68
+    menu tome 0
+endif
+
+# Prep chests ---------------------------
+
+@setvar! lootChest 0x4D70B2BB
+
+if not find lootChest ground any any 2 
+    overhead 'Cannot reach dragon chest!' 38
+    stop
+endif
+
+dclick lootChest
+waitforgump 2865667423
+
+# Loot Lists -----------------------------
+
+removelist itemList
+createlist itemList
+
+# regular items --------------------
+pushlist itemList 'gold coin'
+pushlist itemList 'research materials'
+pushlist itemList 'seed of renewal'
+pushlist itemList 'toy'
+
+# lesser rares ---------------------
+
+# plant chemicals
+pushlist itemList 29030
+
+# arcane essence
+pushlist itemList 12686
+
+# carpet dye
+pushlist itemList 29036
+
+# collectible cards
+pushlist itemList 'parchment'
+
+# accessory dye
+pushlist itemList 3843 
+
+# aspect phylactaries
+pushlist itemList 'phylactery'
+
+# greater rares --------------------
+
+# skill scrolls
+pushlist itemList 'scroll of calling'
+
+# treasure and resource maps
+pushlist itemList 'map'
+
+# aspect stuff
+pushlist itemList 'aspect core'
+pushlist itemList 'chroma core'
+pushlist itemList 'chroma distil'
+
+# all aspect distillations
+pushlist itemList 17686
+
+# aspect extract
+pushlist itemList 3836
+
+# mastercrafting diagram
+pushlist itemList 17087
+
+# rare cloth
+pushlist itemList 5981              
+
+# skill ball
+pushlist itemList 22336             
+
+# spell hue deed
+pushlist itemList 5359             
+
+# backpack dye
+pushlist itemList 3839              
+
+# facial hair dye
+pushlist itemList 3843              
+
+# funiture dye
+pushlist itemList 29025   
+          
+# hair dye
+pushlist itemList 3843              
+
+# headwear dye
+pushlist itemList 3842              
+
+# runebook dye
+pushlist itemList 3838              
+
+# tattoo dye
+pushlist itemList 15297
+
+# mount gear dye
+pushlist itemList 15296 
+
+pushlist itemList 'dungeon seed'
+pushlist itemList 'carpet'
+pushlist itemList 'rug'
+pushlist itemList 'immaculate stone'
+pushlist itemList 'pristine lumber ' 
+
+# wildlands
+pushlist itemList 'dig tools'
+pushlist itemList 'manuscript pages'
+pushlist itemList 'redline bottle'
+
+
+# Move items to chest ---------------------------
+
+foreach itemID in itemList
+    while findtype itemID lootBag as loot
+        getlabel loot lootName
+        sysmsg 'Moving regular item: {{lootName}}' 1001
+        lift loot 60000
+        wait dragDelay
+        drop lootChest -1 -1 -1
+        wait dropDelay
+    endwhile
+endfor
+
+
+# Complex rules ----------------------------------
+
+# arcane scrolls (because requires hue)
+while findtype 'blank scroll%s%' lootBag 2609 as loot
+    getlabel loot lootName
+    sysmsg 'Moving arcane scroll: {{lootName}}' 89
+    lift loot 60000
+    wait dragDelay
+    drop lootChest -1 -1 -1
+    wait dropDelay
+endwhile
+
+
+overhead 'Drop off done!' 68
+sysmsg 'Drop off done!' 68
