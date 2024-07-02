@@ -8,7 +8,8 @@
 # retarget the correct one using the Options
 # tab above and update the 'lootBag' variable
 #
-# Last updated April 6, 2024
+# Version 1.0
+# Last updated July 2, 2024
 # by Aphlux
 #----------------------------------------------------------- 
 # 
@@ -21,7 +22,7 @@
 if overrideLootbag != 0
     setvar lootBag overrideLootbag
 elseif not varexist lootBag or not find lootBag self
-    overhead 'Select your loot container:' 53
+    overhead 'Select your loot container or target yourself:' 53
     setvar lootBag 0
     setvar lootBag
 endif
@@ -38,7 +39,7 @@ endif
 # since the script will stop if they are not in range.
 
 if findtype 'ornate elven chest' ground any any 2 as recycler
-    overhead 'Added magics' 68
+    overhead 'Dropped off magic items' 68
     menu recycler 1
 endif
 
@@ -112,14 +113,17 @@ pushlist lessers 'parchment'
 # accessory dye
 pushlist lessers 3843 
 
+# all aspect distillations
+pushlist lessers 17686
+
+# aspect phylactaries
+pushlist lessers 'phylactery'
+
 # greater rares --------------------
 
-pushlist greaters 'aspect core'
+# chromatics
 pushlist greaters 'chroma core'
-
-# aspect distillation
 pushlist greaters 'chroma distil'
-pushlist greaters 17686
 
 # aspect extract
 pushlist greaters 3836
@@ -132,9 +136,6 @@ pushlist greaters 5981
 
 # skill ball
 pushlist greaters 22336             
-
-# skill scroll
-pushlist greaters 8826              
 
 # spell hue deed
 pushlist greaters 5359             
@@ -168,7 +169,6 @@ pushlist greaters 'carpet'
 pushlist greaters 'rug'
 pushlist greaters 'immaculate stone'
 pushlist greaters 'pristine lumber ' 
-pushlist greaters 'phylactery'
 
 # wildlands
 pushlist greaters 'dig tools'
@@ -181,6 +181,52 @@ pushlist greaters 'redline bottle'
 # Anything worth less than 6k goes
 # into the  lesser rares chest
 @clearignore 
+
+# aspect cores
+while findtype 'aspect core' lootBag as loot
+    getlabel loot lootName
+    sysmsg 'Moving aspect core: {{lootName}}' 442
+    lift loot 1
+    wait dragDelay
+    
+    # lower value cores for lessers
+    if 'blood' in lootName or 'death' in lootName or 'discipline' in lootName or 'earth' in lootName or 'fire' in lootName or 'holy' in lootName or 'water' in lootName
+       @setvar! dropChest lessersChest
+    
+    # higher value cores for greater 
+    else
+        @setvar! dropChest greatersChest
+    endif
+    
+    # random horizontal placement at top
+    clearsysmsg 
+    random 10
+    if insysmsg 'Random: 1'
+        drop dropChest 0 0 0
+    elseif insysmsg 'Random: 2'
+        drop dropChest 28 0 0
+    elseif insysmsg 'Random: 3'
+        drop dropChest 40 0 0
+    elseif insysmsg 'Random: 4'
+        drop dropChest 52 0 0
+    elseif insysmsg 'Random: 5'
+        drop dropChest 64 0 0
+    elseif insysmsg 'Random: 6'
+        drop dropChest 76 0 0
+    elseif insysmsg 'Random: 7'
+        drop dropChest 88 0 0
+    elseif insysmsg 'Random: 8'
+        drop dropChest 100 0 0
+    elseif insysmsg 'Random: 9'
+        drop dropChest 112 0 0
+    elseif insysmsg 'Random: 10'
+        drop dropChest 124 0 0
+    endif
+    
+    wait dropDelay
+endwhile
+
+# treasure & resource maps
 while findtype 'map' lootBag as loot
     getlabel loot lootName
     sysmsg 'Moving map: {{lootName}}' 442
@@ -204,7 +250,10 @@ while findtype 'map' lootBag as loot
     # ore map 
     elseif hue loot = 2796
         @setvar! dropY 135
-    
+        if 'dull' in lootName or 'shadow' in lootName or 'copper' in lootName or 'bronze' in lootName
+            @setvar! dropChest lessersChest
+        endif
+        
     # lumber map
     elseif hue loot = 2799
         @setvar! dropY 130
@@ -216,7 +265,7 @@ while findtype 'map' lootBag as loot
     elseif hue loot = 2904
         @setvar! dropY 125
     
-        if 'avarscale' in lootName or 'valescale' in lootName or 'verescale' in lootName or 'rosescale' in lootName
+        if 'avarscale' in lootName
         else
             @setvar! dropChest lessersChest
         endif
@@ -246,10 +295,54 @@ while findtype 'map' lootBag as loot
     wait dropDelay
 endwhile
 
+# skill scrolls
+while findtype 'scroll of calling' lootBag as loot
+    getlabel loot lootName
+    sysmsg 'Moving skill scroll: {{lootName}}' 89
+    lift loot 1
+    wait dragDelay
+    
+    # greaters
+    if 'alchemy' in lootName or 'animal lore' in lootName or 'animal taming' in lootName or 'chivalry' in lootName or 'detect hidden' in lootName or 'herding' in lootName or 'inscription' in lootName or 'lockpicking' in lootName or 'item id' in lootName or 'necromancy' in lootName or 'stealth' in lootName or 'taste' in lootName or 'veterinary' in lootName
+        @setvar! dropChest greatersChest
+    
+    # lessers
+    else
+        @setvar! dropChest lessersChest
+    endif
+    
+    # random horizontal placement at top
+    clearsysmsg 
+    random 10
+    if insysmsg 'Random: 1'
+        drop dropChest 0 0 0
+    elseif insysmsg 'Random: 2'
+        drop dropChest 28 0 0
+    elseif insysmsg 'Random: 3'
+        drop dropChest 40 0 0
+    elseif insysmsg 'Random: 4'
+        drop dropChest 52 0 0
+    elseif insysmsg 'Random: 5'
+        drop dropChest 64 0 0
+    elseif insysmsg 'Random: 6'
+        drop dropChest 76 0 0
+    elseif insysmsg 'Random: 7'
+        drop dropChest 88 0 0
+    elseif insysmsg 'Random: 8'
+        drop dropChest 100 0 0
+    elseif insysmsg 'Random: 9'
+        drop dropChest 112 0 0
+    elseif insysmsg 'Random: 10'
+        drop dropChest 124 0 0
+    endif
+    
+    wait dropDelay
+endwhile
+
 # arcane scrolls (because requires hue)
 while findtype 'blank scroll%s%' lootBag 2609 as loot
     getlabel loot lootName
-    sysmsg 'Moving lesser rare: {{lootName}}' 89
+    sysmsg 'Moving arcane scroll: {{lootName}}' 89
     lift loot 60000
     wait dragDelay
     drop lessersChest -1 -1 -1
