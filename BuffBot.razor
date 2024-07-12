@@ -99,11 +99,11 @@ if skill 'item identification' = 120 and findtype 'ornate elven chest' ground an
     
     # check if box has items
     getlabel itemBox boxLabel
-    if '0 items' in boxLabel
+    if '(0 items' in boxLabel
         # do nothing
     else
         # break down items
-        say 'Breaking down items!'
+        
         dclick itemBox
         waitforgump 4045111101
         
@@ -113,12 +113,16 @@ if skill 'item identification' = 120 and findtype 'ornate elven chest' ground an
             waitforgump 4045111101
         endif
         
-        if ingump 'Confirm Recycle' 4045111101
+        if ingump 'Begin Recycle' 4045111101 or ingump 'No recyclable items found' 4045111101
+            gumpclose 4045111101
+        
+        elseif ingump 'Confirm Recycle' 4045111101
+            say 'Breaking down items!'
             gumpresponse 6 4045111101
             waitforgump 4045111101
             @setvar didRecycle 1
+            gumpclose 4045111101
         endif
-        gumpclose 4045111101
         
         if didRecycle = 1
             # add raw materials to stockpile
