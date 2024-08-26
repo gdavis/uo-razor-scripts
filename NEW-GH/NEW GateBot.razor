@@ -43,15 +43,10 @@ if timer gateRunning > 15000
     settimer gateRunning 0
 endif
 
-# golden oil lamp for towns
-#@setvar! lanternOn 55434
-#@setvar! lanternOff 55433
-
 # maus lantern for towns
 @setvar! lanternOn 2594
 @setvar! lanternOff 2597
 
-#if findtype lanternOn ground any any 2 as lantern
 if findtype lanternOn ground 2092 any 2 as lantern
     @setvar! destination townsLoc
     @setvar! itemOn lanternOn
@@ -74,9 +69,9 @@ if findtype torchOn ground 1182 any 2 as torch
     say 'Dungeon gate, right away!'
 endif
 
-# candle for shrines
-@setvar! candleOn 2575
-@setvar! candleOff 2600
+# golden oil lamp for shrines
+@setvar! candleOn 55434
+@setvar! candleOff 55433
 if findtype candleOn ground any any 2 as candle
     @setvar! destination shrinesLoc
     @setvar! itemOn candleOn
