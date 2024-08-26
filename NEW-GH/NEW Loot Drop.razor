@@ -9,7 +9,7 @@
 # tab above and update the 'lootBag' variable
 #
 # Version 1.0
-# Last updated July 2, 2024
+# Last updated July 15, 2024
 # by Aphlux
 #----------------------------------------------------------- 
 # 
@@ -164,6 +164,12 @@ pushlist greaters 15297
 # mount gear dye
 pushlist greaters 15296 
 
+# mastery chain dyes
+pushlist greaters 29034
+
+# melloweed
+pushlist greaters 51094
+
 pushlist greaters 'dungeon seed'
 pushlist greaters 'carpet'
 pushlist greaters 'rug'
@@ -303,7 +309,7 @@ while findtype 'scroll of calling' lootBag as loot
     wait dragDelay
     
     # greaters
-    if 'alchemy' in lootName or 'animal lore' in lootName or 'animal taming' in lootName or 'chivalry' in lootName or 'detect hidden' in lootName or 'herding' in lootName or 'inscription' in lootName or 'lockpicking' in lootName or 'item id' in lootName or 'necromancy' in lootName or 'stealth' in lootName or 'taste' in lootName or 'veterinary' in lootName
+    if 'alchemy' in lootName or 'animal lore' in lootName or 'animal taming' in lootName or 'chivalry' in lootName or 'detect hidden' in lootName or 'herding' in lootName or 'inscription' in lootName or 'lockpicking' in lootName or 'item id' in lootName or 'necromancy' in lootName or 'stealth' in lootName or 'taste' in lootName or 'veterinary' in lootName or 'tailoring' in lootName
         @setvar! dropChest greatersChest
     
     # lessers
