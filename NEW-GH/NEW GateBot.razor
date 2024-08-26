@@ -44,10 +44,15 @@ if timer gateRunning > 15000
 endif
 
 # golden oil lamp for towns
-@setvar! lanternOn 55434
-@setvar! lanternOff 55433
+#@setvar! lanternOn 55434
+#@setvar! lanternOff 55433
 
-if findtype lanternOn ground any any 2 as lantern
+# maus lantern for towns
+@setvar! lanternOn 2594
+@setvar! lanternOff 2597
+
+#if findtype lanternOn ground any any 2 as lantern
+if findtype lanternOn ground 2092 any 2 as lantern
     @setvar! destination townsLoc
     @setvar! itemOn lanternOn
     @setvar! itemOff lanternOff
