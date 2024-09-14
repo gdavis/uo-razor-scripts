@@ -15,7 +15,8 @@ while 1 = 1
     clearsysmsg 
 
     # Player gate, moongate, dungeon gate
-    if findtype 3948 'ground' any 1 2 as gate
+    if findtype 3948 'ground' any -1 2 as gate
+        overhead 'Moongate Exit' 53
         dclick gate
         # Player gate
         if hue gate = 0
@@ -43,6 +44,32 @@ while 1 = 1
             
             stop
         endif
+        
+    # player chiv gate
+    elseif findtype 30528 'ground' 2091 -1 2 as gate
+        overhead 'Chiv Exit' 53
+        dclick gate
+        waitforgump 3773199800
+        gumpresponse 2 3773199800
+        
+        if insysmsg 'too far away'
+            continue
+        endif
+            
+        stop
+        
+    # omni gate
+    elseif findtype 27754 'ground' 2821 -1 2 as gate
+        overhead "Omni Exit" 53
+        dclick gate
+        waitforgump 3773199800
+        gumpresponse 2 3773199800
+
+        if insysmsg 'too far away'
+            continue
+        endif
+        
+        stop
     endif
     
     if timer gtfoTimer > gtfoTimeout
