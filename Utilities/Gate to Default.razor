@@ -1,0 +1,15 @@
+if not varexist recallInnTarget
+    overhead 'Set recall target to the innkeeper:'
+    setvar recallInnTarget
+endif
+
+if not find recallInnTarget backpack
+    overhead 'Could not find recall target!' 38
+    overhead 'Set recall target to the innkeeper:'
+    setvar recallInnTarget
+endif
+
+cast 'Gate Travel'
+wft 8000
+say '[whistle'
+target recallInnTarget
