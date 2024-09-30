@@ -3,12 +3,14 @@
 # recalls home to an innkeeper,
 # and enters the inn room.
 
-# open runebook
-dclick 0x4130DF4A
-waitforgump 1551740969
+# open runetome
+dclick 0x4188B1D9
+waitforgump 167090027
 
 # go to tinker-tailor
-gumpresponse 17
+gumpresponse 220
+waitforgump 167090027
+gumpresponse 10
 wait 1500
 
 # sell items until bag is empty
@@ -20,13 +22,12 @@ endwhile
 # return home
 hotkey 'Recall'
 waitfortarget 4000
-target 0x4130DF4A
+target 0x4F740792
+wait 750
 
 # enter inn room
 say 'room'
 waitforgump 2393832411
-gumpresponse 2
-waitforgump 2393832411
-gumpresponse 100
+gumpresponse 4 2393832411
 
 script 'Training\MaxItemCraftingCancel'

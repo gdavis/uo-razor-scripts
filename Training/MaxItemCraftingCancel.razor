@@ -4,18 +4,26 @@
 getlabel backpack backpackName
 #overhead '{{backpackName}}'
 
-if '150/150' in backpackName
+if skill 'tinkering' >= 85
+    overhead 'next skill item'
+    sysmsg 'next skill item'
+    stop
+endif
+
+if not gumpexists 453554062
+    say '[CraftingQueue'
+    waitforgump 453554062
+endif
+
+if ingump 'Begin Crafting' 453554062
+    overhead 'Crafting queue not started!'
+    gumpresponse 7 453554062
+    waitforgump 453554062
+    loop
+endif
+
+if '125/125' in backpackName
     overhead 'At max items!' 54
-
-    if not gumpexists 453554062
-        say '[CraftingQueue'
-        waitforgump 453554062
-    endif
-
-    if ingump 'Begin Crafting' 453554062
-        overhead 'Crafting queue not started!'
-        loop
-    endif
 
     # stop the queue
     gumpresponse 7 453554062
