@@ -3,6 +3,30 @@
 # recalls home to an innkeeper,
 # and enters the inn room.
 
+# max skill for this item type
+if skill 'tinkering' >= 85
+    overhead 'next skill item'
+    sysmsg 'next skill item'
+    stop
+endif
+
+if not gumpexists 453554062
+    say '[CraftingQueue'
+    waitforgump 453554062
+endif
+
+if ingump 'Begin Crafting' 453554062
+    overhead 'Crafting queue not started!'
+    gumpresponse 7 453554062
+    waitforgump 453554062
+endif
+
+# update count here to match how many
+# necklaces we make before selling
+while counttype 'necklace' backpack < 50
+    wait 1000
+endwhile
+
 # open runetome
 dclick 0x4188B1D9
 waitforgump 167090027
@@ -29,5 +53,19 @@ wait 750
 say 'room'
 waitforgump 2393832411
 gumpresponse 4 2393832411
+wait 1000
 
-script 'Training\MaxItemCraftingCancel'
+# add gold to deposit box
+if findtype 'bank deposit safe' ground any any 2 as bank
+    while findtype 'gold coin' backpack as cash
+        getlabel cash cashName
+        overhead 'Depositing: {{cashName}}' 54
+        lift cash 60000
+        drop bank -1 -1 0
+        wait 750
+    endwhile
+endif
+
+loop
+
+# script 'Training\MaxItemCraftingCancel'
