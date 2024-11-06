@@ -4,10 +4,17 @@ if skill 'tasteidentification' >= 100
     loop
 endif
 
+if find tasteTrainingTarget self 
+else
+    overhead 'Select training target'
+    setvar tasteTrainingTarget
+endif
+
 
 skill 'tasteidentification'
 waitfortarget 5000
-targetrelloc 0 0
+#targetrelloc 0 0
+target tasteTrainingTarget
 wait 500
 
 if insysmsg 'you are unable'
