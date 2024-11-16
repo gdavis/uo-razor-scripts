@@ -36,12 +36,16 @@ if lootBag = 0
     stop
 endif
 
-
 # Dump magic items and runes
 # NOTE: this is done before checking the chests
 # since the script will stop if they are not in range.
 
-if findtype 'magic item recycler' ground any any 2 as recycler
+#if findtype 'magic item recycler' ground any any 2 as recycler
+#    overhead 'Dropped off magic items' 68
+#    menu recycler 1
+#endif
+
+if findtype 'ornate elven chest' ground any any 2 as recycler
     overhead 'Dropped off magic items' 68
     menu recycler 1
 endif
