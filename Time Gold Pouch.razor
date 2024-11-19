@@ -1,0 +1,15 @@
+# drops gold off to a targetted pouch on the ground
+
+if not varexist timePouch or not find timePouch ground any any 2
+    overhead 'Target the time pouch for gold:' 54
+    setvar timePouch
+endif
+
+if find timePouch ground any any 2 as pouch
+    while findtype 'gold coin' backpack as gold
+        lift gold 60000
+        wait 500
+        drop pouch
+        wait 500
+    endwhile
+endif
