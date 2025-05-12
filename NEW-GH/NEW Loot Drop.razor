@@ -8,14 +8,18 @@
 # retarget the correct one using the Options
 # tab above and update the 'lootBag' variable
 #
-# Version 1.0
-# Last updated Sept 29, 2024
+# Version 1.1
+# Last updated May 12, 2025
 # by Aphlux
 #----------------------------------------------------------- 
 # 
 
-# set this to 0 if you are placing runes
+# set to 0 if you are placing runes
 @setvar! dropOffRunes 1
+
+# set to 0 if you DO NOT want to drop off leather
+@setvar! dropOffLeather 1
+
 
 # Timings
 @setvar! dragDelay 100
@@ -34,6 +38,10 @@ if lootBag = 0
     overhead 'Failed to find loot bag!' 38
     sysmsg 'Failed to find the loot bag! Restart the script and retarget the loot bag.'
     stop
+endif
+
+if insysmsg "That container cannot hold more"
+    # clear check for full message
 endif
 
 # Dump magic items and runes
@@ -105,13 +113,13 @@ pushlist regulars 'toy'
 pushlist regulars 'boss token'
 pushlist regulars 'statue'
 
-# lesser rares ---------------------
-
 # plant chemicals
-pushlist lessersStacked 29030
+pushlist regulars 29030
 
 # arcane essence
-pushlist lessersStacked 12686
+pushlist regulars 3901
+
+# lesser rares ---------------------
 
 # carpet dye
 pushlist lessers 29036
@@ -240,6 +248,12 @@ while findtype 'aspect core' lootBag as loot
     endif
     
     wait dropDelay
+    
+    if insysmsg "That container cannot hold more"
+        overhead 'Loot container is full!' 38
+        sysmsg 'Loot container is full!' 38
+        stop
+    endif
 endwhile
 
 # treasure & resource maps
@@ -309,6 +323,12 @@ while findtype 'map' lootBag as loot
     
     drop dropChest dropX dropY -1
     wait dropDelay
+    
+    if insysmsg "That container cannot hold more"
+        overhead 'Loot container is full!' 38
+        sysmsg 'Loot container is full!' 38
+        stop
+    endif
 endwhile
 
 # skill scrolls
@@ -353,6 +373,12 @@ while findtype 'scroll of calling' lootBag as loot
     endif
     
     wait dropDelay
+    
+    if insysmsg "That container cannot hold more"
+        overhead 'Loot container is full!' 38
+        sysmsg 'Loot container is full!' 38
+        stop
+    endif
 endwhile
 
 # arcane scrolls (because requires hue)
@@ -361,21 +387,35 @@ while findtype 'blank scroll%s%' lootBag 2609 as loot
     sysmsg 'Moving arcane scroll: {{lootName}}' 89
     lift loot 60000
     wait dragDelay
-    drop lessersChest -1 -1 -1
+    drop goldChest -1 -1 -1
     wait dropDelay
+    
+    if insysmsg "That container cannot hold more"
+        overhead 'Loot container is full!' 38
+        sysmsg 'Loot container is full!' 38
+        stop
+    endif
 endwhile
 
 # dump all non-regular leather
-while findtype 'cut up leather' lootBag as loot
-    if hue loot = 0
-        @ignore loot
-    else
-        lift loot 60000
-        wait dragDelay
-        drop goldChest -1 -1 -1
-        wait dropDelay
-    endif
-endwhile
+if dropOffLeather = 1 
+    while findtype 'cut up leather' lootBag as loot
+        if hue loot = 0
+            @ignore loot
+        else
+            lift loot 60000
+            wait dragDelay
+            drop goldChest -1 -1 -1
+            wait dropDelay
+            
+            if insysmsg "That container cannot hold more"
+                overhead 'Loot container is full!' 38
+                sysmsg 'Loot container is full!' 38
+                stop
+            endif
+        endif
+    endwhile    
+endif
 
 # Sort items to chests ---------------------------
 
@@ -387,6 +427,12 @@ foreach itemID in regulars
         wait dragDelay
         drop goldChest -1 -1 -1
         wait dropDelay
+        
+        if insysmsg "That container cannot hold more"
+            overhead 'Loot container is full!' 38
+            sysmsg 'Loot container is full!' 38
+            stop
+        endif
     endwhile
 endfor
 
@@ -424,6 +470,12 @@ foreach itemID in lessers
         endif
         
         wait dropDelay
+        
+        if insysmsg "That container cannot hold more"
+            overhead 'Loot container is full!' 38
+            sysmsg 'Loot container is full!' 38
+            stop
+        endif
     endwhile
 endfor
 
@@ -436,6 +488,12 @@ foreach itemID in lessersStacked
         wait dragDelay
         drop lessersChest -1 -1 -1
         wait dropDelay
+        
+        if insysmsg "That container cannot hold more"
+            overhead 'Loot container is full!' 38
+            sysmsg 'Loot container is full!' 38
+            stop
+        endif
     endwhile
 endfor
 
@@ -473,6 +531,12 @@ foreach itemID in greaters
         endif
         
         wait dropDelay
+        
+        if insysmsg "That container cannot hold more"
+            overhead 'Loot container is full!' 38
+            sysmsg 'Loot container is full!' 38
+            stop
+        endif
     endwhile
 endfor
 
