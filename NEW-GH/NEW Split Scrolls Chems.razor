@@ -1,0 +1,22 @@
+@setvar! arcaneamt 10
+@setvar! chemamt 5
+
+
+overhead "Set drop chest"
+@setvar juiceChest
+while findtype 3827 backpack as scroll
+    @drop scroll backpack
+    lift scroll arcaneamt
+    wait 100
+    drop juiceChest 17 17 0
+    wait 200
+endwhile
+
+while findtype 29030 backpack as chemical
+    @drop chemical backpack
+    lift chemical chemamt
+    wait 100
+    drop juiceChest 50 50 0
+    wait 200
+endwhile
+overhead "Remember to check for leftovers"

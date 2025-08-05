@@ -1,0 +1,13 @@
+@setvar! amount 579
+
+
+overhead "Set drop chest"
+@setvar juiceChest
+while findtype 3901 backpack as juice
+    @drop juice backpack
+    lift juice amount
+    wait 100
+    drop juiceChest 17 17 0
+    wait 200
+endwhile
+overhead "Remember to stack extra essence"
