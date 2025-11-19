@@ -8,8 +8,8 @@
 # retarget the correct one using the Options
 # tab above and update the 'lootBag' variable
 #
-# Version 1.1
-# Last updated May 12, 2025
+# Version 1.2
+# Last updated Sept 29, 2025
 # by Aphlux
 #----------------------------------------------------------- 
 # 
@@ -45,14 +45,6 @@ if insysmsg "That container cannot hold more"
 endif
 
 # Dump magic items and runes
-# NOTE: this is done before checking the chests
-# since the script will stop if they are not in range.
-
-#if findtype 'magic item recycler' ground any any 2 as recycler
-#    overhead 'Dropped off magic items' 68
-#    menu recycler 1
-#endif
-
 if findtype 'ornate elven chest' ground 1575 any 2 as recycler
     overhead 'Dropped off magic items' 68
     menu recycler 1
@@ -97,12 +89,10 @@ waitforgump 2865667423
 
 removelist regulars
 removelist lessers
-removelist lessersStacked
 removelist greaters
 
 createlist regulars
 createlist lessers
-createlist lessersStacked
 createlist greaters
 
 # regular items --------------------
@@ -210,7 +200,7 @@ pushlist greaters 'redline bottle'
 while findtype 'aspect core' lootBag as loot
     getlabel loot lootName
     sysmsg 'Moving aspect core: {{lootName}}' 442
-    lift loot 1
+    lift loot 60000
     wait dragDelay
     
     # lower value cores for lessers
@@ -222,31 +212,7 @@ while findtype 'aspect core' lootBag as loot
         @setvar! dropChest greatersChest
     endif
     
-    # random horizontal placement at top
-    clearsysmsg 
-    random 10
-    if insysmsg 'Random: 1'
-        drop dropChest 0 0 0
-    elseif insysmsg 'Random: 2'
-        drop dropChest 28 0 0
-    elseif insysmsg 'Random: 3'
-        drop dropChest 40 0 0
-    elseif insysmsg 'Random: 4'
-        drop dropChest 52 0 0
-    elseif insysmsg 'Random: 5'
-        drop dropChest 64 0 0
-    elseif insysmsg 'Random: 6'
-        drop dropChest 76 0 0
-    elseif insysmsg 'Random: 7'
-        drop dropChest 88 0 0
-    elseif insysmsg 'Random: 8'
-        drop dropChest 100 0 0
-    elseif insysmsg 'Random: 9'
-        drop dropChest 112 0 0
-    elseif insysmsg 'Random: 10'
-        drop dropChest 124 0 0
-    endif
-    
+    drop dropChest -1 -1 -1
     wait dropDelay
     
     if insysmsg "That container cannot hold more"
@@ -260,7 +226,7 @@ endwhile
 while findtype 'map' lootBag as loot
     getlabel loot lootName
     sysmsg 'Moving map: {{lootName}}' 442
-    lift loot 1
+    lift loot 60000
     wait dragDelay
     
     @setvar! dropChest greatersChest
@@ -300,28 +266,8 @@ while findtype 'map' lootBag as loot
             @setvar! dropChest lessersChest
         endif
     endif
-    
-    if 'avar' in lootName or 'level 7' in lootName
-        @setvar! dropX 0
-    elseif 'vale' in lootName or 'valor' in lootName or 'level 6' in lootName
-        @setvar! dropX 15
-    elseif 'vere' in lootName or 'level 5' in lootName
-        @setvar! dropX 30
-    elseif 'agapite' in lootName or 'rose' in lootName or 'level 4' in lootName
-        @setvar! dropX 45
-    elseif 'gold' in lootName or 'level 3' in lootName
-        @setvar! dropX 60
-    elseif 'bronze' in lootName or 'level 2' in lootName
-        @setvar! dropX 75
-    elseif 'dull' in lootName or 'level 1' in lootName
-        @setvar! dropX 90
-    elseif 'copper' in lootName
-        @setvar! dropX 105
-    elseif 'shadow' in lootName
-        @setvar! dropX 120
-    endif
-    
-    drop dropChest dropX dropY -1
+
+    drop dropChest -1 -1 -1
     wait dropDelay
     
     if insysmsg "That container cannot hold more"
@@ -335,7 +281,7 @@ endwhile
 while findtype 'scroll of calling' lootBag as loot
     getlabel loot lootName
     sysmsg 'Moving skill scroll: {{lootName}}' 89
-    lift loot 1
+    lift loot 60000
     wait dragDelay
     
     # greaters
@@ -347,31 +293,7 @@ while findtype 'scroll of calling' lootBag as loot
         @setvar! dropChest lessersChest
     endif
     
-    # random horizontal placement at top
-    clearsysmsg 
-    random 10
-    if insysmsg 'Random: 1'
-        drop dropChest 0 0 0
-    elseif insysmsg 'Random: 2'
-        drop dropChest 28 0 0
-    elseif insysmsg 'Random: 3'
-        drop dropChest 40 0 0
-    elseif insysmsg 'Random: 4'
-        drop dropChest 52 0 0
-    elseif insysmsg 'Random: 5'
-        drop dropChest 64 0 0
-    elseif insysmsg 'Random: 6'
-        drop dropChest 76 0 0
-    elseif insysmsg 'Random: 7'
-        drop dropChest 88 0 0
-    elseif insysmsg 'Random: 8'
-        drop dropChest 100 0 0
-    elseif insysmsg 'Random: 9'
-        drop dropChest 112 0 0
-    elseif insysmsg 'Random: 10'
-        drop dropChest 124 0 0
-    endif
-    
+    drop dropChest -1 -1 -1
     wait dropDelay
     
     if insysmsg "That container cannot hold more"
@@ -436,56 +358,14 @@ foreach itemID in regulars
     endwhile
 endfor
 
-# move lessers that should be separated into single items
+# move lessers
 foreach itemID in lessers
     while findtype itemID lootBag as loot
         getlabel loot lootName
         sysmsg 'Moving lesser rare: {{lootName}}' 89
-        lift loot 1
-        wait dragDelay
-        
-        # random horizontal placement at top
-        clearsysmsg 
-        random 10
-        if insysmsg 'Random: 1'
-            drop lessersChest 0 125 0
-        elseif insysmsg 'Random: 2'
-            drop lessersChest 28 125 0
-        elseif insysmsg 'Random: 3'
-            drop lessersChest 40 125 0
-        elseif insysmsg 'Random: 4'
-            drop lessersChest 52 125 0
-        elseif insysmsg 'Random: 5'
-            drop lessersChest 64 125 0
-        elseif insysmsg 'Random: 6'
-            drop lessersChest 76 125 0
-        elseif insysmsg 'Random: 7'
-            drop lessersChest 88 125 0
-        elseif insysmsg 'Random: 8'
-            drop lessersChest 100 125 0
-        elseif insysmsg 'Random: 9'
-            drop lessersChest 112 125 0
-        elseif insysmsg 'Random: 10'
-            drop lessersChest 124 125 0
-        endif
-        
-        wait dropDelay
-        
-        if insysmsg "That container cannot hold more"
-            overhead 'Loot container is full!' 38
-            sysmsg 'Loot container is full!' 38
-            stop
-        endif
-    endwhile
-endfor
-
-# move lessers that can be stacked
-foreach itemID in lessersStacked
-    while findtype itemID lootBag as loot
-        getlabel loot lootName
-        sysmsg 'Moving stacked lesser rare: {{lootName}}' 89
         lift loot 60000
         wait dragDelay
+        
         drop lessersChest -1 -1 -1
         wait dropDelay
         
@@ -502,34 +382,9 @@ foreach itemID in greaters
     while findtype itemID lootBag as loot
         getlabel loot lootName
         sysmsg 'Moving greater rare: {{lootName}}' 14
-        lift loot 1
+        lift loot 60000
         wait dragDelay
-        
-        # random horizontal placement at top
-        clearsysmsg 
-        random 10
-        if insysmsg 'Random: 1'
-            drop greatersChest 0 0 0
-        elseif insysmsg 'Random: 2'
-            drop greatersChest 28 0 0
-        elseif insysmsg 'Random: 3'
-            drop greatersChest 40 0 0
-        elseif insysmsg 'Random: 4'
-            drop greatersChest 52 0 0
-        elseif insysmsg 'Random: 5'
-            drop greatersChest 64 0 0
-        elseif insysmsg 'Random: 6'
-            drop greatersChest 76 0 0
-        elseif insysmsg 'Random: 7'
-            drop greatersChest 88 0 0
-        elseif insysmsg 'Random: 8'
-            drop greatersChest 100 0 0
-        elseif insysmsg 'Random: 9'
-            drop greatersChest 112 0 0
-        elseif insysmsg 'Random: 10'
-            drop greatersChest 124 0 0
-        endif
-        
+        drop greatersChest -1 -1 -1
         wait dropDelay
         
         if insysmsg "That container cannot hold more"
