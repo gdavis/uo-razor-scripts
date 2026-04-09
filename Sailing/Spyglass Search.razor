@@ -1,0 +1,157 @@
+# Start Spyglass
+# Written by Aphlux
+# Updated May 29, 2024
+# 
+# Uses the highest tier material spyglass
+
+# spyglass = 5365
+if not findtype 5365 self
+    overhead 'I need a spyglass!' 38
+    wait 3000
+    loop
+endif
+
+# do the spy
+
+# check for higher quality spyglasses first
+# avarite
+if findtype 5365 backpack 1763 as spyglass
+    overhead '*scans the horizon*' 1763 
+    dclick spyglass
+
+# valorite
+elseif findtype 5365 backpack 2219 as spyglass
+    overhead '*scans the horizon*' 2219 
+    dclick spyglass
+
+# verite
+elseif findtype 5365 backpack 2207 as spyglass
+    overhead '*scans the horizon*' 2207 
+    dclick spyglass
+
+# agapite
+elseif findtype 5365 backpack 2425 as spyglass
+    overhead '*scans the horizon*' 2425 
+    dclick spyglass
+    
+# gold
+elseif findtype 5365 backpack 2213 as spyglass
+    overhead '*scans the horizon*' 2213 
+    dclick spyglass
+    
+# bronze
+elseif findtype 5365 backpack 2418 as spyglass
+    overhead '*scans the horizon*' 2418 
+    dclick spyglass
+    
+# copper
+elseif findtype 5365 backpack 2418 as spyglass
+    overhead '*scans the horizon*' 2418 
+    dclick spyglass    
+    
+# shadow iron
+elseif findtype 5365 backpack 2406 as spyglass
+    overhead '*scans the horizon*' 2406 
+    dclick spyglass       
+    
+# dull copper
+elseif findtype 5365 backpack 2419 as spyglass
+    overhead '*scans the horizon*' 2419 
+    dclick spyglass        
+    
+else 
+    overhead '*scans the horizon*' 1001 
+    dclicktype 5365 backpack
+endif
+
+waitforgump shipGump 1000
+
+if insysmsg 'before you make another ship search'
+    wait 100
+    loop
+elseif insysmsg 'You must wait to perform another action'
+    wait 100
+    loop
+endif
+
+# this is set to the ship id when found
+@setvar! foundShip 0
+
+# list of ids for different ships
+@setvar! smallShip 1
+@setvar! smallDragonship 2
+@setvar! mediumShip 3
+@setvar! mediumDragonship 4
+@setvar! largeShip 5
+@setvar! largeDragonship 6
+@setvar! carrack 7
+@setvar! galleon 8
+@setvar! longship 9
+@setvar! shipOfTheLine 10
+
+while 1 = 1
+    if ingump "a small ship" 2890020940
+        @setvar! foundShip smallShip
+        break
+    elseif ingump "a small dragonship" 2890020940
+        @setvar! foundShip smallDragonship
+        break
+    elseif ingump "a medium ship" 2890020940
+        @setvar! foundShip mediumShip
+        break
+    elseif ingump "a medium dragonship" 2890020940
+        @setvar! foundShip mediumDragonship
+        break
+    elseif ingump "a large ship" 2890020940 
+        @setvar! foundShip largeShip
+        break
+    elseif ingump "a large dragonship" 2890020940
+        @setvar! foundShip largeDragonship
+        break
+    elseif ingump "a carrack" 2890020940
+        @setvar! foundShip carrack
+        break
+    elseif ingump "a galleon" 2890020940
+        @setvar! foundShip galleon
+        break
+    elseif ingump "a longship" 2890020940
+        @setvar! foundShip longship
+        break
+    elseif ingump "a ship of the line" 2890020940
+        @setvar! foundShip shipOfTheLine
+        break
+    elseif ingump "Next" 2890020940
+        # go to next page and keep checking
+        gumpresponse 3 2890020940
+        wait 350
+    else
+        break
+    endif
+endwhile
+
+if foundShip != 0 
+    for 5
+        if foundShip = smallShip
+            overhead 'SMALL SHIP SIGHTED!' 54
+        elseif foundShip = smallDragonship
+            overhead 'SMALL DRAGONSHIP SIGHTED!' 54
+        elseif foundShip = mediumShip
+            overhead 'SHIP SIGHTED!' 54
+        elseif foundShip = dragonship
+            overhead 'DRAGONSHIP SIGHTED!' 54
+        elseif foundShip = largeShip
+            overhead 'LARGE SHIP SIGHTED!' 54
+        elseif foundShip = largeDragonship
+            overhead 'LARGE DRAGONSHIP SIGHTED!' 54
+        elseif foundShip = carrack
+            overhead 'CARRACK SIGHTED!' 54
+        elseif foundShip = galleon
+            overhead 'GALLEON SIGHTED!' 54
+        elseif foundShip = longship
+            overhead 'LONGSHIP SIGHTED!' 54
+        elseif foundShip = shipOfTheLine
+            overhead 'SHIP OF THE LINE SIGHTED!' 54
+        endif
+        wait alertInterval
+    endfor
+endif
