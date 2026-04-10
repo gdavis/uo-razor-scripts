@@ -186,6 +186,33 @@ while shipTillerman = 0
     endif
 endwhile
 
+
+# target the ship hold and verify
+setvar shipHold 0
+while shipHold = 0
+    if not varexist shipHold or not find shipHold ground
+        overhead 'Select your boat loot hold:' 54
+        setvar shipHold 0
+        setvar! shipHold
+    endif
+
+    if shipHold = 0
+        overhead 'Invalid ship hold! Retarget!' 38
+    else 
+        # check name to make sure the trash 
+        # or something wasnt targetted
+        getlabel shipHold holdName
+        
+        if 'ship\'s hold' in holdName
+        else
+            overhead 'Invalid ship hold! Retarget!' 38
+            setvar shipHold 0
+        endif
+    endif
+endwhile
+
+overhead 'successfully set ship hold'
+
 overhead 'Readying ship...'
 say '[Ship'
 wait 250
@@ -278,11 +305,6 @@ else
 endif
 
 script 'Repair Ship'
-
-
-
-
-
 
 
 
