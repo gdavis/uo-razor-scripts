@@ -1,0 +1,74 @@
+
+@setvar! netId 3530
+
+# check for higher quality spyglasses first
+# avarite
+if findtype netId backpack 1763 as net
+    overhead '*throws net*' 1763 
+    dclick net
+
+# valorite
+elseif findtype netId backpack 2219 as net
+    overhead '*throws net*' 2219 
+    dclick net
+
+# verite
+elseif findtype netId backpack 2207 as net
+    overhead '*throws net*' 2207 
+    dclick net
+
+# agapite
+elseif findtype netId backpack 2425 as net
+    overhead '*throws net*' 2425 
+    dclick net
+    
+# gold
+elseif findtype netId backpack 2213 as net
+    overhead '*throws net*' 2213 
+    dclick net
+    
+# bronze
+elseif findtype netId backpack 2418 as net
+    overhead '*throws net*' 2418 
+    dclick net
+    
+# copper
+elseif findtype netId backpack 2418 as net
+    overhead '*throws net*' 2418 
+    dclick net    
+    
+# shadow iron
+elseif findtype netId backpack 2406 as net
+    overhead '*throws net*' 2406 
+    dclick net       
+    
+# dull copper
+elseif findtype netId backpack 2419 as net
+    overhead '*scans the horizon*' 2419 
+    dclick net        
+    
+else 
+    overhead '*throws net*' 1001 
+    dclicktype netId backpack
+endif
+
+waitfortarget 1000
+
+if targetexists 'neutral'
+    clearsysmsg 
+    target self
+else
+    overhead 'No more nets?' 38
+    stop
+endif
+
+settimer fishTimer 0
+while 1 = 1
+    if insysmsg 'see anything nearby that requires a fishing net'
+        overhead 'Nothing biting here.' 924
+        stop
+    elseif timer fishTimer > 4000
+        overhead 'next cast'
+        loop
+    endif
+endwhile
