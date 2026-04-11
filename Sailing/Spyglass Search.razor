@@ -1,6 +1,9 @@
-# Start Spyglass
+# Start Spyglass Search
+#
+# Constantly look for player ships
+#
 # Written by Aphlux
-# Updated May 29, 2024
+# Updated April 10, 2026
 # 
 # Uses the highest tier material spyglass
 
@@ -72,6 +75,8 @@ if insysmsg 'before you make another ship search'
 elseif insysmsg 'You must wait to perform another action'
     wait 100
     loop
+elseif insysmsg 'What do you wish to use this spyglass on'
+    overhead 'Are you on a boat?' 38
 endif
 
 # this is set to the ship id when found
@@ -127,31 +132,36 @@ while 1 = 1
     else
         break
     endif
+    
+    # check for a ship
+    if foundShip != 0 
+        overhead '*continues scanning horizon*' 925
+    
+        for 5
+            if foundShip = smallShip
+                overhead 'SMALL SHIP SIGHTED!' 54
+            elseif foundShip = smallDragonship
+                overhead 'SMALL DRAGONSHIP SIGHTED!' 54
+            elseif foundShip = mediumShip
+                overhead 'SHIP SIGHTED!' 54
+            elseif foundShip = dragonship
+                overhead 'DRAGONSHIP SIGHTED!' 54
+            elseif foundShip = largeShip
+                overhead 'LARGE SHIP SIGHTED!' 54
+            elseif foundShip = largeDragonship
+                overhead 'LARGE DRAGONSHIP SIGHTED!' 54
+            elseif foundShip = carrack
+                overhead 'CARRACK SIGHTED!' 54
+            elseif foundShip = galleon
+                overhead 'GALLEON SIGHTED!' 54
+            elseif foundShip = longship
+                overhead 'LONGSHIP SIGHTED!' 54
+            elseif foundShip = shipOfTheLine
+                overhead 'SHIP OF THE LINE SIGHTED!' 54
+            endif
+            wait alertInterval
+        endfor
+    endif
+    
+    wait 6000
 endwhile
-
-if foundShip != 0 
-    for 5
-        if foundShip = smallShip
-            overhead 'SMALL SHIP SIGHTED!' 54
-        elseif foundShip = smallDragonship
-            overhead 'SMALL DRAGONSHIP SIGHTED!' 54
-        elseif foundShip = mediumShip
-            overhead 'SHIP SIGHTED!' 54
-        elseif foundShip = dragonship
-            overhead 'DRAGONSHIP SIGHTED!' 54
-        elseif foundShip = largeShip
-            overhead 'LARGE SHIP SIGHTED!' 54
-        elseif foundShip = largeDragonship
-            overhead 'LARGE DRAGONSHIP SIGHTED!' 54
-        elseif foundShip = carrack
-            overhead 'CARRACK SIGHTED!' 54
-        elseif foundShip = galleon
-            overhead 'GALLEON SIGHTED!' 54
-        elseif foundShip = longship
-            overhead 'LONGSHIP SIGHTED!' 54
-        elseif foundShip = shipOfTheLine
-            overhead 'SHIP OF THE LINE SIGHTED!' 54
-        endif
-        wait alertInterval
-    endfor
-endif
