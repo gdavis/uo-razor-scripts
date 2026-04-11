@@ -1,0 +1,68 @@
+@setvar! blade 0
+@setvar! delay 100
+@setvar! stockpileGumpID 1859005118
+
+if findtype 'scissors' backpack as tool
+    @setvar! blade tool
+endif
+
+if blade = 0
+    overhead 'Failed to find scissors in bag!' 38
+    stop
+endif
+
+# TODO: use a id list instead.
+# fish can have same name with many ids
+    
+# cut up fish
+while findtype 'fish' backpack as meat
+    dclick blade
+    wft 1000
+    
+    if targetexists 'neutral'
+        target meat
+    endif
+    wait delay
+endwhile
+
+# cut up crabs
+while findtype 'crab' backpack as meat
+    dclick blade
+    wft 1000
+    
+    if targetexists 'neutral'
+        target meat
+    endif
+    wait delay
+endwhile
+
+# find the nearest resource stockpile
+if findtype 'resource container' ground -1 -1 2 as pile
+    overhead 'Found stockpile...' 908
+
+    @setvar! didFindFish 0
+
+    while findtype 7708 backpack as food
+        @setvar! didFindFish 1
+    
+        getlabel food foodName
+        overhead 'storing {{foodName}}' 925
+        
+        dclick pile
+        waitforgump stockpileGumpID
+        gumpresponse 2
+        waitfortarget 1000
+        target food
+        gumpclose stockpileGumpID
+        wait delay
+    endwhile
+    
+    if didFindFish = 0
+        overhead 'Failed to store any fish!' 38
+    else
+        overhead 'Fish cut and stored.' 69
+    endif
+else
+    overhead 'Did not find a nearby stockpile!' 38
+    stop
+endif
