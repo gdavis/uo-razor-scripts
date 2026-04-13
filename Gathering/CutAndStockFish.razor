@@ -36,6 +36,24 @@ while findtype 'crab' backpack as meat
     wait delay
 endwhile
 
+# cut up raw fish
+while findtype 7710 backpack as fish
+    dclick fish
+endwhile
+
+# cut up random other fish ids
+# 28829 = a thornback ray
+# 15124 = a tiger prawn
+while findtype 28829|15124 backpack as meat
+    dclick blade
+    wft 1000
+    
+    if targetexists 'neutral'
+        target meat
+    endif
+    wait delay
+endwhile
+
 # find the nearest resource stockpile
 if findtype 'resource container' ground -1 -1 2 as pile
     overhead 'Found stockpile...' 908
