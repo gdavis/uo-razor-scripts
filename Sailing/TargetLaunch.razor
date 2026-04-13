@@ -8,6 +8,13 @@
 # Last updated June 27, 2023
 #
 # ---------------------------
+# Boat ID
+# ---------------------------
+# select boat to launch in list
+# response is 10 + button row, zero indexed.
+@setvar! boatID 11
+
+# ---------------------------
 # Summoner Pets
 # ---------------------------
 # 0 - No pet
@@ -104,7 +111,7 @@ else
 
     # select boat to launch in list
     # response is 10 + button row, zero indexed.
-    gumpresponse 10
+    gumpresponse boatID
 
     # wait for target cursor
     waitfortarget 6000
@@ -319,4 +326,3 @@ else
 endif
 
 script 'Repair Ship'
-
