@@ -44,7 +44,8 @@ endwhile
 # cut up random other fish ids
 # 28829 = a thornback ray
 # 15124 = a tiger prawn
-while findtype 28829|15124 backpack as meat
+# 28845 = seahorse
+while findtype 28829|15124|28845 backpack as meat
     dclick blade
     wft 1000
     
@@ -60,7 +61,11 @@ if findtype 'resource container' ground -1 -1 2 as pile
 
     @setvar! didFindFish 0
 
-    while findtype 7708 backpack as food
+    # 7708 = raw fish fillet
+    # 2426 = raw fish steak
+    # 17619 = raw lobster
+    # 17617 = raw crab
+    while findtype 7708|2426|17619|17617 backpack as food
         @setvar! didFindFish 1
     
         getlabel food foodName

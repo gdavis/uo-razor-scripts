@@ -1,18 +1,20 @@
 # NEW! Loot Dropoff
-# Moves distributed items into 3 chests:
+# Moves distributed items into these chests:
 # - regular items (gold check chest)
 # - lessers (plant chems, arcane scrolls, <6k items)
 # - greaters (cores, maps, nice stuff)
+# - trophies (boss tokens, research materials)
+# - junk (plant seeds)
 #
 # TIP: If you target the wrong container,
 # retarget the correct one using the Options
 # tab above and update the 'lootBag' variable
 #
-# Version 1.2
-# Last updated Sept 29, 2025
-# by Aphlux
+# Version 1.3
+# Last updated April 19, 2026
+# by Aphra
 #----------------------------------------------------------- 
-# 
+# User Settings
 
 # set to 0 if you are placing runes
 @setvar! dropOffRunes 1
@@ -20,12 +22,15 @@
 # set to 0 if you DO NOT want to drop off leather
 @setvar! dropOffLeather 1
 
+#-----------------------------------------------------------
+# DANGER AREA - DO NOT EDIT BELOW
+# UNLESS YOU KNOW WHAT YOU ARE DOING
 
 # Timings
 @setvar! dragDelay 100
 @setvar! dropDelay 300
 
-# setup loot container
+# setup loot container ------------------------------
 if overrideLootbag != 0
     setvar lootBag overrideLootbag
 elseif not varexist lootBag or not find lootBag self
@@ -44,9 +49,24 @@ if insysmsg "That container cannot hold more"
     # clear check for full message
 endif
 
-# Dump magic items and runes
-if findtype 'ornate elven chest' ground 1575 any 2 as recycler
-    overhead 'Dropped off magic items' 68
+# Dump magic items and runes -------------------------
+@setvar! primaryRecycler 0x58C5A5A6
+@setvar! secondaryRecycler 0x4125AB3E
+@setvar! useSecondaryRecycler 0
+
+if find primaryRecycler ground any any 2 as recycler
+    getlabel primaryRecycler recyclerName
+    
+    if '(125 items,' in recyclerName
+        @setvar! useSecondaryRecycler 1
+    else
+        overhead 'Dropped off magic items' 68
+        menu recycler 1
+    endif
+endif
+
+if useSecondaryRecycler = 1 and find secondaryRecycler ground any any 2 as recycler
+    overhead 'Dropped off magic items in secondary' 68
     menu recycler 1
 endif
 
@@ -57,9 +77,11 @@ endif
 
 # Prep chests ---------------------------
 
+@setvar! trophyChest 0x44F7A9FE
 @setvar! goldChest 0x4D70B4E2
 @setvar! lessersChest 0x41E85C8E
 @setvar! greatersChest 0x4981ED36
+@setvar! junkChest 0x4D70B2BB
 
 if not find goldChest ground any any 2 
     overhead 'Cannot reach gold chest!' 38
@@ -76,6 +98,16 @@ if not find greatersChest ground any any 2
     stop
 endif
 
+if not find trophyChest ground any any 2
+    overhead 'Cannot reach trophy chest!' 38
+    stop
+endif
+
+if not find junkChest ground any any 2
+    overhead 'Cannot reach recruit (junk) chest!' 38
+    stop
+endif
+
 dclick goldChest
 waitforgump 2865667423
 
@@ -85,23 +117,36 @@ waitforgump 2865667423
 dclick greatersChest
 waitforgump 2865667423
 
+dclick junkChest
+waitforgump 2865667423
+
+dclick trophyChest
+
 # Loot Lists -----------------------------
 
+removelist trophies
 removelist regulars
 removelist lessers
 removelist greaters
+removelist junks
 
+createlist trophies
 createlist regulars
 createlist lessers
 createlist greaters
+createlist junks
+
+# trophy items ---------------------
+pushlist trophies 'boss token'
+pushlist trophies 'statue'
+pushlist trophies 'research materials'
+
+# junk chest items
+pushlist junks 'seed of renewal'
 
 # regular items --------------------
 pushlist regulars 'gold coin'
-pushlist regulars 'research materials'
-pushlist regulars 'seed of renewal'
 pushlist regulars 'toy'
-pushlist regulars 'boss token'
-pushlist regulars 'statue'
 
 # plant chemicals
 pushlist regulars 29030
@@ -385,6 +430,44 @@ foreach itemID in greaters
         lift loot 60000
         wait dragDelay
         drop greatersChest -1 -1 -1
+        wait dropDelay
+        
+        if insysmsg "That container cannot hold more"
+            overhead 'Loot container is full!' 38
+            sysmsg 'Loot container is full!' 38
+            stop
+        endif
+    endwhile
+endfor
+
+# move trophies
+foreach itemID in trophies
+    while findtype itemID lootBag as loot
+        getlabel loot lootName
+        sysmsg 'Moving trophy rare: {{lootName}}' 89
+        lift loot 60000
+        wait dragDelay
+        
+        drop trophyChest -1 -1 -1
+        wait dropDelay
+        
+        if insysmsg "That container cannot hold more"
+            overhead 'Loot container is full!' 38
+            sysmsg 'Loot container is full!' 38
+            stop
+        endif
+    endwhile
+endfor
+
+# move junk items
+foreach itemID in junks
+    while findtype itemID lootBag as loot
+        getlabel loot lootName
+        sysmsg 'Moving junk item: {{lootName}}' 89
+        lift loot 60000
+        wait dragDelay
+        
+        drop junkChest -1 -1 -1
         wait dropDelay
         
         if insysmsg "That container cannot hold more"
