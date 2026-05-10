@@ -4,8 +4,8 @@ clearsysmsg
 cleardragdrop
 
 # set this to your vendor using >info
-@setvar! vendor 0x6F9D5
-@setvar! vendorBackpackID 0x41DD748E
+@setvar! vendor 0xC0DE7
+@setvar! vendorBackpackID 0x43AD990A
 @setvar! actionDelay 500
 
 # Steps to adding vendor items:
@@ -28,6 +28,8 @@ pushlist itemIDs 'Book of Truth'
 pushlist itemIDs 'folded cloth'
 # ingots
 pushlist itemIDs 'crate'
+# fishing nets
+pushlist itemIDs 'fishing net'
 
 if not find vendor ground any any 2
     overhead 'Failed to find vendor. Must be within 2 tiles!' 38
@@ -234,15 +236,22 @@ foreach itemID in itemIDs
             @setvar! xPosition 100
             @setvar! yPosition 120            
             
+        # Commodities
         elseif 'iron ingot commodity' in itemName
-            @setvar price 125000
+            @setvar price 170000
             @setvar! xPosition 0
             @setvar! yPosition 0
             
         elseif 'board commodity' in itemName
-            @setvar price 100000
+            @setvar price 150000
             @setvar! xPosition 0
             @setvar! yPosition 80
+            
+        # Fishing Nets
+        elseif 'special fishing net' in itemName
+            @setvar price 10999
+            @setvar! xPosition -1
+            @setvar! yPosition -1
             
         elseif '[blessed' in itemName
             @ignore foundItem
