@@ -41,23 +41,28 @@ while poisoned and not dead
 endwhile
 
 while not dead and hp < 80
-    clearsysmsg 
-    cast 'Greater Heal'
-    overhead '[G-Heal Self]' 24
-    wait 250
-    
-    if insysmsg 'You are already casting a spell'
-        overhead '[Cancel Last Spell]' 38
-        waitfortarget 
-        hotkey 'Cancel Current Target' 38
-    elseif insysmsg 'You have not yet recovered'
-        overhead '[Not Recovered]' 38
-        wait 100
-    else
-        waitfortarget 
-        target self
-        break
+    if skill 'magery' >= 60
+        clearsysmsg 
+        cast 'Greater Heal'
+        overhead '[G-Heal Self]' 24
+        wait 250
+        
+        if insysmsg 'You are already casting a spell'
+            overhead '[Cancel Last Spell]' 38
+            waitfortarget 
+            hotkey 'Cancel Current Target' 38
+        elseif insysmsg 'You have not yet recovered'
+            overhead '[Not Recovered]' 38
+            wait 100
+        else
+            waitfortarget 
+            target self
+            break
+        endif
+    elseif findtype 'yellow potion' backpack as potion 
+        dclick potion
     endif
+
 endwhile
 
 if skill 'poisoning' < 50 
