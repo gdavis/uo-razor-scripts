@@ -4,53 +4,71 @@ if not varexist poisonTrainingWeapon or not find poisonTrainingWeapon backpack
     setvar poisonTrainingWeapon
 endif
 
+if not varexist tasteIdTarget or not find tasteIdTarget backpack 
+    overhead 'Select food to taste:'
+    setvar tasteIdTarget
+endif
+
 while poisoned and not dead
     if targetexists 
         hotkey 'Cancel Current Target'
     endif
     
-    clearsysmsg 
-    cast 'Cure'
-    overhead '[Cure Self]' 24
-    waitfortarget 1000
-    
-    if insysmsg 'You are already casting a spell'
-        overhead '[Cancel Last Spell]' 38
-        wait 100
+    if skill 'magery' > 0
+        clearsysmsg 
+        cast 'Cure'
+        overhead '[Cure Self]' 24
+        waitfortarget 1000
         
-    elseif insysmsg 'You have not yet recovered'
-        overhead '[Not Recovered]' 38
-        wait 100
+        if insysmsg 'You are already casting a spell'
+            overhead '[Cancel Last Spell]' 38
+            wait 100
+            
+        elseif insysmsg 'You have not yet recovered'
+            overhead '[Not Recovered]' 38
+            wait 100
+        else
+            target self
+            wait 500
+        endif
     else
-        target self
-        wait 500
+        if findtype 'orange potion' backpack as potion
+            dclick potion
+        elseif findtype 'keg' 44 backpack as keg
+            dclick keg
+        else
     endif
 endwhile
 
 while not dead and hp < 80
-    clearsysmsg 
-    cast 'Greater Heal'
-    overhead '[G-Heal Self]' 24
-    wait 250
-    
-    if insysmsg 'You are already casting a spell'
-        overhead '[Cancel Last Spell]' 38
-        waitfortarget 
-        hotkey 'Cancel Current Target' 38
-    elseif insysmsg 'You have not yet recovered'
-        overhead '[Not Recovered]' 38
-        wait 100
-    else
-        waitfortarget 
-        target self
-        break
+    if skill 'magery' >= 60
+        clearsysmsg 
+        cast 'Greater Heal'
+        overhead '[G-Heal Self]' 24
+        wait 250
+        
+        if insysmsg 'You are already casting a spell'
+            overhead '[Cancel Last Spell]' 38
+            waitfortarget 
+            hotkey 'Cancel Current Target' 38
+        elseif insysmsg 'You have not yet recovered'
+            overhead '[Not Recovered]' 38
+            wait 100
+        else
+            waitfortarget 
+            target self
+            break
+        endif
+    elseif findtype 'yellow potion' backpack as potion 
+        dclick potion
     endif
+
 endwhile
 
 if skill 'poisoning' < 50 
     overhead 'Need to train to 50.'
     stop
-elseif skill 'poisoning' < 55
+elseif skill 'poisoning' < 60
     # fill poison potions from a keg from 50-55
     if counttype 'green potion' backpack == 0
         while counttype 'Green Potion' self < 25
@@ -72,7 +90,7 @@ elseif skill 'poisoning' < 55
     endif
 
     if findtype 'green potion' as potion
-        overhead '50-55 Regular'
+        overhead '50-60 Regular'
         skill 'poisoning'
         
         waitfortarget 6000
@@ -99,7 +117,7 @@ else
         getlabel potion potName
     
         if skill 'poisoning' < 80
-            overhead '55-80 Greater'
+            overhead '60-80 Greater'
             if 'greater poison' in potName 
                 @setvar! potionTarget potion
                 break
@@ -146,7 +164,7 @@ endif
 if skill 'tasteidentification' < 120
     skill 'tasteidentification'
     waitfortarget 3000
-    target 0x437EE911
+    target tasteIdTarget
     wait 3000
 endif
 
