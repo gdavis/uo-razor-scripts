@@ -5,6 +5,9 @@
 # - Update the maxWeight below to match your character
 # - Ensure you DO NOT have system messages filtered!
 #   (Filters tab > Text & Messages > Filter Messages)
+# - Add a Cooldown named "Moving"
+#    - Set Cooldown type to "Walk"
+#    - Set default cooldown to 0.25
 #
 # Features:
 # - Non-blocking wait times
@@ -250,6 +253,16 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     sysmsg 'Lumberjack stopped after Escaping PK!' 44
     @setvar! isActive 0
     stop
+endif
+
+
+# Movement Check ----------------
+# If we are moving, we dont want to perform
+# actions such as hiding, smelting, etc.
+# wait for the cooldown to finish before proceeding
+if cooldown 'Moving' > 0
+    @setvar! isActive 0
+    replay
 endif
 
 
