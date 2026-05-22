@@ -2,6 +2,9 @@
 # 
 # Setup:
 # - Update the maxWeight below to match your character
+# - Add a Cooldown named "Moving"
+#    - Set Cooldown type to "Walk"
+#    - Set default cooldown to 0.25
 #
 # Features:
 # - Non-blocking wait times
@@ -69,9 +72,8 @@ if isActive = 1
 endif
 
 # constants
-@setvar! actionDelay 250
-@setvar! digDuration 500
-@setvar! digWait 6500
+@setvar! actionDelay 200
+@setvar! digDuration 300
 @setvar! messageThrottle 3000
 @setvar! pickaxeID 3718
 @setvar! hideDelay 3000
@@ -250,6 +252,16 @@ if insysmsg 'Now tracking:' or insysmsg 'Distance to destination'
     sysmsg 'Miner stopped after Escaping PK!' 44
     @setvar! isActive 0
     stop
+endif
+
+
+# Movement Check ----------------
+# If we are moving, we dont want to perform
+# actions such as hiding, smelting, etc.
+# wait for the cooldown to finish before proceeding
+if cooldown 'Moving' > 0
+    @setvar! isActive 0
+    replay
 endif
 
 
