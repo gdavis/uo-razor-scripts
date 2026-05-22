@@ -63,7 +63,7 @@ endwhile
 if skill 'poisoning' < 50 
     overhead 'Need to train to 50.'
     stop
-    elseif skill 'poisoning' < 65
+elseif skill 'poisoning' < 60
     # fill poison potions from a keg from 50-55
     if counttype 'green potion' backpack == 0
         while counttype 'Green Potion' self < 25
