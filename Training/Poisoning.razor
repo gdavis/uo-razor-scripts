@@ -14,21 +14,29 @@ while poisoned and not dead
         hotkey 'Cancel Current Target'
     endif
     
-    clearsysmsg 
-    cast 'Cure'
-    overhead '[Cure Self]' 24
-    waitfortarget 1000
-    
-    if insysmsg 'You are already casting a spell'
-        overhead '[Cancel Last Spell]' 38
-        wait 100
+    if skill 'magery' > 0
+        clearsysmsg 
+        cast 'Cure'
+        overhead '[Cure Self]' 24
+        waitfortarget 1000
         
-    elseif insysmsg 'You have not yet recovered'
-        overhead '[Not Recovered]' 38
-        wait 100
+        if insysmsg 'You are already casting a spell'
+            overhead '[Cancel Last Spell]' 38
+            wait 100
+            
+        elseif insysmsg 'You have not yet recovered'
+            overhead '[Not Recovered]' 38
+            wait 100
+        else
+            target self
+            wait 500
+        endif
     else
-        target self
-        wait 500
+        if findtype 'orange potion' backpack as potion
+            dclick potion
+        elseif findtype 'keg' 44 backpack as keg
+            dclick keg
+        else
     endif
 endwhile
 
