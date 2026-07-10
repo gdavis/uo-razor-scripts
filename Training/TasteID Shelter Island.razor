@@ -1,4 +1,4 @@
-if skill 'tasteidentification' >= 100
+if skill 'tasteidentification' >= 120
     overhead 'At Taste ID Max'
     wait 5000
     loop
@@ -10,17 +10,19 @@ else
     setvar tasteTrainingTarget
 endif
 
+if targetexists
+    clearall 
+endif
 
 skill 'tasteidentification'
-waitfortarget 5000
-#targetrelloc 0 0
+waitfortarget 500
 target tasteTrainingTarget
 wait 500
 
 if insysmsg 'you are unable'
-    wait 5500
+    wait 1000
 else
-    wait 11000
+    wait 1000
 endif
 
 loop
