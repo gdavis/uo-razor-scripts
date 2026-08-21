@@ -70,7 +70,7 @@ if useSecondaryRecycler = 1 and find secondaryRecycler ground any any 2 as recyc
     menu recycler 1
 endif
 
-if dropOffRunes = 1 and findtype 29104 ground 2085 any 2 as tome
+if dropOffRunes = 1 and findtype 70158 ground any any 2 as tome
     overhead 'Dropped off runes' 68
     menu tome 0
 endif
@@ -173,6 +173,9 @@ pushlist lessers 'phylactery'
 
 # greater rares --------------------
 
+# treasure map
+pushlist greaters 5356
+
 # chromatics
 pushlist greaters 'chroma core'
 pushlist greaters 'chroma distil'
@@ -267,49 +270,89 @@ while findtype 'aspect core' lootBag as loot
     endif
 endwhile
 
-# treasure & resource maps
-while findtype 'map' lootBag as loot
+# resource maps
+while findtype 'ore map' lootBag as loot
     getlabel loot lootName
-    sysmsg 'Moving map: {{lootName}}' 442
+    sysmsg 'Moving ore map: {{lootName}}' 442
     lift loot 60000
     wait dragDelay
     
     @setvar! dropChest greatersChest
-    @setvar! dropY 145
+    @setvar! dropY 135
     
-    # standard treasure map
-    if hue loot = 0
-        
-    # skinning map
-    elseif hue loot = 2651
-        @setvar! dropY 140
-        if 'avarhide' in lootName or 'valehide' in lootName  or 'verehide' in lootName or 'rosehide' in lootName
-        else
-            @setvar! dropChest lessersChest
-        endif
+    if 'dull' in lootName or 'shadow' in lootName or 'copper' in lootName or 'bronze' in lootName
+        @setvar! dropChest lessersChest
+    endif
+
+    drop dropChest -1 -1 -1
+    wait dropDelay
     
-    # ore map 
-    elseif hue loot = 2796
-        @setvar! dropY 135
-        if 'dull' in lootName or 'shadow' in lootName or 'copper' in lootName or 'bronze' in lootName
-            @setvar! dropChest lessersChest
-        endif
-        
-    # lumber map
-    elseif hue loot = 2799
-        @setvar! dropY 130
-        if 'dull' in lootName or 'shadow' in lootName or 'copper' in lootName or 'bronze' in lootName
-            @setvar! dropChest lessersChest
-        endif
+    if insysmsg "That container cannot hold more"
+        overhead 'Loot container is full!' 38
+        sysmsg 'Loot container is full!' 38
+        stop
+    endif
+endwhile
+
+while findtype 'skinning map' lootBag as loot
+    getlabel loot lootName
+    sysmsg 'Moving skinning map: {{lootName}}' 442
+    lift loot 60000
+    wait dragDelay
     
-    # fishing map
-    elseif hue loot = 2904
-        @setvar! dropY 125
+    @setvar! dropChest greatersChest
+    @setvar! dropY 140
     
-        if 'avarscale' in lootName
-        else
-            @setvar! dropChest lessersChest
-        endif
+    if 'avarhide' in lootName or 'valehide' in lootName  or 'verehide' in lootName or 'rosehide' in lootName
+    else
+        @setvar! dropChest lessersChest
+    endif
+
+    drop dropChest -1 -1 -1
+    wait dropDelay
+    
+    if insysmsg "That container cannot hold more"
+        overhead 'Loot container is full!' 38
+        sysmsg 'Loot container is full!' 38
+        stop
+    endif
+endwhile
+
+while findtype 'lumber map' lootBag as loot
+    getlabel loot lootName
+    sysmsg 'Moving lumber map: {{lootName}}' 442
+    lift loot 60000
+    wait dragDelay
+    
+    @setvar! dropChest greatersChest
+    @setvar! dropY 130
+    
+    if 'dull' in lootName or 'shadow' in lootName or 'copper' in lootName or 'bronze' in lootName
+        @setvar! dropChest lessersChest
+    endif
+
+    drop dropChest -1 -1 -1
+    wait dropDelay
+    
+    if insysmsg "That container cannot hold more"
+        overhead 'Loot container is full!' 38
+        sysmsg 'Loot container is full!' 38
+        stop
+    endif
+endwhile
+
+while findtype 'fishing map' lootBag as loot
+    getlabel loot lootName
+    sysmsg 'Moving fishing map: {{lootName}}' 442
+    lift loot 60000
+    wait dragDelay
+    
+    @setvar! dropChest greatersChest
+    @setvar! dropY 125
+    
+    if 'avarscale' in lootName
+    else
+        @setvar! dropChest lessersChest
     endif
 
     drop dropChest -1 -1 -1
